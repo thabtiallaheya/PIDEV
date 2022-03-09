@@ -34,11 +34,37 @@ export default function LoginForm() {
       remember: true
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: async ({ email, password }) => {
+      const genericErrorMessage = 'Something went wrong! Please try again later.';
+      try {
+        const response = await fetch('http://localhost:8081/users/login', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: email, password })
+        });
+        if (!response.ok) {
+          if (response.status === 400) {
+            console.log('Please fill all the fields correctly!');
+          } else if (response.status === 401) {
+            console.log('Invalid email and password combination.');
+          } else {
+            console.log(genericErrorMessage);
+          }
+        } else {
+          const data = await response.json();
+          // setUserContext((oldValues) => {
+          //   return { ...oldValues, token: data.token };
+          // });
+          console.log(data);
+        }
+      } catch (error) {
+        // setIsSubmitting(false);
+        console.log(genericErrorMessage);
+      }
+      // navigate('/dashboard', { replace: true });
     }
   });
-
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
@@ -78,7 +104,7 @@ export default function LoginForm() {
             helperText={touched.password && errors.password}
           />
         </Stack>
-
+        <div>test</div>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
           <FormControlLabel
             control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}

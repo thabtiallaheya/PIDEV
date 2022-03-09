@@ -1,30 +1,56 @@
-const express = require('express');
-const app = express();
-const mongoose = require('mongoose');
-const PIDEV = require('./models/PIDEV');
+const express = require("express")
+const cors = require("cors")
+const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
+const passport = require("passport")
 
-app.use(express.json())
-mongoose.connect(
-    "mongodb+srv://Firas:qs2DNSfxzNVgWzT5@pidev.rwjs1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }).then(() => console.log('MongoDB connected!'))
-    .catch(err => console.log(err));
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
-app.get('/data',async(req,res)=>{
-    const activity = new PIDEV({title:"act",file:"file.txt",creationDate:"2022-06-21",limitDate:"2022-06-22"})
-    try{
-        await activity.save();
-        res.send('INSERTED DATA');
-    } catch(err){
-        console.log(err)
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
+require("./utils/connectdb")
+
+require("./strategies/JwtStrategy")
+require("./strategies/LocalStrategy")
+require("./authenticate")
+
+const userRouter = require("./routes/userRoutes")
+
+const app = express()
+
+
+app.use(bodyParser.json())
+app.use(cookieParser(process.env.COOKIE_SECRET))
+
+const whitelist = process.env.WHITELISTED_DOMAINS
+  ? process.env.WHITELISTED_DOMAINS.split(",")
+  : []
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error("Not allowed by CORS"))
     }
-    
-    
-    });
-app.listen(3001, () => {
-    console.log('app is running in port 3001');
+  },
+
+  credentials: true,
+}
+
+app.use(cors(corsOptions))
+
+app.use(cors(corsOptions))
+
+app.use(passport.initialize())
+
+app.use("/users", userRouter)
+
+app.get("/", function (req, res) {
+  res.send({ status: "success" })
+})
+
+const server = app.listen(process.env.PORT || 8081, function () {
+  const port = server.address().port
+
+  console.log("App started at port:", port)
 })

@@ -15,14 +15,11 @@
     "react",
     "react-hooks"
   ],
-  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 8,
+    "ecmaVersion": 12,
+    "parser": "@babel/eslint-parser",
     "requireConfigFile": false,
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "impliedStrict": true
-    }
+    "sourceType": "module"
   },
   "rules": {
     "import": 0,
