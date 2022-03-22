@@ -32,8 +32,34 @@ export default function RegisterForm() {
       password: ''
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: async ({ email, password, firstName, lastName }) => {
+      const genericErrorMessage = 'Something went wrong! Please try again later.';
+      try {
+        const response = await fetch('http://localhost:8081/users/signup', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: email, password, firstName, lastName })
+        });
+        if (!response.ok) {
+          if (response.status === 400) {
+            console.log('Please fill all the fields correctly!');
+          } else if (response.status === 401) {
+            console.log('Invalid email and password combination.');
+          } else {
+            console.log(genericErrorMessage);
+          }
+        } else {
+          const data = await response.json();
+          // setUserContext((oldValues) => {
+          //   return { ...oldValues, token: data.token };
+          // });
+          console.log(data);
+        }
+      } catch (error) {
+        // setIsSubmitting(false);
+        console.log(genericErrorMessage);
+      }
     }
   });
 

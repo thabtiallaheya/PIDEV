@@ -13,13 +13,16 @@ import {
   FormControlLabel
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { useDispatch } from 'react-redux';
 // component
+import { login } from '../../../features/User/UserSlice';
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -53,10 +56,12 @@ export default function LoginForm() {
           }
         } else {
           const data = await response.json();
-          // setUserContext((oldValues) => {
-          //   return { ...oldValues, token: data.token };
-          // });
           console.log(data);
+          dispatch(
+            login({
+              email
+            })
+          );
         }
       } catch (error) {
         // setIsSubmitting(false);
@@ -104,7 +109,6 @@ export default function LoginForm() {
             helperText={touched.password && errors.password}
           />
         </Stack>
-        <div>test</div>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
           <FormControlLabel
             control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
