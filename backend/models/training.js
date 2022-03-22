@@ -26,6 +26,13 @@ const TrainingSchema = new mongoose.Schema({
   scheduledDate: {
     type: Date,
   },
+  nbrParticipent: {
+    type: Number,
+    required: true,
+  },
+  image: {
+    type: String,
+  },
 });
 const Training = mongoose.model("training", TrainingSchema);
 module.exports = Training;

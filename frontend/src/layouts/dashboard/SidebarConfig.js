@@ -27,6 +27,11 @@ const sidebarConfig = [
     icon: getIcon('eva:file-text-fill')
   },
   {
+    title: 'training',
+    path: '/dashboard/training',
+    icon: getIcon('eva:file-text-fill')
+  },
+  {
     title: 'login',
     path: '/login',
     icon: getIcon('eva:lock-fill')
