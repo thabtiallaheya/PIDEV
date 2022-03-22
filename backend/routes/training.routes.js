@@ -31,7 +31,7 @@ const upload = multer({
 }).single("image");
 
 //GET ALL
-router.get("/getAll", async (req, res) => {
+router.get("/training/getAll", async (req, res) => {
   try {
     const data = await trainingModule.find();
     res.json(data);
@@ -41,7 +41,7 @@ router.get("/getAll", async (req, res) => {
 });
 
 //GET ONE BY ID
-router.get("/getOne/:id", async (req, res) => {
+router.get("/training/getOne/:id", async (req, res) => {
   try {
     const data = await trainingModule.findById(req.params.id);
     res.json(data);
@@ -51,7 +51,7 @@ router.get("/getOne/:id", async (req, res) => {
 });
 
 //POST API
-router.post("/insert", upload, async (req, res) => {
+router.post("/training/insert", upload, async (req, res) => {
   const data = new trainingModule({
     name: req.body.name,
     description: req.body.description,
@@ -72,7 +72,7 @@ router.post("/insert", upload, async (req, res) => {
 });
 
 //PATCH API
-router.patch("/patch/:id", async (req, res) => {
+router.patch("/training/patch/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const dataToUpdate = req.body;
@@ -90,7 +90,7 @@ router.patch("/patch/:id", async (req, res) => {
 });
 
 //DELET API
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/training/delete/:id", async (req, res) => {
   try {
     await trainingModule.findByIdAndDelete(req.params.id);
     res.send(`${req.params.id} has been Deleted`);
