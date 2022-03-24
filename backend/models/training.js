@@ -30,6 +30,9 @@ const TrainingSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  price: {
+    type: Number,
+  },
   image: {
     type: String,
   },
