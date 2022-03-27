@@ -11,6 +11,7 @@ import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
 import Training from './pages/Training';
+import NewTraining from './pages/NewTraining';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +25,8 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> },
-        { path: 'training', element: <Training /> }
+        { path: 'training', element: <Training /> },
+        { path: 'training/new', element: <NewTraining /> }
       ]
     },
     {

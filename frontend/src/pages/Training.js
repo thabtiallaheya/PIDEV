@@ -15,12 +15,6 @@ import Iconify from '../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-const SORT_OPTIONS = [
-  { value: 'latest', label: 'Latest' },
-  { value: 'popular', label: 'Popular' },
-  { value: 'oldest', label: 'Oldest' }
-];
-
 // ----------------------------------------------------------------------
 
 export default function Training() {
@@ -41,7 +35,7 @@ export default function Training() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="#"
+            to="/dashboard/training/new"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
             New Training
