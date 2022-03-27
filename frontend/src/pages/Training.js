@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import ReactPaginate from 'react-paginate';
+import './Training.css';
 // material
 import { Button, Container, Stack, Typography } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import CardActions from '@mui/material/CardActions';
@@ -25,6 +28,43 @@ export default function Training() {
       // console.log(response.data);
     });
   }, []);
+  const [pageNumber, setPageNumber] = useState(0);
+
+  const trainingsPerPage = 8;
+  const pagesVisited = pageNumber * trainingsPerPage;
+  const displayTrainings = training
+    .slice(pagesVisited, pagesVisited + trainingsPerPage)
+    .map((training) => {
+      return (
+        <Grid key={training._id} item xs={12} sm={6} md={3}>
+          <Card sx={{ maxWidth: 345 }}>
+            <CardMedia
+              component="img"
+              height="140"
+              image={`http://localhost:3001/${training.image}`}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {training.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" noWrap>
+                {training.description}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small">Share</Button>
+              <Button size="small">Learn More</Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      );
+    });
+  const pageCount = Math.ceil(training.length / trainingsPerPage);
+
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
+
   return (
     <Page title="Dashboard: Training | Learnigo">
       <Container>
@@ -43,30 +83,20 @@ export default function Training() {
         </Stack>
       </Container>
       <Grid container spacing={3}>
-        {training.map((training) => (
-          <Grid key={training._id} item xs={12} sm={6} md={3}>
-            <Card sx={{ maxWidth: 345 }}>
-              <CardMedia
-                component="img"
-                height="140"
-                image={`http://localhost:3001/${training.image}`}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {training.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" noWrap>
-                  {training.description}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Share</Button>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
+        {displayTrainings}
       </Grid>
+      <br />
+      <ReactPaginate
+        previousLabel={'Previous'}
+        nextLabel={'Next'}
+        pageCount={pageCount}
+        onPageChange={changePage}
+        containerClassName={'paginationBttns'}
+        previousLinkClassName={'previousBttn'}
+        nextLinkClassName={'nextBttn'}
+        disabledClassName={'paginationDisabled'}
+        activeClassName={'paginationActive'}
+      />
     </Page>
   );
 }
