@@ -1,14 +1,6 @@
-const mongoose = require("mongoose")
-const Schema = mongoose.Schema
-
-const passportLocalMongoose = require("passport-local-mongoose")
-
-const Session = new Schema({
-  refreshToken: {
-    type: String,
-    default: "",
-  },
-})
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const jwt = require("jsonwebtoken");
 
 const User = new Schema({
   firstName: {
@@ -23,23 +15,23 @@ const User = new Schema({
     type: String,
     default: "local",
   },
-  points: {
-    type: Number,
-    default: 50,
+  password: String,
+  email: {
+    type: "string",
+    trim: true,
+    unique: true,
   },
-  refreshToken: {
-    type: [Session],
-  },
-})
+  restpassword: String,
+});
 
-//Remove refreshToken from the response
-User.set("toJSON", {
-  transform: function (doc, ret, options) {
-    delete ret.refreshToken
-    return ret
-  },
-})
+User.methods.generateVerificationToken = function () {
+  const user = this;
+  const verificationToken = jwt.sign(
+    { ID: user._id },
+    process.env.USER_VERIFICATION_TOKEN_SECRET,
+    { expiresIn: "7d" }
+  );
+  return verificationToken;
+};
 
-User.plugin(passportLocalMongoose)
-
-module.exports = mongoose.model("User", User)
+module.exports = mongoose.model("User", User);

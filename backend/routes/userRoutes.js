@@ -1,154 +1,195 @@
-const express = require("express");
-const router = express.Router();
+var express = require("express");
+var router = express.Router();
 const User = require("../models/user");
 const passport = require("passport");
+const bcrypt = require("bcryptjs");
+const user = require("../models/user");
+const jwt = require("jsonwebtoken");
+const { ROLES, inRole } = require("../security/Rolemiddleware");
+const ValidateRegister = require("../validation/Register");
+const ValidateLogin = require("../validation/Login");
+var mailer = require("../utils/mailer");
+const { v4: uuidv4 } = require("uuid");
 
-const {
-  getToken,
-  COOKIE_OPTIONS,
-  getRefreshToken,
-  verifyUser,
-} = require("../authenticate");
+router.get(
+  "/getUser",
+  passport.authenticate("jwt", { session: false }),
+  function (req, res, next) {
+    res.json({ user: req.user });
+  }
+);
 
-router.get("/me", verifyUser, (req, res, next) => {
-  res.send(req.user);
+/* GET users listing. */
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  inRole(ROLES.ADMIN),
+  function (req, res, next) {
+    User.find({}, function (err, users) {
+      res.send(users);
+    });
+  }
+);
+
+router.post("/", function (req, res, next) {
+  // const { isValid } = ValidateRegister(req.body);
+  try {
+    // if (!isValid) {
+    //   res.status(404).json({ message: "invalid data" });
+    // } else {
+    user.findOne({ email: req.body.email }).then(async (exist) => {
+      if (exist) {
+        res.status(404).json({ message: "user exist" });
+      } else {
+        const hash = bcrypt.hashSync(req.body.password, 10); //hashed password
+        req.body.password = hash;
+        const user = new User({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          password: req.body.password,
+        });
+        user.save().then((user) => {
+          // const verificationToken = user.generateVerificationToken();
+          // mailer.sendVerifyMail(user.email, verificationToken);
+
+          res.status(200).json({ message: "user added" });
+        });
+      }
+    });
+    // }
+  } catch (error) {
+    res.status(404).json({ message: "error" });
+  }
 });
 
-router.post("/signup", (req, res, next) => {
-  // Verify that first name is not empty
-  if (!req.body.firstName) {
-    res.statusCode = 500;
-    res.send({
-      name: "FirstNameError",
-      message: "The first name is required",
+router.get("/:id", function (req, res, next) {
+  id = req.params.id;
+  console.log(id);
+  User.findById(id, (err, data) => {
+    console.log(data);
+    res.send(data);
+  });
+});
+
+router.put("/:id", function (req, res, next) {
+  id = req.params.id;
+  firstName = req.body.firstName;
+  User.findByIdAndUpdate(id, { firstName: firstName }, (err, data) => {
+    res.send("data updated");
+  });
+});
+
+router.delete("/:id", function (req, res, next) {
+  id = req.params.id;
+  User.findByIdAndDelete(id, (err, data) => {
+    res.send("data deleted" + data);
+  });
+});
+
+router.post("/login", (req, res, next) => {
+  try {
+    user.findOne({ email: req.body.email }).then((user) => {
+      if (!user) {
+        res.status(400).json({ message: req.body.email });
+      } else {
+        bcrypt.compare(req.body.password, user.password).then((isMatch) => {
+          if (!isMatch) {
+            res.status(400).json({ message: "incorrect password" });
+          } else {
+            var token = jwt.sign(
+              {
+                id: user._id,
+                firstName: user.firstName,
+                email: user.email,
+                role: user.role,
+              },
+              process.env.PRIVATE_KEY,
+              { expiresIn: "24h" }
+            );
+            res.status(200).json({
+              accessToken: token,
+              user: user,
+            });
+          }
+        });
+      }
     });
-  } else {
-    User.register(
-      new User({ username: req.body.username }),
-      req.body.password,
-      (err, user) => {
-        if (err) {
-          res.statusCode = 500;
-          res.send(err);
-        } else {
-          user.firstName = req.body.firstName;
-          user.lastName = req.body.lastName || "";
-          const token = getToken({ _id: user._id });
-          const refreshToken = getRefreshToken({ _id: user._id });
-          user.refreshToken.push({ refreshToken });
-          user.save((err, user) => {
-            if (err) {
-              res.statusCode = 500;
-              res.send(err);
-            } else {
-              res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
-              res.send({ success: true, token });
-            }
-          });
-        }
+  } catch (error) {
+    res.status(404).json(error.message);
+  }
+});
+
+router.post("/active", function (req, res, next) {
+  let payload = null;
+  try {
+    payload = jwt.verify(
+      req.body.token,
+      process.env.USER_VERIFICATION_TOKEN_SECRET
+    );
+    console.log(payload.ID);
+    User.findOneAndUpdate(
+      { _id: payload.ID },
+      { verified: true },
+      (err, data) => {
+        res.send("user verified");
       }
     );
+  } catch (err) {
+    return res.status(500).send(err);
   }
 });
 
-router.post("/login", passport.authenticate("local"), (req, res, next) => {
-  const token = getToken({ _id: req.user._id });
-  const refreshToken = getRefreshToken({ _id: req.user._id });
-  User.findById(req.user._id).then(
-    (user) => {
-      user.refreshToken.push({ refreshToken });
-      user.save((err, user) => {
-        if (err) {
-          res.statusCode = 500;
-          res.send(err);
-        } else {
-          res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
-          res.send({ success: true, user });
-        }
-      });
-    },
-    (err) => next(err)
-  );
-});
+router.post("/resetpassword", function (req, res, next) {
+  const email = req.body.email;
 
-router.post("/refreshToken", (req, res, next) => {
-  const { signedCookies = {} } = req;
-  const { refreshToken } = signedCookies;
-
-  if (refreshToken) {
-    try {
-      const payload = jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET
-      );
-      const userId = payload._id;
-      User.findOne({ _id: userId }).then(
-        (user) => {
-          if (user) {
-            // Find the refresh token against the user record in database
-            const tokenIndex = user.refreshToken.findIndex(
-              (item) => item.refreshToken === refreshToken
-            );
-
-            if (tokenIndex === -1) {
-              res.statusCode = 401;
-              res.send("Unauthorized");
-            } else {
-              const token = getToken({ _id: userId });
-              // If the refresh token exists, then create new one and replace it.
-              const newRefreshToken = getRefreshToken({ _id: userId });
-              user.refreshToken[tokenIndex] = { refreshToken: newRefreshToken };
-              user.save((err, user) => {
-                if (err) {
-                  res.statusCode = 500;
-                  res.send(err);
-                } else {
-                  res.cookie("refreshToken", newRefreshToken, COOKIE_OPTIONS);
-                  res.send({ success: true, token });
-                }
-              });
-            }
-          } else {
-            res.statusCode = 401;
-            res.send("Unauthorized");
-          }
-        },
-        (err) => next(err)
-      );
-    } catch (err) {
-      res.statusCode = 401;
-      res.send("Unauthorized");
+  User.findOne({ email: email }).then((user) => {
+    console.log(req.body);
+    if (!user) {
+      res.status(404).json({ message: "user not found" });
+    } else {
+      const restpassword = uuidv4();
+      user.restpassword = restpassword;
+      user.save();
+      mailer.ChangePassword(user.email, user.restpassword);
+      res.send("email send");
     }
-  } else {
-    res.statusCode = 401;
-    res.send("Unauthorized");
+  });
+});
+
+router.post("/verify-restpassword", function (req, res, next) {
+  const restpassword = req.body.restpassword;
+
+  User.findOne({ restpassword: restpassword }).then((user) => {
+    if (!user) {
+      return res.status(400).json({ message: "user not found " });
+    }
+
+    user.restpassword = "";
+    user.save();
+    res.send({ id: user.id });
+  });
+});
+
+router.post("/update-password", function (req, res, next) {
+  const { id, password } = req.body;
+
+  const hash = bcrypt.hashSync(password, 10); //hashed password
+
+  User.findByIdAndUpdate({ _id: id }, { password: hash }).exec();
+
+  res.send("password changed");
+});
+
+router.get(
+  "/a",
+  passport.authenticate("jwt", { session: false }),
+  inRole(ROLES.ADMIN),
+  function (req, res, next) {
+    User.find({}, function (err, users) {
+      res.send(users);
+    });
   }
-});
+);
 
-router.get("/logout", verifyUser, (req, res, next) => {
-  const { signedCookies = {} } = req;
-  const { refreshToken } = signedCookies;
-  User.findById(req.user._id).then(
-    (user) => {
-      const tokenIndex = user.refreshToken.findIndex(
-        (item) => item.refreshToken === refreshToken
-      );
-
-      if (tokenIndex !== -1) {
-        user.refreshToken.id(user.refreshToken[tokenIndex]._id).remove();
-      }
-
-      user.save((err, user) => {
-        if (err) {
-          res.statusCode = 500;
-          res.send(err);
-        } else {
-          res.clearCookie("refreshToken", COOKIE_OPTIONS);
-          res.send({ success: true });
-        }
-      });
-    },
-    (err) => next(err)
-  );
-});
 module.exports = router;

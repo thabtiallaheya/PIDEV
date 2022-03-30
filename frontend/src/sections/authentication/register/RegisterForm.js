@@ -35,16 +35,14 @@ export default function RegisterForm() {
     onSubmit: async ({ email, password, firstName, lastName }) => {
       const genericErrorMessage = 'Something went wrong! Please try again later.';
       try {
-        const response = await fetch('http://localhost:8081/users/signup', {
+        const response = await fetch('http://localhost:8081/users/', {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: email, password, firstName, lastName })
+          body: JSON.stringify({ email, password, firstName, lastName })
         });
-        if (!response.ok) {
-          if (response.status === 400) {
-            console.log('Please fill all the fields correctly!');
-          } else if (response.status === 401) {
+        if (response.status !== 200) {
+          if (response.status === 401) {
             console.log('Invalid email and password combination.');
           } else {
             console.log(genericErrorMessage);
@@ -58,7 +56,7 @@ export default function RegisterForm() {
         }
       } catch (error) {
         // setIsSubmitting(false);
-        console.log(genericErrorMessage);
+        console.log(error);
       }
     }
   });
