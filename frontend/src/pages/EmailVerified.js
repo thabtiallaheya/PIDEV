@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Link as RouterLink, useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Button, Typography, Container } from '@mui/material';
@@ -7,7 +7,6 @@ import { Box, Button, Typography, Container } from '@mui/material';
 import { useEffect } from 'react';
 import { MotionContainer, varBounceIn } from '../components/animate';
 import Page from '../components/Page';
-import Login from './Login';
 
 // ----------------------------------------------------------------------
 

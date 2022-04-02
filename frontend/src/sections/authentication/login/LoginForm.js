@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import {
@@ -22,7 +22,6 @@ import Iconify from '../../../components/Iconify';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState(false);
@@ -48,24 +47,16 @@ export default function LoginForm() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
-        console.log(response);
+        const data = await response.json();
         if (response.status !== 200) {
-          if (response.status === 400) {
-            setStatus({ type: 'error', message: 'Please fill all the fields correctly!' });
-          } else if (response.status === 401) {
-            console.log('Invalid email and password combination.');
-            setStatus({ type: 'error', message: 'Invalid email and password combination.' });
-          } else {
-            setStatus({ type: 'error', message: genericErrorMessage });
-            console.log(genericErrorMessage);
-          }
+          setStatus({ type: 'error', message: data?.message || genericErrorMessage });
         } else {
-          const data = await response.json();
           setStatus({ type: 'success', message: 'logged in successfuly' });
           console.log(data);
           dispatch(
             login({
-              email
+              email,
+              token: data.accessToken
             })
           );
         }
