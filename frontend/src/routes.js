@@ -19,7 +19,6 @@ import ResetPassword from './pages/ResetPassword';
 
 export default function Router() {
   const user = useSelector((state) => state.user);
-  console.log(user);
   const routes = user
     ? [
         {

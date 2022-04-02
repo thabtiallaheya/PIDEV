@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import {
@@ -25,7 +25,6 @@ export default function LoginForm() {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState(false);
-  const navigate = useNavigate();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
@@ -54,18 +53,17 @@ export default function LoginForm() {
         } else {
           setStatus({ type: 'success', message: 'logged in successfuly' });
           console.log(data);
+          const { firstName, lastName } = data.user;
           dispatch(
             login({
               email,
-              token: data.accessToken
+              token: data.accessToken,
+              firstName,
+              lastName
             })
           );
-          setTimeout(() => {
-            navigate('/dashboard', { replace: true });
-          }, 200000);
         }
       } catch (error) {
-        // setIsSubmitting(false);
         console.log(genericErrorMessage);
       }
     }
