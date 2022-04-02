@@ -31,35 +31,32 @@ router.get(
   }
 );
 
-router.post("/", function (req, res, next) {
-  // const { isValid } = ValidateRegister(req.body);
-  try {
-    // if (!isValid) {
-    //   res.status(404).json({ message: "invalid data" });
-    // } else {
-    user.findOne({ email: req.body.email }).then(async (exist) => {
-      if (exist) {
-        res.status(404).json({ message: "user exist" });
-      } else {
-        const hash = bcrypt.hashSync(req.body.password, 10); //hashed password
-        req.body.password = hash;
-        const user = new User({
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          password: req.body.password,
-        });
-        user.save().then((user) => {
-          // const verificationToken = user.generateVerificationToken();
-          // mailer.sendVerifyMail(user.email, verificationToken);
-
-          res.status(200).json({ message: "user added" });
-        });
+router.post("/", async (req, res, next) => {
+  const { isValid } = ValidateRegister(req.body);
+  if (!isValid) {
+    return res.status(404).json({ message: "invalid data" });
+  } else {
+    const exist = await user.findOne({ email: req.body.email });
+    if (exist) {
+      return res.status(400).json({ message: "user exist" });
+    } else {
+      const hash = bcrypt.hashSync(req.body.password, 10);
+      req.body.password = hash;
+      const user = new User({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: req.body.password,
+        verified: false,
+      });
+      const newUser = await user.save();
+      if (newUser) {
+        const verificationToken = user.generateVerificationToken();
+        mailer.sendVerifyMail(user.email, verificationToken);
+        return res.status(200).json({ message: "user added" });
       }
-    });
-    // }
-  } catch (error) {
-    res.status(404).json({ message: "error" });
+      return res.status(404).json({ message: "error" });
+    }
   }
 });
 
@@ -132,7 +129,7 @@ router.post("/active", function (req, res, next) {
       { _id: payload.ID },
       { verified: true },
       (err, data) => {
-        res.send("user verified");
+        res.status(200).send("user verified");
       }
     );
   } catch (err) {

@@ -11,6 +11,7 @@ import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
 import ResetPassword from './pages/ResetPasswrod';
+import EmailVerified from './pages/EmailVerified';
 
 // ----------------------------------------------------------------------
 
@@ -35,6 +36,7 @@ export default function Router() {
         { path: 'register', element: <Register /> },
         { path: 'reset-password/:resetPassword', element: <ResetPassword /> },
         { path: '404', element: <NotFound /> },
+        { path: 'verify/:token', element: <EmailVerified /> },
         { path: '*', element: <Navigate to="/404" /> }
       ]
     },

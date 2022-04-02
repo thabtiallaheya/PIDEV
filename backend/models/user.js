@@ -15,6 +15,10 @@ const User = new Schema({
     type: String,
     default: "local",
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   password: String,
   email: {
     type: "string",

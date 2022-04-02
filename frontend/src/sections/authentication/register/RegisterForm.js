@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 // material
-import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
@@ -13,6 +13,7 @@ import Iconify from '../../../components/Iconify';
 export default function RegisterForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [status, setStatus] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -34,6 +35,7 @@ export default function RegisterForm() {
     validationSchema: RegisterSchema,
     onSubmit: async ({ email, password, firstName, lastName }) => {
       const genericErrorMessage = 'Something went wrong! Please try again later.';
+
       try {
         const response = await fetch('http://localhost:8081/users/', {
           method: 'POST',
@@ -41,18 +43,14 @@ export default function RegisterForm() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password, firstName, lastName })
         });
+        const data = await response.json();
         if (response.status !== 200) {
-          if (response.status === 401) {
-            console.log('Invalid email and password combination.');
-          } else {
-            console.log(genericErrorMessage);
-          }
+          setStatus({ type: 'error', message: data?.message || genericErrorMessage });
         } else {
-          const data = await response.json();
-          // setUserContext((oldValues) => {
-          //   return { ...oldValues, token: data.token };
-          // });
-          console.log(data);
+          setStatus({
+            type: 'success',
+            message: 'You have successfully signed up! Please verify your email in order to log in'
+          });
         }
       } catch (error) {
         // setIsSubmitting(false);
@@ -67,6 +65,11 @@ export default function RegisterForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
+          {status && (
+            <Alert severity={status?.type} sx={{ width: '100%' }} onClose={() => setStatus(null)}>
+              {status?.message}
+            </Alert>
+          )}
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
               fullWidth

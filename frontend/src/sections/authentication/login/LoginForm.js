@@ -48,9 +48,9 @@ export default function LoginForm() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
+        console.log(response);
         if (response.status !== 200) {
           if (response.status === 400) {
-            console.log('Please fill all the fields correctly!');
             setStatus({ type: 'error', message: 'Please fill all the fields correctly!' });
           } else if (response.status === 401) {
             console.log('Invalid email and password combination.');

@@ -4,12 +4,15 @@ const isEmpty = require("./isEmpty");
 module.exports = function ValidateRegister(data) {
   let errors = {};
 
+  data.lastName = !isEmpty(data.firstName) ? data.lastName : "";
   data.firstName = !isEmpty(data.firstName) ? data.firstName : "";
   data.email = !isEmpty(data.email) ? data.email : "";
   data.password = !isEmpty(data.password) ? data.password : "";
-  data.confirm = !isEmpty(data.confirm) ? data.confirm : "";
 
   if (validator.isEmpty(data.firstName)) {
+    errors.firstName = "Required firstName";
+  }
+  if (validator.isEmpty(data.lastName)) {
     errors.firstName = "Required firstName";
   }
   if (!validator.isEmail(data.email)) {
