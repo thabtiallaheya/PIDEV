@@ -1,9 +1,12 @@
 import { useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
 // material
 import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '@mui/material';
 // components
+import { useDispatch } from 'react-redux';
+import { logout } from '../../features/User/UserSlice';
 import Iconify from '../../components/Iconify';
 import MenuPopover from '../../components/MenuPopover';
 //
@@ -34,12 +37,19 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const logoutUser = () => {
+    dispatch(logout());
+    navigate('/login', { replace: true });
   };
 
   return (
@@ -106,7 +116,7 @@ export default function AccountPopover() {
         ))}
 
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined">
+          <Button fullWidth color="inherit" variant="outlined" onClick={logoutUser}>
             Logout
           </Button>
         </Box>
