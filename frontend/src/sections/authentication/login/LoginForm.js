@@ -60,12 +60,14 @@ export default function LoginForm() {
               token: data.accessToken
             })
           );
+          setTimeout(() => {
+            navigate('/dashboard', { replace: true });
+          }, 200000);
         }
       } catch (error) {
         // setIsSubmitting(false);
         console.log(genericErrorMessage);
       }
-      navigate('/dashboard', { replace: true });
     }
   });
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
@@ -118,7 +120,7 @@ export default function LoginForm() {
             label="Remember me"
           />
 
-          <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
+          <Link component={RouterLink} variant="subtitle2" to="/changepassword" underline="hover">
             Forgot password?
           </Link>
         </Stack>

@@ -1,35 +1,27 @@
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import {
-  Link,
-  Stack,
-  Checkbox,
-  TextField,
-  IconButton,
-  InputAdornment,
-  FormControlLabel
-} from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment, Alert, Snackbar } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useDispatch } from 'react-redux';
 // component
-import { login } from '../../../features/User/UserSlice';
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-export default function ResetForm() {
+export default function ChangePasswordForm() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { resetPassword } = useParams();
   const [showPassword, setShowPassword] = useState(false);
   const [id, setId] = useState();
   const [status, setStatus] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    password: Yup.string().required('Password is required')
+    password: Yup.string().required('Password is required'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Does not match with field1!')
+      .required('Password is required')
   });
 
   useEffect(() => {
@@ -43,7 +35,6 @@ export default function ResetForm() {
         const data = await date.json();
         console.log(date);
         setId(data.id);
-        setStatus({ type: 'success', message: 'password changed successfuly' });
       } catch (err) {
         console.log(err);
         setStatus({ type: 'error', message: 'something went wrong, please try again' });
@@ -59,9 +50,8 @@ export default function ResetForm() {
       password: ''
     },
     validationSchema: LoginSchema,
-    onSubmit: async ({ password, confirmPassword }) => {
+    onSubmit: async ({ password }) => {
       const genericErrorMessage = 'Something went wrong! Please try again later.';
-      console.log('here');
       try {
         const response = await fetch('http://localhost:8081/users/update-password', {
           method: 'POST',
@@ -69,26 +59,25 @@ export default function ResetForm() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id, password })
         });
+        console.log('here');
+        const data = await response.json();
         if (!response.ok) {
-          if (response.status === 400) {
-            console.log('Please fill all the fields correctly!');
-          } else if (response.status === 401) {
-            console.log('Invalid email and password combination.');
-          } else {
-            console.log(genericErrorMessage);
-          }
+          setStatus({ type: 'error', message: data?.message || genericErrorMessage });
         } else {
-          const data = await response.json();
-          console.log(data);
+          setStatus({
+            type: 'success',
+            message: 'Password changed successfully'
+          });
         }
       } catch (error) {
-        // setIsSubmitting(false);
-        console.log(genericErrorMessage);
+        console.log(error);
       }
-      // navigate('/dashboard', { replace: true });
+      setTimeout(() => {
+        navigate('/login', { replace: true });
+      }, 1000);
     }
   });
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -98,6 +87,16 @@ export default function ResetForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
+          <Snackbar open={status} autoHideDuration={6000} onClose={() => setStatus(null)}>
+            <Alert onClose={() => setStatus(null)} severity={status?.type} sx={{ width: '100%' }}>
+              {status?.message}
+            </Alert>
+          </Snackbar>
+          {status && (
+            <Alert severity={status?.type} sx={{ width: '100%' }} onClose={() => setStatus(null)}>
+              {status?.message}
+            </Alert>
+          )}
           <TextField
             fullWidth
             autoComplete="current-password"

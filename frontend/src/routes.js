@@ -11,8 +11,9 @@ import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
-import ResetPassword from './pages/ResetPasswrod';
 import EmailVerified from './pages/EmailVerified';
+import ChangePassword from './pages/ChangePassword';
+import ResetPassword from './pages/ResetPassword';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +22,12 @@ export default function Router() {
   console.log(user);
   const routes = user
     ? [
+        {
+          path: '/',
+          element: <DashboardLayout />
+        },
+        { path: 'login', element: <DashboardLayout /> },
+
         {
           path: '/dashboard',
           element: <DashboardLayout />,
@@ -45,7 +52,8 @@ export default function Router() {
             { path: '/', element: <Navigate to="/dashboard/app" /> },
             { path: 'login', element: <Login /> },
             { path: 'register', element: <Register /> },
-            { path: 'reset-password/:resetPassword', element: <ResetPassword /> },
+            { path: 'changepassword', element: <ResetPassword /> },
+            { path: 'reset-password/:resetPassword', element: <ChangePassword /> },
             { path: '404', element: <NotFound /> },
             { path: 'verify/:token', element: <EmailVerified /> },
             { path: '*', element: <Navigate to="/404" /> }

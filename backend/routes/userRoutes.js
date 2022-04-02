@@ -143,13 +143,13 @@ router.post("/resetpassword", function (req, res, next) {
   User.findOne({ email: email }).then((user) => {
     console.log(req.body);
     if (!user) {
-      res.status(404).json({ message: "user not found" });
+      return res.status(404).json({ message: "user not found" });
     } else {
       const restpassword = uuidv4();
       user.restpassword = restpassword;
       user.save();
       mailer.ChangePassword(user.email, user.restpassword);
-      res.send("email send");
+      return res.status(200).json({ message: "email send" });
     }
   });
 });
@@ -175,7 +175,7 @@ router.post("/update-password", function (req, res, next) {
 
   User.findByIdAndUpdate({ _id: id }, { password: hash }).exec();
 
-  res.send("password changed");
+  res.status(200).json({ message: "password changed" });
 });
 
 router.get(

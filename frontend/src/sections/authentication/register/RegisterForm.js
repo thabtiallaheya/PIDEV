@@ -31,9 +31,8 @@ export default function RegisterForm() {
       password: ''
     },
     validationSchema: RegisterSchema,
-    onSubmit: async ({ email, password, firstName, lastName }) => {
+    onSubmit: async ({ email, password, firstName, lastName }, { resetForm }) => {
       const genericErrorMessage = 'Something went wrong! Please try again later.';
-
       try {
         const response = await fetch('http://localhost:8081/users/', {
           method: 'POST',
@@ -49,6 +48,7 @@ export default function RegisterForm() {
             type: 'success',
             message: 'You have successfully signed up! Please verify your email in order to log in'
           });
+          resetForm();
         }
       } catch (error) {
         // setIsSubmitting(false);

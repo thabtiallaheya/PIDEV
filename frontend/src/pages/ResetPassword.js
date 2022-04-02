@@ -1,13 +1,12 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Card, Link, Container, Typography } from '@mui/material';
+import { Card, Link, Container, Typography } from '@mui/material';
 // layouts
 import AuthLayout from '../layouts/AuthLayout';
 // components
 import Page from '../components/Page';
-import { ResetForm } from '../sections/authentication/resetPassword';
-import AuthSocial from '../sections/authentication/AuthSocial';
+import { EmailForm } from '../sections/authentication/email';
 
 // ----------------------------------------------------------------------
 
@@ -38,7 +37,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function ResetPassword() {
+export default function ChangePassword() {
   return (
     <RootStyle title="Reset Password | Minimal-UI">
       <AuthLayout>
@@ -57,19 +56,7 @@ export default function ResetPassword() {
 
       <Container>
         <ContentStyle>
-          <ResetForm />
-
-          <Typography variant="body2" align="center" sx={{ color: 'text.secondary', mt: 3 }}>
-            By registering, I agree to Minimal&nbsp;
-            <Link underline="always" color="textPrimary">
-              Terms of Service
-            </Link>
-            &nbsp;and&nbsp;
-            <Link underline="always" color="textPrimary">
-              Privacy Policy
-            </Link>
-            .
-          </Typography>
+          <EmailForm />
 
           <Typography
             variant="subtitle2"
