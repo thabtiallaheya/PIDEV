@@ -3,6 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 //
@@ -72,6 +73,10 @@ export default function ShopProductCard({ product }) {
             &nbsp;
             {fCurrency(price)}
           </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Button size="small">Share</Button>
+          <Button size="small">Learn More</Button>
         </Stack>
       </Stack>
     </Card>

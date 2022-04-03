@@ -10,6 +10,9 @@ import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
+import Training from './pages/Training';
+import NewTraining from './pages/NewTraining';
+import TrainingDetails from './pages/TrainingDetails';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +25,10 @@ export default function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> }
+        { path: 'blog', element: <Blog /> },
+        { path: 'training', element: <Training /> },
+        { path: 'training/new', element: <NewTraining /> },
+        { path: 'training/details/:id', element: <TrainingDetails /> }
       ]
     },
     {
