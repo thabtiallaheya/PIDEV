@@ -28,7 +28,7 @@ const sidebarConfig = [
   },
   {
     title: 'training',
-    path: '/dashboard/training',
+    path: '/training',
     icon: getIcon('eva:file-text-fill')
   },
   {

@@ -48,6 +48,7 @@
     "@mui/lab": "^5.0.0-alpha.69",
     "@mui/material": "^5.4.2",
     "@mui/utils": "^5.4.2",
+    "@reduxjs/toolkit": "^1.8.0",
     "@testing-library/jest-dom": "^5.16.2",
     "apexcharts": "^3.33.1",
     "axios": "^0.26.1",
@@ -69,8 +70,10 @@
     "react-images-upload": "^1.2.8",
     "react-material-ui-form-validator": "^3.0.0",
     "react-paginate": "^8.1.2",
+    "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "react-scripts": "^5.0.0",
+    "redux-persist": "^6.0.0",
     "simplebar": "^5.3.6",
     "simplebar-react": "^2.3.6",
     "web-vitals": "^2.1.4",
@@ -79,6 +82,7 @@
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-react": "^7.16.7",
     "eslint": "^8.9.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.4.0",
@@ -87,7 +91,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^2.5.1"
   }
