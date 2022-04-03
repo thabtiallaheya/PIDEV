@@ -53,13 +53,15 @@ export default function LoginForm() {
         } else {
           setStatus({ type: 'success', message: 'logged in successfuly' });
           console.log(data);
-          const { firstName, lastName } = data.user;
+          const { _id, firstName, lastName, photo } = data.user;
           dispatch(
             login({
               email,
               token: data.accessToken,
               firstName,
-              lastName
+              lastName,
+              id: _id,
+              photo: `http://localhost:8081/${photo}`
             })
           );
         }

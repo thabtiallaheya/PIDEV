@@ -10,6 +10,29 @@ const ValidateRegister = require("../validation/Register");
 const ValidateLogin = require("../validation/Login");
 var mailer = require("../utils/mailer");
 const { v4: uuidv4 } = require("uuid");
+const multer = require("multer");
+let path = require("path");
+const { findOneAndUpdate } = require("../models/user");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, uuidv4() + "-" + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+  if (allowedFileTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+let upload = multer({ storage, fileFilter });
 
 router.get(
   "/getUser",
@@ -115,6 +138,21 @@ router.post("/login", (req, res, next) => {
   } catch (error) {
     res.status(404).json(error.message);
   }
+});
+
+router.post("/upload-photo", upload.single("photo"), async (req, res) => {
+  console.log("here");
+  const photo = req.file.filename;
+  console.log(req.body.id);
+  console.log(photo);
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: req.body.id },
+    { photo }
+  );
+  if (!updatedUser) {
+    return res.status(400).json({ message: "user does not exist" });
+  }
+  return res.status(200).json({ message: "test" });
 });
 
 router.post("/active", function (req, res, next) {

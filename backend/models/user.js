@@ -15,6 +15,7 @@ const User = new Schema({
     type: String,
     default: "local",
   },
+  photo: String,
   verified: {
     type: Boolean,
     default: false,

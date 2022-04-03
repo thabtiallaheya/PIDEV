@@ -10,7 +10,6 @@ import { logout } from '../../features/User/UserSlice';
 import Iconify from '../../components/Iconify';
 import MenuPopover from '../../components/MenuPopover';
 //
-import account from '../../_mocks_/account';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +22,7 @@ const MENU_OPTIONS = [
   {
     label: 'Profile',
     icon: 'eva:person-fill',
-    linkTo: '#'
+    linkTo: '/account'
   },
   {
     label: 'Settings',
@@ -75,7 +74,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={user.photo} alt="photoURL" />
       </IconButton>
 
       <MenuPopover

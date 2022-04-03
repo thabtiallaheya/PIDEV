@@ -35,6 +35,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use(express.static("images"));
+
 app.use(passport.initialize());
 require("./security/passport")(passport);
 

@@ -14,6 +14,7 @@ import NotFound from './pages/Page404';
 import EmailVerified from './pages/EmailVerified';
 import ChangePassword from './pages/ChangePassword';
 import ResetPassword from './pages/ResetPassword';
+import Account from './pages/Account';
 
 // ----------------------------------------------------------------------
 
@@ -21,16 +22,13 @@ export default function Router() {
   const user = useSelector((state) => state.user);
   const routes = user
     ? [
-        {
-          path: '/',
-          element: <DashboardLayout />
-        },
         { path: 'login', element: <DashboardLayout /> },
 
         {
-          path: '/dashboard',
+          path: '/',
           element: <DashboardLayout />,
           children: [
+            { path: 'account', element: <Account /> },
             { path: 'app', element: <DashboardApp /> },
             { path: 'user', element: <User /> },
             { path: 'products', element: <Products /> },
