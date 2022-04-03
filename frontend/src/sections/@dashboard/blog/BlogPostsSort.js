@@ -9,9 +9,11 @@ BlogPostsSort.propTypes = {
   onSort: PropTypes.func
 };
 
-export default function BlogPostsSort({ options, onSort }) {
+export default function BlogPostsSort({ options, onSort , modo }) {
   return (
-    <TextField select size="small" value="latest" onChange={onSort}>
+    <TextField select size="small" value="latest" onChange={(event) => {
+      modo(event.target.value)
+    }}>
       {options.map((option) => (
         <MenuItem key={option.value} value={option.value}>
           {option.label}

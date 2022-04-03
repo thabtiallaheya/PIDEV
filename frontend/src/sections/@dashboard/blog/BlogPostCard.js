@@ -1,14 +1,29 @@
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
-// material
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Swal from "sweetalert2";  
+import ReactPaginate from 'react-paginate';
+import axios, * as others from 'axios';
+
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
+import {
+  Stack,
+  Button,
+  Box,
+  Link,
+  Card,
+  Grid,
+  Avatar,
+  Typography,
+  CardContent
+} from '@mui/material';
 // utils
-import { fDate } from '../../../utils/formatTime';
+import { fDate, fDateTime, fDateTimeSuffix } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
 //
 import SvgIconStyle from '../../../components/SvgIconStyle';
 import Iconify from '../../../components/Iconify';
+import Label from 'src/components/Label';
 
 // ----------------------------------------------------------------------
 
@@ -57,20 +72,69 @@ BlogPostCard.propTypes = {
   index: PropTypes.number
 };
 
-export default function BlogPostCard({ post, index }) {
-  const { cover, title, view, comment, share, author, createdAt } = post;
-  const latestPostLarge = index === 0;
-  const latestPost = index === 1 || index === 2;
+export default function BlogPostCard(props) {
+  // const { cover, title, view, comment, share, author, createdAt } = val;
+  const latestPostLarge = props.index === 0 || props.index === 3 || props.index === 6;
+  const latestPost = props.index === 1 || 4;
+  const navigate = useNavigate();
 
-  const POST_INFO = [
+  /*const POST_INFO = [
     { number: comment, icon: 'eva:message-circle-fill' },
     { number: view, icon: 'eva:eye-fill' },
     { number: share, icon: 'eva:share-fill' }
-  ];
+  ];*/
+  /*const [activityList, setActivityList] = useState([]);
+  useEffect(() => {
+    axios.get('http://localhost:3001/read').then((response) => {
+      console.log(response.data);
+      setActivityList(response.data);
+    });
+  }, []);*/
 
+  const deleteActivity = (id) => {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios.delete(`http://localhost:3001/api/delete/${id}`);
+      navigate('/dashboard/blog', { replace: true });
+      Swal.fire(
+        'Deleted!',
+        'Your file has been deleted.',
+        'success'
+      )
+    }
+  })
+};
+  //ancien del
+  /*const deleteActivity = (id) => {
+    axios.delete(`http://localhost:3001/api/delete/${id}`);
+    navigate('/dashboard/blog', { replace: true });
+  };*/
+
+  //return activityList.map((val, key) => {
   return (
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
-      <Card sx={{ position: 'relative' }}>
+      <Card key={props.element._id} sx={{ position: 'relative' }}>
+        <Label
+          variant="filled"
+          color={'secondary'}
+          sx={{
+            zIndex: 9,
+            top: 16,
+            right: 16,
+            position: 'absolute',
+            textTransform: 'uppercase'
+          }}
+        >
+          {props.element.subject}
+        </Label>
         <CardMediaStyle
           sx={{
             ...((latestPostLarge || latestPost) && {
@@ -94,7 +158,7 @@ export default function BlogPostCard({ post, index }) {
         >
           <SvgIconStyle
             color="paper"
-            src="/static/icons/shape-avatar.svg"
+            //src="/static/icons/shape-avatar.svg"
             sx={{
               width: 80,
               height: 36,
@@ -104,21 +168,11 @@ export default function BlogPostCard({ post, index }) {
               ...((latestPostLarge || latestPost) && { display: 'none' })
             }}
           />
-          <AvatarStyle
-            alt={author.name}
-            src={author.avatarUrl}
-            sx={{
-              ...((latestPostLarge || latestPost) && {
-                zIndex: 9,
-                top: 24,
-                left: 24,
-                width: 40,
-                height: 40
-              })
-            }}
+           
+          <CoverImgStyle
+            alt="img"
+            src={`http://localhost:3001/${props.element.file[0].filePath}`}
           />
-
-          <CoverImgStyle alt={title} src={cover} />
         </CardMediaStyle>
 
         <CardContent
@@ -131,16 +185,9 @@ export default function BlogPostCard({ post, index }) {
             })
           }}
         >
-          <Typography
-            gutterBottom
-            variant="caption"
-            sx={{ color: 'text.disabled', display: 'block' }}
-          >
-            {fDate(createdAt)}
-          </Typography>
-
           <TitleStyle
-            to="#"
+            to={`/dashboard/api/read/detail/${props.element._id}`}
+            //to={`/api/read/detail/${props.element._id}`}
             color="inherit"
             variant="subtitle2"
             underline="hover"
@@ -152,29 +199,58 @@ export default function BlogPostCard({ post, index }) {
               })
             }}
           >
-            {title}
+            {props.element.title}
           </TitleStyle>
+          <Typography
+            gutterBottom
+            variant="caption"
+            sx={{ color: 'text.disabled', display: 'block' }}
+          >
+            {' '}
+            Posted At 📝 :{fDateTime(props.element.createdAt)}
+          </Typography>
 
-          <InfoStyle>
-            {POST_INFO.map((info, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  ml: index === 0 ? 0 : 1.5,
-                  ...((latestPostLarge || latestPost) && {
-                    color: 'grey.500'
-                  })
-                }}
-              >
-                <Iconify icon={info.icon} sx={{ width: 16, height: 16, mr: 0.5 }} />
-                <Typography variant="caption">{fShortenNumber(info.number)}</Typography>
-              </Box>
-            ))}
-          </InfoStyle>
+          <Typography
+            gutterBottom
+            variant="caption"
+            sx={{ color: 'text.disabled', display: 'block' }}
+          >
+            {' '}
+            Limite Date ⏰ :{fDateTime(props.element.limiteDate)}
+          </Typography>
+
+          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to={`/dashboard/edit/${props.element._id}`}
+              //startIcon={<Iconify icon="flat-color-icons:data-recovery" />}
+            >
+              <a href={`/dashboard/edit/${props.element._id}`}>✏️ update</a>
+            </Button>
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to={`/dashboard/api/read/detail/${props.element._id}`}
+              //startIcon={<Iconify icon="flat-color-icons:data-recovery" />}
+            >
+              <a href={`/dashboard/api/read/detail/${props.element._id}`}>📖show</a>
+            </Button>
+
+            <Button
+              onClick={() => {
+                deleteActivity(props.element._id);
+              }}
+              style={{ color: 'red' }}
+              variant="contained"
+              //startIcon={<Iconify icon="flat-color-icons:delete-column" />}
+            >
+              ✂️ Delete
+            </Button>
+          </Stack>
         </CardContent>
       </Card>
     </Grid>
   );
+  //});
 }

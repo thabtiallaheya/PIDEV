@@ -22,7 +22,7 @@ const sidebarConfig = [
     icon: getIcon('eva:shopping-bag-fill')
   },
   {
-    title: 'blog',
+    title: 'activity',
     path: '/dashboard/blog',
     icon: getIcon('eva:file-text-fill')
   },
