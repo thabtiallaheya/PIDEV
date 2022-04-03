@@ -3,6 +3,9 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
+const { update } = require("./models/Activity");
+const fileRoutes = require("./routes/fileUploadRoutes");
+const ACTIVITY = require("./models/Activity");
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
@@ -42,6 +45,7 @@ require("./security/passport")(passport);
 const routesTaining = require("./routes/training.routes");
 
 app.use("/api", routesTaining);
+app.use("/eya", fileRoutes.routes);
 app.use("/users", userRouter);
 
 app.get("/", function (req, res) {
