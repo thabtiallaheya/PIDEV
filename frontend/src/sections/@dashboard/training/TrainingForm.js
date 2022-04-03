@@ -1,11 +1,22 @@
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
 // material
-import { Stack, TextField, InputAdornment } from '@mui/material';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import {
+  Stack,
+  TextField,
+  InputAdornment,
+  InputLabel,
+  FormHelperText,
+  FormControl,
+  Select,
+  MenuItem,
+  Typography
+} from '@mui/material';
+import ImageIcon from '@mui/icons-material/Image';
 import { LoadingButton } from '@mui/lab';
 
 export function TrainingForm() {
@@ -16,9 +27,12 @@ export function TrainingForm() {
     tag: Yup.string().required('Tags is required'),
     duration: Yup.number().required('Duration is required'),
     language: Yup.string().required('select a language'),
-    scheduledDate: Yup.date().required('Scheduled Date is required'),
+    scheduledDate: Yup.date()
+      .required('Scheduled Date is required')
+      .min(new Date(), "You can't choose a date equal or later than today"),
     nbrParticipant: Yup.number().required('Number of participants is required'),
-    price: Yup.number().required('Price is required')
+    price: Yup.number().required('Price is required'),
+    image: Yup.mixed().nullable().required('image is required')
   });
 
   const formik = useFormik({
@@ -26,15 +40,16 @@ export function TrainingForm() {
       Name: '',
       description: '',
       tag: '',
-      duration: 0,
+      duration: '',
       language: '',
       scheduledDate: '',
-      nbrParticipant: 0,
-      price: 0,
+      nbrParticipant: '',
+      price: '',
       image: null
     },
     validationSchema: RegisterSchema,
     onSubmit: async (values) => {
+      console.log(values);
       const formdata = new FormData();
       formdata.append('name', values.Name);
       formdata.append('description', values.description);
@@ -55,8 +70,8 @@ export function TrainingForm() {
         });
     }
   });
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
 
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps, setFieldValue } = formik;
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -77,7 +92,23 @@ export function TrainingForm() {
               helperText={touched.tag && errors.tag}
             />
           </Stack>
-          <TextField
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <Typography sx={{ color: 'text.secondary' }}>Description</Typography>
+            <CKEditor
+              editor={ClassicEditor}
+              data=""
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                setFieldValue('description', data);
+              }}
+              error={Boolean(touched.description && errors.description)}
+            />
+            {touched.description && errors.description && (
+              <FormHelperText error>{errors.language}</FormHelperText>
+            )}
+          </FormControl>
+
+          {/* <TextField
             fullWidth
             label="Description"
             {...getFieldProps('description')}
@@ -85,7 +116,7 @@ export function TrainingForm() {
             rows={4}
             error={Boolean(touched.description && errors.description)}
             helperText={touched.description && errors.description}
-          />
+          /> */}
           <TextField
             fullWidth
             type="number"
@@ -96,7 +127,7 @@ export function TrainingForm() {
             InputProps={{
               startAdornment: <InputAdornment position="start">Min</InputAdornment>
             }}
-          />
+          ></TextField>
           <TextField
             label="Number of participants"
             type="number"
@@ -106,30 +137,44 @@ export function TrainingForm() {
           />
           <TextField
             name="image"
-            type="file"
+            label="Image"
             accept="image/*"
+            type="file"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <ImageIcon color="success" />
+                </InputAdornment>
+              )
+            }}
             onChange={(event) => {
               setFieldValue('image', event.currentTarget.files[0]);
               // console.log(getFieldProps('image'));
             }}
-            // onChange={(event) => {
-            //   setFieldValue('image', event.currentTarget);
-            // }}
+            variant="standard"
+            error={Boolean(touched.image && errors.image)}
+            helperText={touched.image && errors.image}
           />
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            {...getFieldProps('language')}
-            label="Language"
-            error={Boolean(touched.language && errors.language)}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={'English'}>English</MenuItem>
-            <MenuItem value={'French'}>French</MenuItem>
-            <MenuItem value={'Arabic'}>Arabic</MenuItem>
-          </Select>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-helper-label">Language</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              {...getFieldProps('language')}
+              label="Language"
+              error={Boolean(touched.language && errors.language)}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={'English'}>English</MenuItem>
+              <MenuItem value={'French'}>French</MenuItem>
+              <MenuItem value={'Arabic'}>Arabic</MenuItem>
+            </Select>
+            {touched.language && errors.language && (
+              <FormHelperText error>{errors.language}</FormHelperText>
+            )}
+          </FormControl>
           <Stack spacing={3}>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <TextField
@@ -146,6 +191,8 @@ export function TrainingForm() {
                 label="Scheduled Date"
                 type="datetime-local"
                 {...getFieldProps('scheduledDate')}
+                error={Boolean(touched.scheduledDate && errors.scheduledDate)}
+                helperText={touched.scheduledDate && errors.scheduledDate}
                 InputLabelProps={{
                   shrink: true
                 }}
@@ -159,7 +206,7 @@ export function TrainingForm() {
             variant="contained"
             loading={isSubmitting}
           >
-            Register
+            Save
           </LoadingButton>
         </Stack>
       </Form>

@@ -12,6 +12,7 @@ import User from './pages/User';
 import NotFound from './pages/Page404';
 import Training from './pages/Training';
 import NewTraining from './pages/NewTraining';
+import TrainingDetails from './pages/TrainingDetails';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +27,8 @@ export default function Router() {
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> },
         { path: 'training', element: <Training /> },
-        { path: 'training/new', element: <NewTraining /> }
+        { path: 'training/new', element: <NewTraining /> },
+        { path: 'training/details/:id', element: <TrainingDetails /> }
       ]
     },
     {

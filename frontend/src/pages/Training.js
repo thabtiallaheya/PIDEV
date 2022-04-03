@@ -5,7 +5,6 @@ import ReactPaginate from 'react-paginate';
 import './Training.css';
 // material
 import { Button, Container, Stack, Typography } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import CardActions from '@mui/material/CardActions';
@@ -52,8 +51,14 @@ export default function Training() {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small">Share</Button>
-              <Button size="small">Learn More</Button>
+              <Button size="small">Add To Cart</Button>
+              <Button
+                size="small"
+                component={RouterLink}
+                to={`/dashboard/training/details/${training._id}`}
+              >
+                Learn More
+              </Button>
             </CardActions>
           </Card>
         </Grid>
