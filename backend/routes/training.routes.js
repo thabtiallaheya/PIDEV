@@ -26,7 +26,7 @@ const upload = multer({
     if (mimeType && extname) {
       return cb(null, true);
     }
-    cb("Give proper files formate to upload");
+    cb("Give proper files format to upload");
   },
 }).single("image");
 
@@ -61,7 +61,7 @@ router.post("/training/insert", upload, async (req, res) => {
     language: req.body.language,
     scheduledDate: req.body.scheduledDate,
     nbrParticipent: req.body.nbrParticipent,
-    image: req.file.path,
+    image: req.file.filename,
     price: req.body.price,
   });
   try {

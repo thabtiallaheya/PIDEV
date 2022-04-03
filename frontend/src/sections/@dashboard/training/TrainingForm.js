@@ -61,12 +61,12 @@ export function TrainingForm() {
       formdata.append('price', values.price);
       formdata.append('image', values.image);
       axios
-        .post('http://localhost:3001/api/training/insert', formdata, {
+        .post('http://localhost:8081/api/training/insert', formdata, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         .then((res) => {
           //console.warn(res);
-          navigate('/dashboard/training', { replace: true });
+          navigate('/training', { replace: true });
         });
     }
   });

@@ -22,7 +22,7 @@ export default function TrainingDetails() {
 
   useEffect(() => {
     // console.log(id);
-    axios.get(`http://localhost:3001/api/training/getOne/${id}`).then((response) => {
+    axios.get(`http://localhost:8081/api/training/getOne/${id}`).then((response) => {
       setTraining(response.data);
       console.log(response.data);
     });
@@ -47,7 +47,7 @@ export default function TrainingDetails() {
                     {training.image && (
                       <CardMedia
                         component="img"
-                        image={`http://localhost:3001/${training.image}`}
+                        image={`http://localhost:8081/${training.image}`}
                       />
                     )}
                   </ButtonBase>

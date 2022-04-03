@@ -22,7 +22,7 @@ import Iconify from '../components/Iconify';
 export default function Training() {
   const [training, setTraining] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:3001/api/training/getAll').then((response) => {
+    axios.get('http://localhost:8081/api/training/getAll').then((response) => {
       setTraining(response.data);
       // console.log(response.data);
     });
@@ -40,7 +40,7 @@ export default function Training() {
             <CardMedia
               component="img"
               height="140"
-              image={`http://localhost:3001/${training.image}`}
+              image={`http://localhost:8081/${training.image}`}
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
@@ -52,11 +52,7 @@ export default function Training() {
             </CardContent>
             <CardActions>
               <Button size="small">Add To Cart</Button>
-              <Button
-                size="small"
-                component={RouterLink}
-                to={`/dashboard/training/details/${training._id}`}
-              >
+              <Button size="small" component={RouterLink} to={`/training/details/${training._id}`}>
                 Learn More
               </Button>
             </CardActions>
@@ -80,7 +76,7 @@ export default function Training() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="/dashboard/training/new"
+            to="/training/new"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
             New Training
