@@ -9,6 +9,7 @@ import {
   Grid,
   TextField
 } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const states = [
   {
@@ -35,6 +36,8 @@ export default function AccountProfileDetails(props) {
     country: 'USA'
   });
 
+  const user = useSelector((state) => state.user);
+
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -57,7 +60,7 @@ export default function AccountProfileDetails(props) {
                 name="firstName"
                 onChange={handleChange}
                 required
-                value={values.firstName}
+                value={user.firstName}
                 variant="outlined"
               />
             </Grid>
@@ -68,7 +71,7 @@ export default function AccountProfileDetails(props) {
                 name="lastName"
                 onChange={handleChange}
                 required
-                value={values.lastName}
+                value={user.lastName}
                 variant="outlined"
               />
             </Grid>
@@ -78,8 +81,8 @@ export default function AccountProfileDetails(props) {
                 label="Email Address"
                 name="email"
                 onChange={handleChange}
-                required
-                value={values.email}
+                disabled
+                value={user.email}
                 variant="outlined"
               />
             </Grid>
