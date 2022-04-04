@@ -34,7 +34,9 @@ const upload = multer({
 router.get("/training/getAll", async (req, res) => {
   try {
     const data = await trainingModule.find();
-    res.json(data);
+
+    const sortedData = data.sort((a, b) => b.creationDate - a.creationDate);
+    res.json(sortedData);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
