@@ -13,6 +13,9 @@ import NotFound from './pages/Page404';
 import Training from './pages/Training';
 import NewTraining from './pages/NewTraining';
 import TrainingDetails from './pages/TrainingDetails';
+import Course from './pages/course';
+import NewCourse from './pages/newCourse';
+import CourseDetails from './pages/courseDetails';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +31,10 @@ export default function Router() {
         { path: 'blog', element: <Blog /> },
         { path: 'training', element: <Training /> },
         { path: 'training/new', element: <NewTraining /> },
-        { path: 'training/details/:id', element: <TrainingDetails /> }
+        { path: 'training/details/:id', element: <TrainingDetails /> },
+        { path: 'course', element: <Course /> },
+        { path: 'course/new', element: <NewCourse /> },
+        { path: 'course/details/:id', element: <CourseDetails /> }
       ]
     },
     {
