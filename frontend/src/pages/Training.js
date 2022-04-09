@@ -2,11 +2,10 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import parse from 'html-react-parser';
 import './Training.css';
 // material
-import { Button, Container, Stack, Typography } from '@mui/material';
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
+import { Button, Container, Stack, Typography, Divider, Card, Grid } from '@mui/material';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -47,11 +46,11 @@ export default function Training() {
                 {training.name}
               </Typography>
               <Typography variant="body2" color="text.secondary" noWrap>
-                {training.description}
+                {parse(training.description)}
               </Typography>
             </CardContent>
-            <CardActions>
-              <Button size="small">Add To Cart</Button>
+            <Divider variant="middle" />
+            <CardActions style={{ justifyContent: 'center' }}>
               <Button size="small" component={RouterLink} to={`/training/details/${training._id}`}>
                 Learn More
               </Button>

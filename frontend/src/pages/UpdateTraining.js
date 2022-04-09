@@ -1,4 +1,7 @@
-import { Link as RouterLink } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
+
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Container, Typography, Stack } from '@mui/material';
@@ -7,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // components
 import Page from '../components/Page';
-import { TrainingForm } from '../sections/@dashboard/training/TrainingForm';
+import { UpdateTrainingForm } from '../sections/@dashboard/training/UpdateTrainingForm';
 
 // ----------------------------------------------------------------------
 
@@ -37,15 +40,24 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function NewTraining() {
+export default function UpdateTraining() {
+  const [training, setTraining] = useState([]);
+  const { id } = useParams();
+  useEffect(() => {
+    // console.log(id);
+    axios.get(`http://localhost:8081/api/training/getOne/${id}`).then((response) => {
+      setTraining(response.data);
+      console.log(response.data);
+    });
+  }, []);
   return (
     <RootStyle title="New Training | Minimal-UI">
       <Container>
         <Typography variant="h4" gutterBottom>
-          <IconButton aria-label="delete" component={RouterLink} to="/training">
+          <IconButton aria-label="delete" component={RouterLink} to={`/training/details/${id}`}>
             <ArrowBackIcon />
           </IconButton>
-          Back To Trainig List
+          Back To Trainig
         </Typography>
         <ContentStyle>
           <Box sx={{ mb: 5 }}>
@@ -56,7 +68,7 @@ export default function NewTraining() {
               Make with as New Training Session
             </Typography>
           </Box>
-          <TrainingForm />
+          {training.image && <UpdateTrainingForm training={training} />}
         </ContentStyle>
       </Container>
     </RootStyle>

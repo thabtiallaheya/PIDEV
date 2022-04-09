@@ -27,6 +27,7 @@ import EmailVerified from './pages/EmailVerified';
 import ChangePassword from './pages/ChangePassword';
 import ResetPassword from './pages/ResetPassword';
 import Account from './pages/Account';
+import UpdateTraining from './pages/UpdateTraining';
 
 // ----------------------------------------------------------------------
 
@@ -47,6 +48,7 @@ export default function Router() {
             { path: 'blog', element: <Blog /> },
             { path: 'training', element: <Training /> },
             { path: 'training/new', element: <NewTraining /> },
+            { path: 'training/update/:id', element: <UpdateTraining /> },
             { path: 'training/details/:id', element: <TrainingDetails /> },
             { path: 'blogFront', element: <BlogFront /> },
             { path: 'add', element: <CreateAct /> },

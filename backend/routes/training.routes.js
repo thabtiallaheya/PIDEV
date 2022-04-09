@@ -4,8 +4,12 @@ const multer = require("multer");
 
 const path = require("path");
 
+const fs = require("fs");
+
 const router = express.Router();
+
 const trainingModule = require("../models/training");
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -73,17 +77,37 @@ router.post("/training/insert", upload, async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
-
-//PATCH API
-router.patch("/training/patch/:id", async (req, res) => {
+//PUT API
+router.put("/training/update/:id", upload, async (req, res) => {
   try {
-    const id = req.params.id;
-    const dataToUpdate = req.body;
+    const data = await trainingModule.findById(req.params.id);
+    let newImage = "";
+    if (req.file) {
+      newImage = req.file.filename;
+      try {
+        fs.unlinkSync("./images/" + data.image);
+        //file removed
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      newImage = data.image;
+    }
     const options = { new: true };
-
     const result = await trainingModule.findByIdAndUpdate(
-      id,
-      dataToUpdate,
+      req.params.id,
+      {
+        name: req.body.name,
+        description: req.body.description,
+        tag: req.body.tag,
+        creationDate: data.creationDate,
+        duration: req.body.duration,
+        language: req.body.language,
+        scheduledDate: req.body.scheduledDate,
+        nbrParticipent: req.body.nbrParticipent,
+        image: newImage,
+        price: req.body.price,
+      },
       options
     );
     res.send(result);
@@ -95,6 +119,14 @@ router.patch("/training/patch/:id", async (req, res) => {
 //DELET API
 router.delete("/training/delete/:id", async (req, res) => {
   try {
+    const data = await trainingModule.findById(req.params.id);
+    //console.log(data.image);
+    try {
+      fs.unlinkSync("./images/" + data.image);
+      //file removed
+    } catch (err) {
+      console.error(err);
+    }
     await trainingModule.findByIdAndDelete(req.params.id);
     res.send(`${req.params.id} has been Deleted`);
   } catch (err) {
