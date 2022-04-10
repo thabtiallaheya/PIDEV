@@ -27,6 +27,12 @@ const User = new Schema({
     unique: true,
   },
   restpassword: String,
+  trainings: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "training",
+    },
+  ],
 });
 
 User.methods.generateVerificationToken = function () {

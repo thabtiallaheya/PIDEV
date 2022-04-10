@@ -9,7 +9,7 @@ const fs = require("fs");
 const router = express.Router();
 
 const trainingModule = require("../models/training");
-
+const UserModule = require("../models/user");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -69,6 +69,7 @@ router.post("/training/insert", upload, async (req, res) => {
     nbrParticipent: req.body.nbrParticipent,
     image: req.file.filename,
     price: req.body.price,
+    trainer: req.body.trainer,
   });
   try {
     const dataToSave = await data.save();
@@ -107,6 +108,7 @@ router.put("/training/update/:id", upload, async (req, res) => {
         nbrParticipent: req.body.nbrParticipent,
         image: newImage,
         price: req.body.price,
+        trainer: req.body.trainer,
       },
       options
     );
@@ -134,3 +136,12 @@ router.delete("/training/delete/:id", async (req, res) => {
   }
 });
 module.exports = router;
+// trainings by user
+router.get("/trainings/user/:id", async (req, res) => {
+  try {
+    const data = await trainingModule.find({ trainer: req.params.id });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});

@@ -17,14 +17,13 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import Stack from '@mui/material/Stack';
 // components
 import Page from '../components/Page';
-import { format, formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 
 export default function TrainingDetails() {
   const [training, setTraining] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
-    // console.log(id);
     axios.get(`http://localhost:8081/api/training/getOne/${id}`).then((response) => {
       setTraining(response.data);
       console.log(response.data);
@@ -49,7 +48,6 @@ export default function TrainingDetails() {
     });
   };
   const fDateTime = (date) => {
-    console.log(date);
     return format(new Date(date), 'dd MMM yyyy HH:mm ');
   };
   return (

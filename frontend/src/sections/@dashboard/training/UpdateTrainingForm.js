@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
+import moment from 'moment';
 // material
 import {
   Stack,
@@ -21,13 +21,6 @@ import ImageIcon from '@mui/icons-material/Image';
 import { LoadingButton } from '@mui/lab';
 
 export function UpdateTrainingForm(props) {
-  useEffect(() => {
-    console.log(props.training.name);
-    // axios.get(`http://localhost:8081/api/training/getOne/${id}`).then((response) => {
-    //   setTraining(response.data);
-    //   console.log(response.data);
-    // });
-  }, []);
   const navigate = useNavigate();
   const RegisterSchema = Yup.object().shape({
     Name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Name is required'),
@@ -35,12 +28,9 @@ export function UpdateTrainingForm(props) {
     tag: Yup.string().required('Tags is required'),
     duration: Yup.number().required('Duration is required'),
     language: Yup.string().required('select a language'),
-    scheduledDate: Yup.date()
-      .required('Scheduled Date is required')
-      .min(new Date(), "You can't choose a date equal or later than today"),
+    // scheduledDate: Yup.date().required('Scheduled Date is required'),
     nbrParticipant: Yup.number().required('Number of participants is required'),
-    price: Yup.number().required('Price is required'),
-    image: Yup.mixed().nullable().required('image is required')
+    price: Yup.number().required('Price is required')
   });
 
   const formik = useFormik({
@@ -50,32 +40,30 @@ export function UpdateTrainingForm(props) {
       tag: props.training.tag,
       duration: props.training.duration,
       language: props.training.language,
-      scheduledDate: props.training.creationDate,
+      scheduledDate: props.training.scheduledDate,
       nbrParticipant: props.training.nbrParticipent,
       price: props.training.price,
       image: null
     },
     validationSchema: RegisterSchema,
     onSubmit: async (values) => {
-      // console.log(values);
-      // const formdata = new FormData();
-      // formdata.append('name', values.Name);
-      // formdata.append('description', values.description);
-      // formdata.append('tag', values.tag);
-      // formdata.append('duration', values.duration);
-      // formdata.append('language', values.language);
-      // formdata.append('scheduledDate', values.scheduledDate);
-      // formdata.append('nbrParticipent', values.nbrParticipant);
-      // formdata.append('price', values.price);
-      // formdata.append('image', values.image);
-      // axios
-      //   .post('http://localhost:8081/api/training/insert', formdata, {
-      //     headers: { 'Content-Type': 'multipart/form-data' }
-      //   })
-      //   .then((res) => {
-      //     //console.warn(res);
-      //     navigate('/training', { replace: true });
-      //   });
+      const formdata = new FormData();
+      formdata.append('name', values.Name);
+      formdata.append('description', values.description);
+      formdata.append('tag', values.tag);
+      formdata.append('duration', values.duration);
+      formdata.append('language', values.language);
+      formdata.append('scheduledDate', values.scheduledDate);
+      formdata.append('nbrParticipent', values.nbrParticipant);
+      formdata.append('price', values.price);
+      formdata.append('image', values.image);
+      axios
+        .put(`http://localhost:8081/api/training/update/${props.training._id}`, formdata, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        .then((res) => {
+          navigate(`/training/details/${props.training._id}`, { replace: true });
+        });
     }
   });
 
@@ -115,16 +103,6 @@ export function UpdateTrainingForm(props) {
               <FormHelperText error>{errors.language}</FormHelperText>
             )}
           </FormControl>
-
-          {/* <TextField
-            fullWidth
-            label="Description"
-            {...getFieldProps('description')}
-            multiline
-            rows={4}
-            error={Boolean(touched.description && errors.description)}
-            helperText={touched.description && errors.description}
-          /> */}
           <TextField
             fullWidth
             type="number"
@@ -160,8 +138,8 @@ export function UpdateTrainingForm(props) {
               // console.log(getFieldProps('image'));
             }}
             variant="standard"
-            error={Boolean(touched.image && errors.image)}
-            helperText={touched.image && errors.image}
+            // error={Boolean(touched.image && errors.image)}
+            // helperText={touched.image && errors.image}
           />
           <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id="demo-simple-select-helper-label">Language</InputLabel>
@@ -198,9 +176,13 @@ export function UpdateTrainingForm(props) {
               <TextField
                 label="Scheduled Date"
                 type="datetime-local"
-                {...getFieldProps('scheduledDate')}
-                error={Boolean(touched.scheduledDate && errors.scheduledDate)}
-                helperText={touched.scheduledDate && errors.scheduledDate}
+                defaultValue={moment(props.training.scheduledDate).format('YYYY-MM-DDThh:mm')}
+                onChange={(event) => {
+                  setFieldValue('scheduledDate', event.currentTarget.value);
+                  // console.log(event.currentTarget.value);
+                }}
+                // error={Boolean(touched.scheduledDate && errors.scheduledDate)}
+                // helperText={touched.scheduledDate && errors.scheduledDate}
                 InputLabelProps={{
                   shrink: true
                 }}

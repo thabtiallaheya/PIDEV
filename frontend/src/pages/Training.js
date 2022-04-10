@@ -45,7 +45,7 @@ export default function Training() {
               <Typography gutterBottom variant="h5" component="div">
                 {training.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary" noWrap>
+              <Typography variant="body2" color="text.secondary" component="div" noWrap>
                 {parse(training.description)}
               </Typography>
             </CardContent>

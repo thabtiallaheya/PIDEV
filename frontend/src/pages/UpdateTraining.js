@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Container, Typography, Stack } from '@mui/material';
-import Card from '@mui/material/Card';
+import { Box, Container, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // components
@@ -18,14 +17,6 @@ const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
     display: 'flex'
   }
-}));
-const SectionStyle = styled(Card)(({ theme }) => ({
-  width: '100%',
-  maxWidth: 464,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  margin: theme.spacing(2, 0, 2, 2)
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
@@ -44,10 +35,8 @@ export default function UpdateTraining() {
   const [training, setTraining] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    // console.log(id);
     axios.get(`http://localhost:8081/api/training/getOne/${id}`).then((response) => {
       setTraining(response.data);
-      console.log(response.data);
     });
   }, []);
   return (
