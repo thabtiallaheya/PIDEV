@@ -2595,6 +2595,24 @@
     "@typescript-eslint/types" "5.12.0"
     eslint-visitor-keys "^3.0.0"
 
+"@videosdk.live/js-sdk@^0.0.28":
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/@videosdk.live/js-sdk/-/js-sdk-0.0.28.tgz#2b19aaddba67fa3d150c767b3d7c72c6d2faa139"
+  integrity sha512-SyTJfrMyL7IV+ErBVxz7OhE3EA+9nMnZJfPjV6D1uupBIIk2Xmy/moHq5EytrnJjlCCzSUWZIKVUMJosJBtZ+Q==
+
+"@videosdk.live/react-sdk@^0.1.28":
+  version "0.1.28"
+  resolved "https://registry.yarnpkg.com/@videosdk.live/react-sdk/-/react-sdk-0.1.28.tgz#1f8649c889862d7ab3c16e0165c509a3d17c6d8c"
+  integrity sha512-rRYPOVnYOVEY20hdQc4SfZBY9f6eo6JDPg/D7X6QsBT+vcK1t7g+STghbVOQb+828GgwDLhoAePL1rzDHxf1jQ==
+  dependencies:
+    "@videosdk.live/js-sdk" "^0.0.28"
+    events "^3.3.0"
+
+"@videosdk.live/rtc-js-prebuilt@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@videosdk.live/rtc-js-prebuilt/-/rtc-js-prebuilt-0.3.1.tgz#aeb5478cdcfcce9385e667f992c8cf7953a755ed"
+  integrity sha512-xHmUl7Sgx6P2i5BtfvVpMHg4WDfv2xVgyX639oJ4w3VpUendIl4fY0Dt62+mhoibgZJqcWkphw57GjouPGRVXg==
+
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
   resolved "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.11.1.tgz"
@@ -4872,7 +4890,7 @@ eventemitter3@^4.0.0:
   resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-4.0.7.tgz"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
 
-events@^3.2.0:
+events@^3.2.0, events@^3.3.0:
   version "3.3.0"
   resolved "https://registry.npmjs.org/events/-/events-3.3.0.tgz"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==

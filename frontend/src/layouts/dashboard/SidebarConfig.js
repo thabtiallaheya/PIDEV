@@ -14,7 +14,7 @@ const sidebarConfig = [
   {
     title: 'user',
     path: '/dashboard/user',
-    icon: getIcon('eva:people-fill')
+    icon: getIcon('fa6-solid:users-gear')
   },
   // {
   //   title: 'product',
@@ -24,23 +24,23 @@ const sidebarConfig = [
   {
     title: 'activity',
     path: '/blog',
-    icon: getIcon('eva:file-text-fill')
+    icon: getIcon('icon-park-outline:activity-source')
   },
   {
     title: 'training',
     path: '/training',
-    icon: getIcon('eva:file-text-fill')
+    icon: getIcon('healthicons:i-training-class')
   },
-  // {
-  //   title: 'login',
-  //   path: '/login',
-  //   icon: getIcon('eva:lock-fill')
-  // },
-  // {
-  //   title: 'register',
-  //   path: '/register',
-  //   icon: getIcon('eva:person-add-fill')
-  // },
+  {
+    title: 'Meeting',
+    path: '/meeting',
+    icon: getIcon('ant-design:video-camera-add-outlined')
+  },
+  {
+    title: 'calendar',
+    path: '/calendar',
+    icon: getIcon('bi:calendar-week-fill')
+  },
   {
     title: 'Not found',
     path: '/404',

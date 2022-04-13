@@ -76,7 +76,7 @@ export default function Training() {
             variant="contained"
             component={RouterLink}
             to="/training/new"
-            startIcon={<Iconify icon="eva:plus-fill" />}
+            startIcon={<Iconify icon="bx:add-to-queue" />}
           >
             New Training
           </Button>

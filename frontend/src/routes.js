@@ -22,6 +22,7 @@ import showDetailAct from './pages/ShowDetailAct';
 import ShowDetailAct from './pages/ShowDetailAct';
 import Training from './pages/Training';
 import NewTraining from './pages/NewTraining';
+import Meeting from './pages/meeting';
 import TrainingDetails from './pages/TrainingDetails';
 import EmailVerified from './pages/EmailVerified';
 import ChangePassword from './pages/ChangePassword';
@@ -47,6 +48,7 @@ export default function Router() {
             { path: 'products', element: <Products /> },
             { path: 'blog', element: <Blog /> },
             { path: 'training', element: <Training /> },
+            { path: 'meeting', element: <Meeting /> },
             { path: 'training/new', element: <NewTraining /> },
             { path: 'training/update/:id', element: <UpdateTraining /> },
             { path: 'training/details/:id', element: <TrainingDetails /> },
