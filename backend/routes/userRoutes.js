@@ -117,6 +117,8 @@ router.post("/login", (req, res, next) => {
         bcrypt.compare(req.body.password, user.password).then((isMatch) => {
           if (!isMatch) {
             res.status(400).json({ message: "incorrect password" });
+          } else if (!user.verified) {
+            res.status(400).json({ message: "Please confirm your email" });
           } else {
             var token = jwt.sign(
               {
