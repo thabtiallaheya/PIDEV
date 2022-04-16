@@ -52,7 +52,6 @@ export default function LoginForm() {
           setStatus({ type: 'error', message: data?.message || genericErrorMessage });
         } else {
           setStatus({ type: 'success', message: 'logged in successfuly' });
-          console.log(data);
           const { _id, firstName, lastName, photo } = data.user;
           dispatch(
             login({

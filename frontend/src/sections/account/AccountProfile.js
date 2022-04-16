@@ -11,9 +11,11 @@ import {
   Typography
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from 'src/features/User/UserSlice';
 
 export default function AccountProfile(props) {
+  const dispatch = useDispatch();
   const [photo, setPhoto] = useState(null);
   const user = useSelector((state) => state.user);
   const [status, setStatus] = useState(null);
@@ -46,6 +48,12 @@ export default function AccountProfile(props) {
         const data = await response.json();
         if (response.status === 200) {
           setStatus({ type: 'success', message: 'Image updated succesfully' });
+          dispatch(
+            login({
+              ...user,
+              photo: `http://localhost:8081/${data}`
+            })
+          );
           setPhoto(null);
         } else {
           setStatus({ type: 'error', message: data?.message || genericErrorMessage });
@@ -115,7 +123,7 @@ export default function AccountProfile(props) {
             onChange={(e) => setPhoto(e.target.files[0])}
           />
         </Button>
-        <Button color="primary" fullWidth variant="contained" onClick={onSubmit}>
+        <Button color="primary" fullWidth variant="contained" disabled={!photo} onClick={onSubmit}>
           Upload picture
         </Button>
       </CardActions>

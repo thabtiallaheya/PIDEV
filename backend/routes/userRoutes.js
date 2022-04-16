@@ -11,6 +11,7 @@ const ValidateLogin = require("../validation/Login");
 var mailer = require("../utils/mailer");
 const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
+const fs = require("fs");
 let path = require("path");
 const { findOneAndUpdate } = require("../models/user");
 
@@ -144,10 +145,8 @@ router.post("/login", (req, res, next) => {
 });
 
 router.post("/upload-photo", upload.single("photo"), async (req, res) => {
-  console.log("here");
   const photo = req.file.filename;
-  console.log(req.body.id);
-  console.log(photo);
+  const oldUser = await User.findById(req.body.id);
   const updatedUser = await User.findOneAndUpdate(
     { _id: req.body.id },
     { photo }
@@ -155,7 +154,8 @@ router.post("/upload-photo", upload.single("photo"), async (req, res) => {
   if (!updatedUser) {
     return res.status(400).json({ message: "user does not exist" });
   }
-  return res.status(200).json({ message: "test" });
+  fs.unlink(`images/${oldUser.photo}`, () => console.log("success"));
+  return res.status(200).json(photo);
 });
 
 router.post("/active", function (req, res, next) {
@@ -211,7 +211,6 @@ router.post("/verify-restpassword", function (req, res, next) {
 
 router.post("/update-password", function (req, res, next) {
   const { id, password } = req.body;
-
   const hash = bcrypt.hashSync(password, 10); //hashed password
 
   User.findByIdAndUpdate({ _id: id }, { password: hash }).exec();
