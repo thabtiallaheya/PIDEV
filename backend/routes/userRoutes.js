@@ -71,6 +71,7 @@ router.post("/", async (req, res, next) => {
         email: req.body.email,
         password: req.body.password,
         verified: false,
+        role: req.body.role === "MENTOR" ? ROLES.MENTOR : ROLES.STUDENT,
       });
       const newUser = await user.save();
       if (newUser) {

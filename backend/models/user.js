@@ -26,6 +26,7 @@ const User = new Schema({
     trim: true,
     unique: true,
   },
+  role: String,
   restpassword: String,
 });
 
