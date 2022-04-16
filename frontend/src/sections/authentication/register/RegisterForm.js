@@ -2,7 +2,17 @@ import * as Yup from 'yup';
 import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
+import {
+  Stack,
+  TextField,
+  IconButton,
+  InputAdornment,
+  Alert,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
+} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
@@ -20,7 +30,8 @@ export default function RegisterForm() {
       .required('First name required'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required')
+    password: Yup.string().required('Password is required'),
+    role: Yup.string().required('Role is required')
   });
 
   const formik = useFormik({
@@ -28,17 +39,18 @@ export default function RegisterForm() {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      role: ''
     },
     validationSchema: RegisterSchema,
-    onSubmit: async ({ email, password, firstName, lastName }, { resetForm }) => {
+    onSubmit: async ({ email, password, firstName, lastName, role }, { resetForm }) => {
       const genericErrorMessage = 'Something went wrong! Please try again later.';
       try {
         const response = await fetch('http://localhost:8081/users/', {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, firstName, lastName })
+          body: JSON.stringify({ email, password, firstName, lastName, role })
         });
         const data = await response.json();
         if (response.status !== 200) {
@@ -114,6 +126,18 @@ export default function RegisterForm() {
             error={Boolean(touched.password && errors.password)}
             helperText={touched.password && errors.password}
           />
+          <FormControl>
+            <InputLabel>I am:</InputLabel>
+            <Select
+              fullWidth
+              {...getFieldProps('role')}
+              error={Boolean(touched.role && errors.role)}
+              helperText={touched.role && errors.role}
+            >
+              <MenuItem value="STUDENT">Student</MenuItem>
+              <MenuItem value="MENTOR">Mentor</MenuItem>
+            </Select>
+          </FormControl>
 
           <LoadingButton
             fullWidth

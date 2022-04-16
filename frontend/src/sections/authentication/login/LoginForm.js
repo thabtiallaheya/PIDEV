@@ -52,14 +52,14 @@ export default function LoginForm() {
           setStatus({ type: 'error', message: data?.message || genericErrorMessage });
         } else {
           setStatus({ type: 'success', message: 'logged in successfuly' });
-          console.log(data);
-          const { _id, firstName, lastName, photo } = data.user;
+          const { _id, firstName, lastName, photo, role } = data.user;
           dispatch(
             login({
               email,
               token: data.accessToken,
               firstName,
               lastName,
+              role,
               id: _id,
               photo: `http://localhost:8081/${photo}`
             })

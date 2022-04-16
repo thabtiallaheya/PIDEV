@@ -11,8 +11,8 @@ const ValidateLogin = require("../validation/Login");
 var mailer = require("../utils/mailer");
 const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
+const fs = require("fs");
 let path = require("path");
-const { findOneAndUpdate } = require("../models/user");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -71,6 +71,7 @@ router.post("/", async (req, res, next) => {
         email: req.body.email,
         password: req.body.password,
         verified: false,
+        role: req.body.role === "MENTOR" ? ROLES.MENTOR : ROLES.STUDENT,
       });
       const newUser = await user.save();
       if (newUser) {
@@ -116,6 +117,8 @@ router.post("/login", (req, res, next) => {
         bcrypt.compare(req.body.password, user.password).then((isMatch) => {
           if (!isMatch) {
             res.status(400).json({ message: "incorrect password" });
+          } else if (!user.verified) {
+            res.status(400).json({ message: "Please confirm your email" });
           } else {
             var token = jwt.sign(
               {
@@ -141,10 +144,8 @@ router.post("/login", (req, res, next) => {
 });
 
 router.post("/upload-photo", upload.single("photo"), async (req, res) => {
-  console.log("here");
   const photo = req.file.filename;
-  console.log(req.body.id);
-  console.log(photo);
+  const oldUser = await User.findById(req.body.id);
   const updatedUser = await User.findOneAndUpdate(
     { _id: req.body.id },
     { photo }
@@ -152,7 +153,8 @@ router.post("/upload-photo", upload.single("photo"), async (req, res) => {
   if (!updatedUser) {
     return res.status(400).json({ message: "user does not exist" });
   }
-  return res.status(200).json({ message: "test" });
+  fs.unlink(`images/${oldUser.photo}`, () => console.log("success"));
+  return res.status(200).json(photo);
 });
 
 router.post("/active", function (req, res, next) {
@@ -162,7 +164,6 @@ router.post("/active", function (req, res, next) {
       req.body.token,
       process.env.USER_VERIFICATION_TOKEN_SECRET
     );
-    console.log(payload.ID);
     User.findOneAndUpdate(
       { _id: payload.ID },
       { verified: true },
@@ -208,7 +209,6 @@ router.post("/verify-restpassword", function (req, res, next) {
 
 router.post("/update-password", function (req, res, next) {
   const { id, password } = req.body;
-
   const hash = bcrypt.hashSync(password, 10); //hashed password
 
   User.findByIdAndUpdate({ _id: id }, { password: hash }).exec();
