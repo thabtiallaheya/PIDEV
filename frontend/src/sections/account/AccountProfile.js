@@ -26,11 +26,6 @@ export default function AccountProfile(props) {
       setImageUrl(URL.createObjectURL(photo));
     }
   }, [photo]);
-  // useEffect(()=>{
-  //   (async()=>{
-
-  //   })()
-  // })
 
   const onSubmit = async () => {
     if (photo) {

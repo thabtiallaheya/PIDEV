@@ -13,7 +13,6 @@ const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
 const fs = require("fs");
 let path = require("path");
-const { findOneAndUpdate } = require("../models/user");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -165,7 +164,6 @@ router.post("/active", function (req, res, next) {
       req.body.token,
       process.env.USER_VERIFICATION_TOKEN_SECRET
     );
-    console.log(payload.ID);
     User.findOneAndUpdate(
       { _id: payload.ID },
       { verified: true },
