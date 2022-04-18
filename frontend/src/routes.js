@@ -34,7 +34,9 @@ export default function Router() {
         { path: 'training/details/:id', element: <TrainingDetails /> },
         { path: 'course', element: <Course /> },
         { path: 'course/new', element: <NewCourse /> },
-        { path: 'course/details/:id', element: <CourseDetails /> }
+          { path: 'course/details/:id', element: <CourseDetails /> },
+
+
       ]
     },
     {

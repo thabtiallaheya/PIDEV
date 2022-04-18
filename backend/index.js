@@ -10,7 +10,7 @@ app.use(cors());
 app.use("/images", express.static(path.join("images")));
 mongoose
   .connect(
-    "mongodb+srv://Firas:qs2DNSfxzNVgWzT5@pidev.rwjs1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "mongodb://localhost:27017/pidev",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -20,7 +20,10 @@ mongoose
   .catch((err) => console.log(err));
 
 const routesTaining = require("./routes/training.routes");
+const routesCourse = require("./routes/course.routes");
+
 app.use("/api", routesTaining);
+app.use("/api", routesCourse);
 app.listen(3001, () => {
   console.log("app is running in port 3001");
 });

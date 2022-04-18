@@ -12,7 +12,7 @@ const CourseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  
+
   price: {
     type: Number,
   },
@@ -23,15 +23,6 @@ const CourseSchema = new mongoose.Schema({
     type: String,
   },
   pdf : {
-    type: String,
-  },
-  cloudinary_id_img: {
-    type: String,
-  },
-  cloudinary_id_vid: {
-    type: String,
-  },
-  cloudinary_id_pdf: {
     type: String,
   }
 });

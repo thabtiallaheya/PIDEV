@@ -44,7 +44,7 @@ export default function NewCourse() {
               Add new Courses.
             </Typography>
             <Typography sx={{ color: 'text.secondary' }}>
-              Create course 
+              Create course
             </Typography>
           </Box>
           <CourseForm />

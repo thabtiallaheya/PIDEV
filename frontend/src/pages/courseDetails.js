@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import parse from 'html-react-parser';
 import VideoPlayer from "react-video-js-player"
-
+import { Player } from 'video-react';
+import "./course.css";
 
 // material
 import { Box, Grid, Container, Typography } from '@mui/material';
@@ -22,6 +23,12 @@ export default function CourseDetails() {
   const [course, setCourse] = useState([]);
   const { id } = useParams();
 
+    const handleButtonClick = () => {
+        axios.delete(`http://localhost:3001/api/course/delete/${id}`)
+            .then((res)=> {
+                console.log(res);
+            });
+    }
   useEffect(() => {
     // console.log(id);
     axios.get(`http://localhost:3001/api/course/getOne/${id}`).then((response) => {
@@ -29,6 +36,7 @@ export default function CourseDetails() {
       console.log(response.data);
     });
   }, []);
+
   return (
     <Page title=" Course Details | Minimal-UI">
       <Container maxWidth="xl">
@@ -51,14 +59,20 @@ export default function CourseDetails() {
                         component="img"
                         image={`http://localhost:3001/${course.image}`}
                       />
-        
+
                     )}
                   </ButtonBase>
                 </Grid>
-                <VideoPlayer src={course.video} width="720"
-                    height="420"
-          playBackRates={[0.5,1,1.25,1.5,2]}/>
-    
+                  <div className="player-wrapper" >
+                  <Player  className="react-player"
+                      poster="/assets/poster.png"
+                           width="100%"
+                           height="100%"
+                      src="https://res.cloudinary.com/learningo/video/upload/v1649129633/pnabmmtqpsv3aawf6uti.mp4"
+                  />
+                  );
+                  </div>
+
           <a href={course.pdf} download>Click to download</a>
 
                 <Grid item xs={12} sm container>
@@ -73,7 +87,7 @@ export default function CourseDetails() {
                       <Typography variant="body2" gutterBottom>
                         {course.description}
                       </Typography>
-                      
+
           <div className="p-2"></div>
                     </Grid>
                     { <Grid item>
@@ -103,7 +117,7 @@ export default function CourseDetails() {
                   </Grid>
             </Paper>
             <Stack direction="row" spacing={2}>
-              <Button variant="outlined" startIcon={<DeleteIcon />}>
+              <Button variant="outlined" startIcon={<DeleteIcon />} >
                 Delete
               </Button>
               <Button variant="contained" endIcon={<ModeEditIcon />}>
