@@ -6,40 +6,40 @@ import Iconify from '../../components/Iconify';
 const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
 
 const sidebarConfig = [
-  {
-    title: 'dashboard',
-    path: '/app',
-    icon: getIcon('eva:pie-chart-2-fill')
-  },
+  // {
+  //   title: 'dashboard',
+  //   path: '/app',
+  //   icon: getIcon('eva:pie-chart-2-fill')
+  // },
   {
     title: 'user',
     path: '/dashboard/user',
-    icon: getIcon('eva:people-fill')
+    icon: getIcon('fa6-solid:users-gear')
   },
-  {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon('eva:shopping-bag-fill')
-  },
+  // {
+  //   title: 'product',
+  //   path: '/dashboard/products',
+  //   icon: getIcon('eva:shopping-bag-fill')
+  // },
   {
     title: 'activity',
     path: '/blog',
-    icon: getIcon('eva:file-text-fill')
+    icon: getIcon('icon-park-outline:activity-source')
   },
   {
     title: 'training',
     path: '/training',
-    icon: getIcon('eva:file-text-fill')
+    icon: getIcon('healthicons:i-training-class')
   },
   {
-    title: 'login',
-    path: '/login',
-    icon: getIcon('eva:lock-fill')
+    title: 'Meeting',
+    path: '/meeting',
+    icon: getIcon('ant-design:video-camera-add-outlined')
   },
   {
-    title: 'register',
-    path: '/register',
-    icon: getIcon('eva:person-add-fill')
+    title: 'calendar',
+    path: '/calendar',
+    icon: getIcon('bi:calendar-week-fill')
   },
   {
     title: 'Not found',

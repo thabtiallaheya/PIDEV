@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -18,8 +19,10 @@ import {
 } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
 import { LoadingButton } from '@mui/lab';
+import Swal from 'sweetalert2';
 
 export function TrainingForm() {
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const RegisterSchema = Yup.object().shape({
     Name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Name is required'),
@@ -49,7 +52,6 @@ export function TrainingForm() {
     },
     validationSchema: RegisterSchema,
     onSubmit: async (values) => {
-      console.log(values);
       const formdata = new FormData();
       formdata.append('name', values.Name);
       formdata.append('description', values.description);
@@ -60,13 +62,22 @@ export function TrainingForm() {
       formdata.append('nbrParticipent', values.nbrParticipant);
       formdata.append('price', values.price);
       formdata.append('image', values.image);
+      formdata.append('trainer', user.id);
       axios
         .post('http://localhost:8081/api/training/insert', formdata, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         .then((res) => {
-          //console.warn(res);
-          navigate('/training', { replace: true });
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Your training has been saved',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          setTimeout(() => {
+            navigate('/training', { replace: true });
+          }, 2000);
         });
     }
   });

@@ -1587,6 +1587,77 @@
   resolved "https://registry.npmjs.org/@faker-js/faker/-/faker-6.0.0-alpha.7.tgz"
   integrity sha512-T2nYE8+EfzfkRMLMSm7UvgC7fZ2KkKEyCMeyPVS0q2cuvENbt1SjWyu0bOJ0JqBbTs1g+gYMWMFMXspWlzNVmQ==
 
+"@fullcalendar/common@~5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/common/-/common-5.11.0.tgz#d7e47b4272ba6824f95581fb7fb630c5880f4212"
+  integrity sha512-gWjbMAnN1u73Oqlgjbyky7i+3bY0hvFSnGT0YBPx44n874AkQa9e9OU12PMLTMOPy0tXPb8DEwRelFQ7CJNbcw==
+  dependencies:
+    tslib "^2.1.0"
+
+"@fullcalendar/daygrid@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.11.0.tgz#fd10391dfc2b6caa3538e0826f8d8f3e83e0e22a"
+  integrity sha512-Ybh/dfHn/VL0qOVIRVyJc9I8oYiqqHl6xQONk8xXCe456QbPzAQLsAxpLLJLH+3smWNCfoQgvDKzR9e9XTzLMQ==
+  dependencies:
+    "@fullcalendar/common" "~5.11.0"
+    tslib "^2.1.0"
+
+"@fullcalendar/premium-common@~5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/premium-common/-/premium-common-5.11.0.tgz#984ad16dba011c656ebc9ecb358bf6f2733c5e88"
+  integrity sha512-XVLJwJQ26EhuglBM1flmrKtNt0BEUBHoazko/wvMiz5Yz17eABKQreFTidipOwjL3s74ifQzDoYpkQVn8TzpZQ==
+  dependencies:
+    "@fullcalendar/common" "~5.11.0"
+    tslib "^2.1.0"
+
+"@fullcalendar/react@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-5.11.0.tgz#175e8b204ccc3c8202395b4c38401e74db08e369"
+  integrity sha512-DkMFQ94ZDi95A6+4g8k2jdVVMIEBCQBqWLNXSi8i39GNiNoadnl2FRn6t2BJBVQTYtI6JDOOLllP34LVmQJVOQ==
+  dependencies:
+    "@fullcalendar/common" "~5.11.0"
+    tslib "^2.1.0"
+
+"@fullcalendar/resource-common@~5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource-common/-/resource-common-5.11.0.tgz#fdf92c3629282504c3ce766fbca423ee6fd7f1ea"
+  integrity sha512-zO6UK9IKo7O8Uj5Y1t9sLMsLyNmxAliriAlz/NNhk//O/yGmQZ5MQOgVDg2qCZpDOWgQeuSZOkTTJdud5ISe2Q==
+  dependencies:
+    "@fullcalendar/common" "~5.11.0"
+    "@fullcalendar/premium-common" "~5.11.0"
+    tslib "^2.1.0"
+
+"@fullcalendar/resource-timeline@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource-timeline/-/resource-timeline-5.11.0.tgz#9ca13058fc4ca32f2b7dee9e4fbea93ee6140243"
+  integrity sha512-+40sKEQj/ig6oh+8/FZPaFYtqI4e9wa/2XT2MTtzwDr3modHU0mQChlpcY8WQ+c6kyPjVwhO89BFiv2OeilLWw==
+  dependencies:
+    "@fullcalendar/common" "~5.11.0"
+    "@fullcalendar/premium-common" "~5.11.0"
+    "@fullcalendar/resource-common" "~5.11.0"
+    "@fullcalendar/scrollgrid" "~5.11.0"
+    "@fullcalendar/timeline" "~5.11.0"
+    tslib "^2.1.0"
+
+"@fullcalendar/scrollgrid@~5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/scrollgrid/-/scrollgrid-5.11.0.tgz#b5ad9ee4e6fe97d5f7056a727da46aa4f76b5519"
+  integrity sha512-OPwLGLr0YF2qQYa9K1vPIGsodfAqPnugcwKLwnkiLprC2UybnPaIXvY6xMAHyVWSiBaeJSmkQ0J8mZDmfKjdTw==
+  dependencies:
+    "@fullcalendar/common" "~5.11.0"
+    "@fullcalendar/premium-common" "~5.11.0"
+    tslib "^2.1.0"
+
+"@fullcalendar/timeline@~5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timeline/-/timeline-5.11.0.tgz#55a72390cf9d2b2ddf91be48b841257ab0970473"
+  integrity sha512-2mASvwsXMR42Vlvwjnb5w0OvMDf8z2WCZXpLCd11lP/b+ZYOosCrJZZQWpzNfWYf7Y4Sqjo7q+YMPxnJqlichg==
+  dependencies:
+    "@fullcalendar/common" "~5.11.0"
+    "@fullcalendar/premium-common" "~5.11.0"
+    "@fullcalendar/scrollgrid" "~5.11.0"
+    tslib "^2.1.0"
+
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.3"
   resolved "https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.9.3.tgz"
@@ -2594,6 +2665,24 @@
   dependencies:
     "@typescript-eslint/types" "5.12.0"
     eslint-visitor-keys "^3.0.0"
+
+"@videosdk.live/js-sdk@^0.0.28":
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/@videosdk.live/js-sdk/-/js-sdk-0.0.28.tgz#2b19aaddba67fa3d150c767b3d7c72c6d2faa139"
+  integrity sha512-SyTJfrMyL7IV+ErBVxz7OhE3EA+9nMnZJfPjV6D1uupBIIk2Xmy/moHq5EytrnJjlCCzSUWZIKVUMJosJBtZ+Q==
+
+"@videosdk.live/react-sdk@^0.1.28":
+  version "0.1.28"
+  resolved "https://registry.yarnpkg.com/@videosdk.live/react-sdk/-/react-sdk-0.1.28.tgz#1f8649c889862d7ab3c16e0165c509a3d17c6d8c"
+  integrity sha512-rRYPOVnYOVEY20hdQc4SfZBY9f6eo6JDPg/D7X6QsBT+vcK1t7g+STghbVOQb+828GgwDLhoAePL1rzDHxf1jQ==
+  dependencies:
+    "@videosdk.live/js-sdk" "^0.0.28"
+    events "^3.3.0"
+
+"@videosdk.live/rtc-js-prebuilt@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@videosdk.live/rtc-js-prebuilt/-/rtc-js-prebuilt-0.3.1.tgz#aeb5478cdcfcce9385e667f992c8cf7953a755ed"
+  integrity sha512-xHmUl7Sgx6P2i5BtfvVpMHg4WDfv2xVgyX639oJ4w3VpUendIl4fY0Dt62+mhoibgZJqcWkphw57GjouPGRVXg==
 
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
@@ -4324,7 +4413,7 @@ dom-serializer@^1.0.1:
     domhandler "^4.2.0"
     entities "^2.0.0"
 
-domelementtype@1, domelementtype@^1.3.1:
+domelementtype@1:
   version "1.3.1"
   resolved "https://registry.npmjs.org/domelementtype/-/domelementtype-1.3.1.tgz"
   integrity sha512-BSKB+TSpMpFI/HOxCNr1O8aMOTZ8hT3pM3GQ0w/mWRmkhEDSFJkkyzz4XQsBV44BChwGkrDfMyjVD0eA2aFV3w==
@@ -4348,13 +4437,6 @@ domhandler@4.3.1, domhandler@^4.2.2:
   dependencies:
     domelementtype "^2.2.0"
 
-domhandler@^2.3.0:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-2.4.2.tgz#8805097e933d65e85546f726d60f5eb88b44f803"
-  integrity sha512-JiK04h0Ht5u/80fdLMCEmV4zkNh2BcoMFBmZ/91WtYZ8qVXSKjiw7fXMgFPnHcSZgOo3XdinHvmnDUeMf5R4wA==
-  dependencies:
-    domelementtype "1"
-
 domhandler@^4.0.0, domhandler@^4.2.0, domhandler@^4.3.0:
   version "4.3.0"
   resolved "https://registry.npmjs.org/domhandler/-/domhandler-4.3.0.tgz"
@@ -4367,7 +4449,7 @@ dompurify@^2.2.0:
   resolved "https://registry.npmjs.org/dompurify/-/dompurify-2.3.6.tgz"
   integrity sha512-OFP2u/3T1R5CEgWCEONuJ1a5+MFKnOYpkywpUSxv/dj1LeBT1erK+JwM7zK0ROy2BRhqVCf0LRw/kHqKuMkVGg==
 
-domutils@^1.5.1, domutils@^1.7.0:
+domutils@^1.7.0:
   version "1.7.0"
   resolved "https://registry.npmjs.org/domutils/-/domutils-1.7.0.tgz"
   integrity sha512-Lgd2XcJ/NjEw+7tFvfKxOzCYKZsdct5lczQ2ZaQY8Djz7pfAD3Gbp8ySJWtreII/vDlMVmxwa6pHmdxIYgttDg==
@@ -4463,11 +4545,6 @@ enhanced-resolve@^5.8.3:
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
-
-entities@^1.1.1:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.2.tgz#bdfa735299664dfafd34529ed4f8522a275fea56"
-  integrity sha512-f2LZMYl1Fzu7YSBKg+RoROelpOaNrcGmE9AZubeDfrCEia483oW4MI4VyFd5VNHIgQ/7qm1I0wUHK1eJnn2y2w==
 
 entities@^2.0.0:
   version "2.2.0"
@@ -4884,7 +4961,7 @@ eventemitter3@^4.0.0:
   resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-4.0.7.tgz"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
 
-events@^3.2.0:
+events@^3.2.0, events@^3.3.0:
   version "3.3.0"
   resolved "https://registry.npmjs.org/events/-/events-3.3.0.tgz"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
@@ -5561,18 +5638,6 @@ htmlparser2@7.2.0:
     domhandler "^4.2.2"
     domutils "^2.8.0"
     entities "^3.0.1"
-
-htmlparser2@^3.9.0:
-  version "3.10.1"
-  resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.10.1.tgz#bd679dc3f59897b6a34bb10749c855bb53a9392f"
-  integrity sha512-IgieNijUMbkDovyoKObU1DUhm1iwNYE/fuifEoEHfd1oZKZDaONBSkal7Y01shxsM49R4XaMdGez3WnF9UfiCQ==
-  dependencies:
-    domelementtype "^1.3.1"
-    domhandler "^2.3.0"
-    domutils "^1.5.1"
-    entities "^1.1.1"
-    inherits "^2.0.1"
-    readable-stream "^3.1.1"
 
 htmlparser2@^6.1.0:
   version "6.1.0"
@@ -7080,6 +7145,13 @@ no-case@^3.0.4:
     lower-case "^2.0.2"
     tslib "^2.0.3"
 
+node-fetch@2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
+  dependencies:
+    whatwg-url "^5.0.0"
+
 node-fetch@^1.0.1:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-1.7.3.tgz#980f6f72d85211a5347c6b2bc18c5b84c3eb47ef"
@@ -8324,13 +8396,6 @@ react-helmet-async@^1.2.3:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
-react-html-parser@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/react-html-parser/-/react-html-parser-2.0.2.tgz#6dbe1ddd2cebc1b34ca15215158021db5fc5685e"
-  integrity sha512-XeerLwCVjTs3njZcgCOeDUqLgNIt/t+6Jgi5/qPsO/krUWl76kWKXMeVs2LhY2gwM6X378DkhLjur0zUQdpz0g==
-  dependencies:
-    htmlparser2 "^3.9.0"
-
 react-images-upload@^1.2.8:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/react-images-upload/-/react-images-upload-1.2.8.tgz#d1e993c50a0ca266aa7a9c7b7456167d80e9e6ab"
@@ -8361,6 +8426,11 @@ react-material-ui-form-validator@^3.0.0:
   dependencies:
     prop-types "^15.0.0"
     react-form-validator-core "1.1.1"
+
+react-moment@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-moment/-/react-moment-1.1.2.tgz#a9b157c58ddd226a2f746e5ca43415b24a17b6af"
+  integrity sha512-lfb+shYXI2tXlQrNUpNr05/1D/kzFj8Isbfp89DQrpZk0fs2JIAnLHWETR0hQS9zvtzwLWlVv0wKLffbue5HoA==
 
 react-paginate@^8.1.2:
   version "8.1.2"
@@ -8546,7 +8616,7 @@ readable-stream@^2.0.1:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-readable-stream@^3.0.6, readable-stream@^3.1.1:
+readable-stream@^3.0.6:
   version "3.6.0"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.0.tgz"
   integrity sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==
@@ -9717,6 +9787,11 @@ tr46@^2.1.0:
   dependencies:
     punycode "^2.1.1"
 
+tr46@~0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+  integrity sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=
+
 tryer@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/tryer/-/tryer-1.0.1.tgz"
@@ -10000,6 +10075,11 @@ web-vitals@^2.1.4:
   resolved "https://registry.npmjs.org/web-vitals/-/web-vitals-2.1.4.tgz"
   integrity sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg==
 
+webidl-conversions@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
+  integrity sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE=
+
 webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-4.0.2.tgz"
@@ -10151,6 +10231,14 @@ whatwg-mimetype@^2.3.0:
   version "2.3.0"
   resolved "https://registry.npmjs.org/whatwg-mimetype/-/whatwg-mimetype-2.3.0.tgz"
   integrity sha512-M4yMwr6mAnQz76TbJm914+gPpB/nCwvZbJU28cUD6dR004SAxDLOOSUaB1JDRqLtaOV/vi0IC5lEAGFgrjGv/g==
+
+whatwg-url@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
+  integrity sha1-lmRU6HZUYuN2RNNib2dCzotwll0=
+  dependencies:
+    tr46 "~0.0.3"
+    webidl-conversions "^3.0.0"
 
 whatwg-url@^7.0.0:
   version "7.1.0"

@@ -36,6 +36,10 @@ const TrainingSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  trainer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+  },
 });
 const Training = mongoose.model("training", TrainingSchema);
 module.exports = Training;

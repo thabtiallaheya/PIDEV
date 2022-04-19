@@ -22,11 +22,14 @@ import showDetailAct from './pages/ShowDetailAct';
 import ShowDetailAct from './pages/ShowDetailAct';
 import Training from './pages/Training';
 import NewTraining from './pages/NewTraining';
+import Meeting from './pages/meeting';
 import TrainingDetails from './pages/TrainingDetails';
 import EmailVerified from './pages/EmailVerified';
 import ChangePassword from './pages/ChangePassword';
 import ResetPassword from './pages/ResetPassword';
 import Account from './pages/Account';
+import UpdateTraining from './pages/UpdateTraining';
+import Calendar from './pages/Calendar';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +49,10 @@ export default function Router() {
             { path: 'products', element: <Products /> },
             { path: 'blog', element: <Blog /> },
             { path: 'training', element: <Training /> },
+            { path: 'calendar', element: <Calendar /> },
+            { path: 'meeting', element: <Meeting /> },
             { path: 'training/new', element: <NewTraining /> },
+            { path: 'training/update/:id', element: <UpdateTraining /> },
             { path: 'training/details/:id', element: <TrainingDetails /> },
             { path: 'blogFront', element: <BlogFront /> },
             { path: 'add', element: <CreateAct /> },
@@ -76,7 +82,7 @@ export default function Router() {
             { path: '*', element: <Navigate to="/404" /> }
           ]
         },
-        { path: '*', element: <Navigate to="/404" replace /> }
+        { path: '*', element: <Navigate to="/login" replace /> }
       ];
   return useRoutes(routes);
 }
