@@ -29,6 +29,7 @@ import ChangePassword from './pages/ChangePassword';
 import ResetPassword from './pages/ResetPassword';
 import Account from './pages/Account';
 import UpdateTraining from './pages/UpdateTraining';
+import Calendar from './pages/Calendar';
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ export default function Router() {
             { path: 'products', element: <Products /> },
             { path: 'blog', element: <Blog /> },
             { path: 'training', element: <Training /> },
+            { path: 'calendar', element: <Calendar /> },
             { path: 'meeting', element: <Meeting /> },
             { path: 'training/new', element: <NewTraining /> },
             { path: 'training/update/:id', element: <UpdateTraining /> },
