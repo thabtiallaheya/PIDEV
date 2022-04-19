@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -19,8 +20,10 @@ import {
 } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
 import { LoadingButton } from '@mui/lab';
+import Swal from 'sweetalert2';
 
 export function UpdateTrainingForm(props) {
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const RegisterSchema = Yup.object().shape({
     Name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Name is required'),
@@ -57,12 +60,23 @@ export function UpdateTrainingForm(props) {
       formdata.append('nbrParticipent', values.nbrParticipant);
       formdata.append('price', values.price);
       formdata.append('image', values.image);
+      formdata.append('trainer', user.id);
       axios
         .put(`http://localhost:8081/api/training/update/${props.training._id}`, formdata, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         .then((res) => {
-          navigate(`/training/details/${props.training._id}`, { replace: true });
+          // console.log(res);
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Your training has been updated',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          setTimeout(() => {
+            navigate(`/training/details/${props.training._id}`, { replace: true });
+          }, 2000);
         });
     }
   });
@@ -196,7 +210,7 @@ export function UpdateTrainingForm(props) {
             variant="contained"
             loading={isSubmitting}
           >
-            Save
+            Update
           </LoadingButton>
         </Stack>
       </Form>

@@ -43,7 +43,9 @@ export default function TrainingDetails() {
       if (result.isConfirmed) {
         axios.delete(`http://localhost:8081/api/training/delete/${id}`);
         Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-        navigate('/training', { replace: true });
+        setTimeout(() => {
+          navigate('/training', { replace: true });
+        }, 2000);
       }
     });
   };
