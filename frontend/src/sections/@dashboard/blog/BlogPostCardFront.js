@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import Swal from "sweetalert2";  
+import Swal from 'sweetalert2';
 import ReactPaginate from 'react-paginate';
 import axios, * as others from 'axios';
 
@@ -85,36 +85,32 @@ export default function BlogPostCardFront(props) {
   ];*/
   /*const [activityList, setActivityList] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:3001/read').then((response) => {
+    axios.get('http://localhost:8081/read').then((response) => {
       console.log(response.data);
       setActivityList(response.data);
     });
   }, []);*/
 
   const deleteActivity = (id) => {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      axios.delete(`http://localhost:3001/api/delete/${id}`);
-      navigate('/dashboard/blog', { replace: true });
-      Swal.fire(
-        'Deleted!',
-        'Your file has been deleted.',
-        'success'
-      )
-    }
-  })
-};
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:8081/eya/delete/${id}`);
+        navigate('/dashboard/blog', { replace: true });
+        Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+      }
+    });
+  };
   //ancien del
   /*const deleteActivity = (id) => {
-    axios.delete(`http://localhost:3001/api/delete/${id}`);
+    axios.delete(`http://localhost:8081/api/delete/${id}`);
     navigate('/dashboard/blog', { replace: true });
   };*/
 
@@ -168,10 +164,10 @@ export default function BlogPostCardFront(props) {
               ...((latestPostLarge || latestPost) && { display: 'none' })
             }}
           />
-           
+
           <CoverImgStyle
             alt="img"
-            src={`http://localhost:3001/${props.element.file[0].filePath}`}
+            src={`http://localhost:8081/${props.element.file[0].fileName}`}
           />
         </CardMediaStyle>
 
@@ -186,7 +182,7 @@ export default function BlogPostCardFront(props) {
           }}
         >
           <TitleStyle
-            to={`/dashboard/api/read/detail/${props.element._id}`}
+            to={`/api/read/detail/${props.element._id}`}
             //to={`/api/read/detail/${props.element._id}`}
             color="inherit"
             variant="subtitle2"
@@ -220,17 +216,14 @@ export default function BlogPostCardFront(props) {
           </Typography>
 
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-           
             <Button
               variant="contained"
               component={RouterLink}
-              to={`/dashboard/api/read/detail/${props.element._id}`}
+              to={`/api/read/detail/${props.element._id}`}
               //startIcon={<Iconify icon="flat-color-icons:data-recovery" />}
             >
-              <a href={`/dashboard/api/read/detail/${props.element._id}`}>📖show</a>
+              <a href={`/api/read/detail/${props.element._id}`}>📖show</a>
             </Button>
-
-          
           </Stack>
         </CardContent>
       </Card>

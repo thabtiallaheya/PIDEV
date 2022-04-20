@@ -8,7 +8,7 @@ const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
 const sidebarConfig = [
   {
     title: 'dashboard',
-    path: '/dashboard/app',
+    path: '/app',
     icon: getIcon('eva:pie-chart-2-fill')
   },
   {
@@ -23,7 +23,12 @@ const sidebarConfig = [
   },
   {
     title: 'activity',
-    path: '/dashboard/blog',
+    path: '/blog',
+    icon: getIcon('eva:file-text-fill')
+  },
+  {
+    title: 'training',
+    path: '/training',
     icon: getIcon('eva:file-text-fill')
   },
   {

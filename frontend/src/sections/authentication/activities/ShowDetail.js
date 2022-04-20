@@ -16,8 +16,7 @@ import axios, * as others from 'axios';
 import { validatrosUpdate } from 'src/common/setErrors';
 import { saveAs } from 'file-saver';
 import Label from 'src/components/Label';
-import Swal from "sweetalert2";  
-
+import Swal from 'sweetalert2';
 
 // ----------------------------------------------------------------------
 const TitleStyle = styled(Link)({
@@ -34,31 +33,29 @@ export default function ShowDetail() {
   const [fileActivity, setFileActivity] = useState([]);
 
   const saveFile = (url, name) => {
-  
-    let timerInterval
-Swal.fire({
-  title: 'Autorize download!',
-  html: 'It will be downloaded in <b></b> milliseconds.',
-  timer: 2000,
-  timerProgressBar: true,
-  didOpen: () => {
-    Swal.showLoading()
-    const b = Swal.getHtmlContainer().querySelector('b')
-    timerInterval = setInterval(() => {
-      b.textContent = Swal.getTimerLeft()
-    }, 100)
-  },
-  willClose: () => {
-    clearInterval(timerInterval)
-  }
-}).then((result) => {
-  saveAs(url, name);
-  /* Read more about handling dismissals below */
-  if (result.dismiss === Swal.DismissReason.timer) {
-    console.log('I was closed by the timer')
-  }
-})
-
+    let timerInterval;
+    Swal.fire({
+      title: 'Autorize download!',
+      html: 'It will be downloaded in <b></b> milliseconds.',
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const b = Swal.getHtmlContainer().querySelector('b');
+        timerInterval = setInterval(() => {
+          b.textContent = Swal.getTimerLeft();
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      }
+    }).then((result) => {
+      saveAs(url, name);
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer');
+      }
+    });
   };
 
   const { id } = useParams();
@@ -72,8 +69,8 @@ Swal.fire({
       hideClass: {
         popup: 'animate__animated animate__fadeOutUp'
       }
-    })
-    axios.get(`http://localhost:3001/api/read/detail/${id}`).then((response) => {
+    });
+    axios.get(`http://localhost:8081/eya/read/detail/${id}`).then((response) => {
       console.log(response.data.activity);
       setActivity(response.data.activity);
       setFileActivity(response.data.activity.file);
@@ -86,7 +83,7 @@ Swal.fire({
         {fileActivity.map((file, key) => {
           return (
             <div key={key}>
-              <img src={`http://localhost:3001/${file.filePath}`} height="500" alt="img" />
+              <img src={`http://localhost:8081/${file.fileName}`} height="500" alt="img" />
               <br />
               <center>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3}>
@@ -95,7 +92,7 @@ Swal.fire({
 
                     //startIcon={<Iconify icon="flat-color-icons:delete-column" />}
                   >
-                    <a href={`http://localhost:3001/${file.filePath}`} download={file.fileName}>
+                    <a href={`http://localhost:8081/${file.fileName}`} download={file.fileName}>
                       🔎 Show
                     </a>
                   </Button>
@@ -103,7 +100,7 @@ Swal.fire({
                   <Button
                     variant="contained"
                     onClick={() => {
-                      saveFile(`http://localhost:3001/${file.filePath}`, file.fileName);
+                      saveFile(`http://localhost:8081/${file.fileName}`, file.fileName);
                     }}
                     //startIcon={<Iconify icon="flat-color-icons:delete-column" />}
                   >

@@ -4,7 +4,7 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router';
 import moment from 'moment';
-import Swal from "sweetalert2";  
+import Swal from 'sweetalert2';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -46,7 +46,7 @@ export default function EditActivity() {
     },
     validationSchema: ActivitySchema,
     onSubmit: () => {
-      navigate('/dashboard/blog', { replace: true });
+      navigate('/blog', { replace: true });
     }
   });
   const [formData, setFormData] = useState({
@@ -66,7 +66,7 @@ export default function EditActivity() {
   };
   const { id } = useParams();
   useEffect(() => {
-    axios.get(`http://localhost:3001/api/read/detail/${id}`).then((response) => {
+    axios.get(`http://localhost:8081/eya/read/detail/${id}`).then((response) => {
       /*let isoDate = response.data.activity.creationDate
         let newDate = moment.utc(isoDate).format('YYYY-MM-DD')*/
 
@@ -85,45 +85,42 @@ export default function EditActivity() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-     const onSubmit = (e) => {
-      Swal.fire({
-        title: 'Do you want to save the changes?',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Save',
-        denyButtonText: `Don't save`,
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
+  const onSubmit = (e) => {
+    Swal.fire({
+      title: 'Do you want to save the changes?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      denyButtonText: `Don't save`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        e.preventDefault();
+        const { subject, title, limiteDate } = formData;
+        console.log(formData);
 
-          e.preventDefault();
-      const { subject, title, limiteDate } = formData;
-      console.log(formData);
-  
-      if (validate(subject, title, limiteDate)) {
-        axios.put(`http://localhost:3001/api/update/${id}`, formData).then((response) => {
-          if (response.data.success) {
-            //alert('updated')
-          }
-          navigate('/dashboard/blog', { replace: true });
-        });
-      }
-          Swal.fire('Saved!', '', 'success')
-        } else if (result.isDenied) {
-          Swal.fire('Changes are not saved', '', 'info')
+        if (validate(subject, title, limiteDate)) {
+          axios.put(`http://localhost:8081/eya/update/${id}`, formData).then((response) => {
+            if (response.data.success) {
+              //alert('updated')
+            }
+            navigate('/blog', { replace: true });
+          });
         }
-      })
-     
-    
-    };
- //ancien update
+        Swal.fire('Saved!', '', 'success');
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info');
+      }
+    });
+  };
+  //ancien update
   /*const onSubmit = (e) => {
     e.preventDefault();
     const { subject, title, limiteDate } = formData;
     console.log(formData);
 
     if (validate(subject, title, limiteDate)) {
-      axios.put(`http://localhost:3001/api/update/${id}`, formData).then((response) => {
+      axios.put(`http://localhost:8081/api/update/${id}`, formData).then((response) => {
         if (response.data.success) {
           //alert('updated')
         }
