@@ -61,7 +61,6 @@ export default function AccountProfileDetails(props) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ firstName, lastName, phone, bio, skills })
         });
-        console.log(skills);
         const data = await response.json();
         if (response.status !== 200) {
           setStatus({ type: 'error', message: data?.message || genericErrorMessage });

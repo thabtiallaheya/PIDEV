@@ -11,7 +11,7 @@ export const Profile = () => {
     <Container>
       <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
         <Grid container spacing={6}>
-          <Grid item md={4} xs={8} gutterBottom>
+          <Grid item md={4} xs={8}>
             <Box mb={4}>
               <Photo url={user.photo} />
             </Box>
@@ -25,6 +25,7 @@ export const Profile = () => {
               phone={user.phone}
               bio={user.bio}
               followers={user.followers?.length}
+              skills={user.skills}
             />
           </Grid>
         </Grid>
