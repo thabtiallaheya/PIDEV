@@ -95,10 +95,15 @@ router.get("/:id", function (req, res, next) {
 
 router.put("/:id", function (req, res, next) {
   id = req.params.id;
-  firstName = req.body.firstName;
-  User.findByIdAndUpdate(id, { firstName: firstName }, (err, data) => {
-    res.send("data updated");
-  });
+  const { firstName, lastName, phone, bio } = req.body;
+  User.findByIdAndUpdate(
+    id,
+    { firstName, lastName, phone, bio },
+    (err, data) => {
+      if (err) res.status(400).json({ message: err });
+      else res.status(200).json({ message: "data updated" });
+    }
+  );
 });
 
 router.delete("/:id", function (req, res, next) {

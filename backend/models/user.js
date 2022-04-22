@@ -26,6 +26,8 @@ const User = new Schema({
     trim: true,
     unique: true,
   },
+  phone: String,
+  bio: String,
   role: String,
   restpassword: String,
   trainings: [
