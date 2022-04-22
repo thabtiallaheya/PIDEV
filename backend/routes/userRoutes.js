@@ -95,10 +95,10 @@ router.get("/:id", function (req, res, next) {
 
 router.put("/:id", function (req, res, next) {
   id = req.params.id;
-  const { firstName, lastName, phone, bio } = req.body;
+  const { firstName, lastName, phone, bio, skills } = req.body;
   User.findByIdAndUpdate(
     id,
-    { firstName, lastName, phone, bio },
+    { firstName, lastName, phone, bio, skills },
     (err, data) => {
       if (err) res.status(400).json({ message: err });
       else res.status(200).json({ message: "data updated" });

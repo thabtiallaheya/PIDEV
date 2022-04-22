@@ -9,12 +9,27 @@ import {
   Divider,
   Grid,
   TextField,
-  Te
+  InputLabel,
+  Select,
+  Chip,
+  MenuItem
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { login } from 'src/features/User/UserSlice';
 import { LoadingButton } from '@mui/lab';
+import { skills } from 'src/utils/skillsList';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
 
 export default function AccountProfileDetails(props) {
   const dispatch = useDispatch();
@@ -33,18 +48,20 @@ export default function AccountProfileDetails(props) {
       lastName: user.lastName,
       email: user.email,
       phone: user.phone || '',
-      bio: user.bio || ''
+      bio: user.bio || '',
+      skills: user.skills || []
     },
     validationSchema: ProfileSchema,
-    onSubmit: async ({ firstName, lastName, phone, bio }) => {
+    onSubmit: async ({ firstName, lastName, phone, bio, skills }) => {
       const genericErrorMessage = 'Something went wrong! Please try again later.';
       try {
         const response = await fetch(`http://localhost:8081/users/${user.id}`, {
           method: 'PUT',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ firstName, lastName, phone, bio })
+          body: JSON.stringify({ firstName, lastName, phone, bio, skills })
         });
+        console.log(skills);
         const data = await response.json();
         if (response.status !== 200) {
           setStatus({ type: 'error', message: data?.message || genericErrorMessage });
@@ -56,7 +73,8 @@ export default function AccountProfileDetails(props) {
               firstName,
               lastName,
               phone,
-              bio
+              bio,
+              skills
             })
           );
         }
@@ -119,6 +137,29 @@ export default function AccountProfileDetails(props) {
               <Grid container spacing={3}>
                 <Grid item md={12} xs={12}>
                   <TextField multiline fullWidth label="Bio" rows={4} {...getFieldProps('bio')} />
+                </Grid>
+                <Grid item md={12} xs={12}>
+                  <InputLabel shrink>Skills</InputLabel>
+                  <Select
+                    multiple
+                    fullWidth
+                    label="skills"
+                    {...getFieldProps('skills')}
+                    renderValue={(selected) => (
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selected.map((name) => (
+                          <Chip key={name} label={name} />
+                        ))}
+                      </Box>
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {skills.map(({ name }) => (
+                      <MenuItem key={name} value={name}>
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </Grid>
               </Grid>
             </CardContent>
