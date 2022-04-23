@@ -8,9 +8,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/images", express.static(path.join("images")));
+app.use("/uploads", express.static(path.join("uploads")));
+
 mongoose
   .connect(
-    "mongodb://localhost:27017/pidev",
+    "mongodb+srv://Firas:qs2DNSfxzNVgWzT5@pidev.rwjs1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,

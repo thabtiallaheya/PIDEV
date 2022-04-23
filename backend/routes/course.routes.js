@@ -54,7 +54,6 @@ const upload = multer({
 //router.post("/course/ajout", imageUpload, async (req, res) => {
 
 router.post("/course/add", upload, async (req, res) => {
-    console.log(req.files.length)
     console.log("Files",fileInArray)
     let img;
     let vid;
@@ -74,9 +73,9 @@ router.post("/course/add", upload, async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         tag: req.body.tag,
-        image: img.secure_url,
-        video: vid.secure_url,
-        pdf: pdff.secure_url,
+        image: req.body.img,
+        video: req.body.vid,
+        pdf: req.body.pdff,
         price: req.body.price,
         cloudinary_id_img: img.public_id,
         cloudinary_id_vid: vid.public_id,
