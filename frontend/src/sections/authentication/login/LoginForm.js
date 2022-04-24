@@ -42,7 +42,8 @@ export default function LoginForm() {
           setStatus({ type: 'error', message: data?.message || genericErrorMessage });
         } else {
           setStatus({ type: 'success', message: 'logged in successfuly' });
-          const { _id, firstName, lastName, photo, role, phone, skills } = data.user;
+          const { _id, firstName, lastName, photo, role, phone, skills, followers, following } =
+            data.user;
           dispatch(
             login({
               email,
@@ -51,6 +52,8 @@ export default function LoginForm() {
               lastName,
               role,
               phone,
+              followers,
+              following,
               id: _id,
               photo: `http://localhost:8081/${photo}`,
               skills

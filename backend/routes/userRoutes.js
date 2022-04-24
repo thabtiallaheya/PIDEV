@@ -83,6 +83,7 @@ router.post("/", async (req, res, next) => {
     }
   }
 });
+
 router.get("/trainers", function (req, res, next) {
   user.find({ role: "MENTOR" }, (err, docs) => {
     if (err) res.status(400).send({ message: err });
@@ -92,6 +93,60 @@ router.get("/trainers", function (req, res, next) {
     });
     res.status(200).send({ trainers: users, message: "success" });
   });
+});
+
+router.post("/follow", function (req, res, next) {
+  const { student, mentor } = req.body;
+  user.findOneAndUpdate(
+    { _id: mentor },
+    { $push: { followers: student } },
+    function (error, success) {
+      if (error) {
+        res.status(400).send({ message: error });
+      } else {
+        user.findOneAndUpdate(
+          { _id: student },
+          {
+            $push: { following: mentor },
+          },
+          function (error, success) {
+            if (error) {
+              res.status(400).send({ message: error });
+            } else {
+              res.status(200).send({ message: "success" });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+router.post("/unfollow", function (req, res, next) {
+  const { student, mentor } = req.body;
+  user.findOneAndUpdate(
+    { _id: mentor },
+    { $pull: { followers: student } },
+    function (error, success) {
+      if (error) {
+        res.status(400).send({ message: error });
+      } else {
+        user.findOneAndUpdate(
+          { _id: student },
+          {
+            $pull: { following: mentor },
+          },
+          function (error, success) {
+            if (error) {
+              res.status(400).send({ message: error });
+            } else {
+              res.status(200).send({ message: "success" });
+            }
+          }
+        );
+      }
+    }
+  );
 });
 
 router.get("/:id", function (req, res, next) {
