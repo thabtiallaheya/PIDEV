@@ -97,7 +97,8 @@ export const Trainer = () => {
               <Grid item xs={4} key={mentor._id}>
                 <Card sx={{ maxWidth: 345 }}>
                   <CardActionArea
-                    onClick={() => navigate('/profile', { replace: true, state: mentor })}
+                    sx={{ height: 300 }}
+                    onClick={() => navigate('/profile', { replace: false, state: mentor })}
                   >
                     <CardMedia
                       component="img"
