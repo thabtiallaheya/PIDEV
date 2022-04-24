@@ -28,6 +28,7 @@ import Account from './pages/Account';
 import UpdateTraining from './pages/UpdateTraining';
 import Calendar from './pages/Calendar';
 import { Profile } from './sections/profile/Profile';
+import { Trainer } from './pages/Trainers';
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +47,7 @@ export default function Router() {
             { path: 'user', element: <User /> },
             { path: 'profile', element: <Profile /> },
             { path: 'products', element: <Products /> },
+            { path: 'trainers', element: <Trainer /> },
             { path: 'blog', element: <Blog /> },
             { path: 'training', element: <Training /> },
             { path: 'calendar', element: <Calendar /> },

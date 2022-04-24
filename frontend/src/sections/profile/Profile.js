@@ -1,11 +1,12 @@
 import { Box, Button, Container, Grid, Stack } from '@mui/material';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 import { Photo } from './Photo';
 import { TopSection } from './TopSection';
+import { useLocation } from 'react-router-dom';
 
 export const Profile = () => {
-  const user = useSelector((state) => state.user);
+  const location = useLocation();
+  const user = location.state;
 
   return (
     <Container>
@@ -13,7 +14,7 @@ export const Profile = () => {
         <Grid container spacing={6}>
           <Grid item md={4} xs={8}>
             <Box mb={4}>
-              <Photo url={user.photo} />
+              <Photo url={`http://localhost:8081/${user.photo}`} />
             </Box>
             <Button fullWidth variant="contained">
               Follow

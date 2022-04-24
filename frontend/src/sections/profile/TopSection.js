@@ -14,7 +14,7 @@ export const TopSection = ({ name, bio, followers, skills }) => {
       )}
       <Typography variant="body1">{bio}</Typography>
       <Box mt={4} sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-        {skills.map((name) => (
+        {skills?.map((name) => (
           <Chip key={name} label={name} />
         ))}
       </Box>

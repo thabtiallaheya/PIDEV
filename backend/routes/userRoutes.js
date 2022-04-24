@@ -83,6 +83,16 @@ router.post("/", async (req, res, next) => {
     }
   }
 });
+router.get("/trainers", function (req, res, next) {
+  user.find({ role: "MENTOR" }, (err, docs) => {
+    if (err) res.status(400).send({ message: err });
+    const users = docs.map((user) => {
+      const { password, ...rest } = user.toObject();
+      return rest;
+    });
+    res.status(200).send({ trainers: users, message: "success" });
+  });
+});
 
 router.get("/:id", function (req, res, next) {
   id = req.params.id;
