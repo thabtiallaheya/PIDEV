@@ -16,12 +16,26 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Typography
+  Typography,
+  Box,
+  ListItemIcon,
+  ListItemText
 } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
 import { LoadingButton } from '@mui/lab';
 import Swal from 'sweetalert2';
-
+const LANGS = [
+  {
+    value: 'en',
+    label: 'English',
+    icon: '/static/icons/ic_flag_en.svg'
+  },
+  {
+    value: 'fr',
+    label: 'French',
+    icon: '/static/icons/ic_flag_fr.svg'
+  }
+];
 export function UpdateTrainingForm(props) {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -66,7 +80,6 @@ export function UpdateTrainingForm(props) {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         .then((res) => {
-          // console.log(res);
           Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -117,17 +130,27 @@ export function UpdateTrainingForm(props) {
               <FormHelperText error>{errors.language}</FormHelperText>
             )}
           </FormControl>
-          <TextField
-            fullWidth
-            type="number"
-            label="Duration"
-            {...getFieldProps('duration')}
-            error={Boolean(touched.duration && errors.duration)}
-            helperText={touched.duration && errors.duration}
-            InputProps={{
-              startAdornment: <InputAdornment position="start">Min</InputAdornment>
-            }}
-          ></TextField>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-helper-label">Duration</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              {...getFieldProps('duration')}
+              label="Duration"
+              error={Boolean(touched.duration && errors.duration)}
+            >
+              <MenuItem value={0}>
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={30}>30 Min</MenuItem>
+              <MenuItem value={60}>60 Min</MenuItem>
+              <MenuItem value={90}>90 Min</MenuItem>
+              <MenuItem value={120}>120 Min</MenuItem>
+            </Select>
+            {touched.duration && errors.duration && (
+              <FormHelperText error>{errors.duration}</FormHelperText>
+            )}
+          </FormControl>
           <TextField
             label="Number of participants"
             type="number"
@@ -167,6 +190,33 @@ export function UpdateTrainingForm(props) {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
+              {LANGS.map((option) => (
+                <MenuItem key={option.value} sx={{ py: 1, px: 2.5 }} value={option.label}>
+                  <ListItemIcon>
+                    <Box component="img" alt={option.label} src={option.icon} />
+                  </ListItemIcon>
+                  <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
+                    {option.label}
+                  </ListItemText>
+                </MenuItem>
+              ))}
+            </Select>
+            {touched.language && errors.language && (
+              <FormHelperText error>{errors.language}</FormHelperText>
+            )}
+          </FormControl>
+          {/* <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-helper-label">Language</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              {...getFieldProps('language')}
+              label="Language"
+              error={Boolean(touched.language && errors.language)}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
               <MenuItem value={'English'}>English</MenuItem>
               <MenuItem value={'French'}>French</MenuItem>
               <MenuItem value={'Arabic'}>Arabic</MenuItem>
@@ -174,7 +224,7 @@ export function UpdateTrainingForm(props) {
             {touched.language && errors.language && (
               <FormHelperText error>{errors.language}</FormHelperText>
             )}
-          </FormControl>
+          </FormControl> */}
           <Stack spacing={3}>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <TextField

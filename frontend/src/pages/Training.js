@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import parse from 'html-react-parser';
@@ -19,9 +20,10 @@ import Iconify from '../components/Iconify';
 // ----------------------------------------------------------------------
 
 export default function Training() {
+  const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:8081/api/training/getAll').then((response) => {
+    axios.get(`http://localhost:8081/api/trainings/user/${user.id}`).then((response) => {
       setTraining(response.data);
       // console.log(response.data);
     });
@@ -42,12 +44,20 @@ export default function Training() {
               image={`http://localhost:8081/${training.image}`}
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography gutterBottom variant="h5" component="div" noWrap>
                 {training.name}
               </Typography>
+              <Divider variant="middle" />
               <Typography variant="body2" color="text.secondary" component="div" noWrap>
-                {parse(training.description)}
+                Created by{' '}
+                <b>
+                  {' '}
+                  {user.firstName} {user.lastName}
+                </b>
               </Typography>
+              {/* <Typography variant="body2" color="text.secondary" component="div" noWrap>
+                {parse(training.description)}
+              </Typography> */}
             </CardContent>
             <Divider variant="middle" />
             <CardActions style={{ justifyContent: 'center' }}>

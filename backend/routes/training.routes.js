@@ -140,7 +140,8 @@ module.exports = router;
 router.get("/trainings/user/:id", async (req, res) => {
   try {
     const data = await trainingModule.find({ trainer: req.params.id });
-    res.json(data);
+    const sortedData = data.sort((a, b) => b.creationDate - a.creationDate);
+    res.json(sortedData);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
