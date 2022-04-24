@@ -14,11 +14,8 @@ import BlogFront from './pages/BlogFront';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
-import CreateActivity from './sections/authentication/activities/CreateActivity';
-import EditActivity from './sections/authentication/activities/EditActivity';
 import Add from './sections/authentication/activities/Add';
 import EditAct from './pages/EditAct';
-import showDetailAct from './pages/ShowDetailAct';
 import ShowDetailAct from './pages/ShowDetailAct';
 import Training from './pages/Training';
 import NewTraining from './pages/NewTraining';
@@ -30,6 +27,8 @@ import ResetPassword from './pages/ResetPassword';
 import Account from './pages/Account';
 import UpdateTraining from './pages/UpdateTraining';
 import Calendar from './pages/Calendar';
+import { Profile } from './sections/profile/Profile';
+import { Trainer } from './pages/Trainers';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +45,9 @@ export default function Router() {
             { path: 'account', element: <Account /> },
             { path: 'app', element: <DashboardApp /> },
             { path: 'user', element: <User /> },
+            { path: 'profile', element: <Profile /> },
             { path: 'products', element: <Products /> },
+            { path: 'trainers', element: <Trainer /> },
             { path: 'blog', element: <Blog /> },
             { path: 'training', element: <Training /> },
             { path: 'calendar', element: <Calendar /> },

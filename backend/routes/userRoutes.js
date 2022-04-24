@@ -12,8 +12,8 @@ var mailer = require("../utils/mailer");
 const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
 const fs = require("fs");
+const app = express();
 let path = require("path");
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "images");
@@ -84,6 +84,76 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.get("/trainers", function (req, res, next) {
+  user.find({ role: "MENTOR" }, (err, docs) => {
+    if (err) res.status(400).send({ message: err });
+    const users = docs.map((user) => {
+      const { password, ...rest } = user.toObject();
+      return rest;
+    });
+    res.status(200).send({ trainers: users, message: "success" });
+  });
+});
+
+router.post("/follow", function (req, res, next) {
+  var io = req.app.get("socketio");
+
+  const { student, mentor } = req.body;
+
+  user.findOneAndUpdate(
+    { _id: mentor },
+    { $push: { followers: student } },
+    function (error, success) {
+      if (error) {
+        res.status(400).send({ message: error });
+      } else {
+        user.findOneAndUpdate(
+          { _id: student },
+          {
+            $push: { following: mentor },
+          },
+          function (error, success) {
+            console.log(success);
+            io.emit(mentor, { user: success, follow: "follow" });
+            if (error) {
+              res.status(400).send({ message: error });
+            } else {
+              res.status(200).send({ message: "success" });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+router.post("/unfollow", function (req, res, next) {
+  const { student, mentor } = req.body;
+  user.findOneAndUpdate(
+    { _id: mentor },
+    { $pull: { followers: student } },
+    function (error, success) {
+      if (error) {
+        res.status(400).send({ message: error });
+      } else {
+        user.findOneAndUpdate(
+          { _id: student },
+          {
+            $pull: { following: mentor },
+          },
+          function (error, success) {
+            if (error) {
+              res.status(400).send({ message: error });
+            } else {
+              res.status(200).send({ message: "success" });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
 router.get("/:id", function (req, res, next) {
   id = req.params.id;
   console.log(id);
@@ -95,10 +165,15 @@ router.get("/:id", function (req, res, next) {
 
 router.put("/:id", function (req, res, next) {
   id = req.params.id;
-  firstName = req.body.firstName;
-  User.findByIdAndUpdate(id, { firstName: firstName }, (err, data) => {
-    res.send("data updated");
-  });
+  const { firstName, lastName, phone, bio, skills } = req.body;
+  User.findByIdAndUpdate(
+    id,
+    { firstName, lastName, phone, bio, skills },
+    (err, data) => {
+      if (err) res.status(400).json({ message: err });
+      else res.status(200).json({ message: "data updated" });
+    }
+  );
 });
 
 router.delete("/:id", function (req, res, next) {

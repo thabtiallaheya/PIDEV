@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
+import { Link, Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useDispatch } from 'react-redux';
 // component
@@ -42,7 +42,8 @@ export default function LoginForm() {
           setStatus({ type: 'error', message: data?.message || genericErrorMessage });
         } else {
           setStatus({ type: 'success', message: 'logged in successfuly' });
-          const { _id, firstName, lastName, photo, role } = data.user;
+          const { _id, firstName, lastName, photo, role, phone, skills, followers, following } =
+            data.user;
           dispatch(
             login({
               email,
@@ -50,8 +51,12 @@ export default function LoginForm() {
               firstName,
               lastName,
               role,
+              phone,
+              followers,
+              following,
               id: _id,
-              photo: `http://localhost:8081/${photo}`
+              photo: `http://localhost:8081/${photo}`,
+              skills
             })
           );
         }

@@ -6,7 +6,6 @@ const passport = require("passport");
 const { update } = require("./models/Activity");
 const fileRoutes = require("./routes/fileUploadRoutes");
 const ACTIVITY = require("./models/Activity");
-
 const morgan = require("morgan");
 const { default: fetch } = require("node-fetch");
 const jwt = require("jsonwebtoken");
@@ -15,8 +14,6 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 require("./utils/connectdb");
-
-const userRouter = require("./routes/userRoutes");
 
 const app = express();
 app.use(express.json());
@@ -44,10 +41,20 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.static("images"));
-
+//socket.io
+const http = require("http").Server(app);
+io = require("socket.io")(http, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+io.listen(8000);
+//
+app.set("socketio", io);
 app.use(passport.initialize());
 require("./security/passport")(passport);
 const routesTaining = require("./routes/training.routes");
+const userRouter = require("./routes/userRoutes");
 
 app.use("/api", routesTaining);
 app.use("/eya", fileRoutes.routes);

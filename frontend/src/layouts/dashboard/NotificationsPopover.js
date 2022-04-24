@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import PropTypes from 'prop-types';
 import { noCase } from 'change-case';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { set, sub, formatDistanceToNow } from 'date-fns';
 // material
@@ -27,6 +27,8 @@ import { mockImgAvatar } from '../../utils/mockImages';
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 import MenuPopover from '../../components/MenuPopover';
+import openSocket from 'socket.io-client';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -167,7 +169,29 @@ export default function NotificationsPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState(NOTIFICATIONS);
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
+  const user = useSelector((state) => state.user);
+  const socket = openSocket('http://localhost:8000');
+  const [totalUnRead, setTotalUnread] = useState(0);
+
+  useEffect(() => {
+    socket.on(user.id, (arg) => {
+      // if (arg === 'follow') setNbNotification(nbNotification + 1);
+      const user = arg.user;
+      setTotalUnread(totalUnRead + 1);
+      setNotifications([
+        {
+          id: faker.datatype.uuid(),
+          title: 'New follower',
+          description: user.firstName + ' Start following you ',
+          avatar: null,
+          type: 'order_placed',
+          createdAt: set(new Date(), { hours: 10, minutes: 30 }),
+          isUnRead: true
+        },
+        ...notifications
+      ]);
+    });
+  }, [notifications, socket, user.id]);
 
   const handleOpen = () => {
     setOpen(true);

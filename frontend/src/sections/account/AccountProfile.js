@@ -31,7 +31,6 @@ export default function AccountProfile(props) {
     if (photo) {
       const formData = new FormData();
       formData.append('photo', photo);
-      console.log(user.id);
       formData.append('id', user.id);
       const genericErrorMessage = 'Something went wrong! Please try again later.';
 

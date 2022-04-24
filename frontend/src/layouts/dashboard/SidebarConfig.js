@@ -32,6 +32,11 @@ const sidebarConfig = [
     icon: getIcon('healthicons:i-training-class')
   },
   {
+    title: 'trainers',
+    path: '/trainers',
+    icon: getIcon('healthicons:i-training-class')
+  },
+  {
     title: 'Meeting',
     path: '/meeting',
     icon: getIcon('ant-design:video-camera-add-outlined')
