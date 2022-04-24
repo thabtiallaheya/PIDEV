@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import parse from 'html-react-parser';
 import Swal from 'sweetalert2';
+import { Icon } from '@iconify/react';
 
 // material
 import { Box, Grid, Container, Typography, Divider } from '@mui/material';
@@ -20,13 +22,13 @@ import Page from '../components/Page';
 import { format } from 'date-fns';
 
 export default function TrainingDetails() {
+  const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
     axios.get(`http://localhost:8081/api/training/getOne/${id}`).then((response) => {
       setTraining(response.data);
-      console.log(response.data);
     });
   }, []);
   const navigate = useNavigate();
@@ -120,24 +122,35 @@ export default function TrainingDetails() {
             >
               <Grid item>
                 <Typography variant="body2" color="text.secondary">
-                  Language : {training.language}
+                  {/* //flag:gb-4x3 */}
+                  {training.language === 'French' && <Icon icon="twemoji:flag-france" />}
+                  {training.language === 'English' && <Icon icon="flag:gb-4x3" />} Language :{' '}
+                  {training.language}
                 </Typography>
               </Grid>
               <Grid item>
                 {training.scheduledDate && (
                   <Typography variant="body2" color="text.secondary">
-                    ScheduledDate : {fDateTime(training.scheduledDate)}
+                    <Icon icon="icon-park:time" /> ScheduledDate :{' '}
+                    {fDateTime(training.scheduledDate)}
                   </Typography>
                 )}
               </Grid>
               <Grid item>
                 <Typography variant="body2" color="text.secondary">
+                  <Icon icon="heroicons-solid:user-group" />
                   Participant: {training.nbrParticipent}
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography variant="body2" color="text.secondary">
-                  Duration: {training.duration} Min
+                  <Icon icon="el:screen" /> Duration: {training.duration} Min
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body2" color="text.secondary">
+                  <Icon icon="icon-park:user-business" /> Created by {user.firstName}{' '}
+                  {user.lastName}
                 </Typography>
               </Grid>
               <Divider variant="middle" />
