@@ -12,8 +12,8 @@ var mailer = require("../utils/mailer");
 const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
 const fs = require("fs");
+const app = express();
 let path = require("path");
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "images");
@@ -96,7 +96,10 @@ router.get("/trainers", function (req, res, next) {
 });
 
 router.post("/follow", function (req, res, next) {
+  var io = req.app.get("socketio");
+
   const { student, mentor } = req.body;
+
   user.findOneAndUpdate(
     { _id: mentor },
     { $push: { followers: student } },
@@ -110,6 +113,8 @@ router.post("/follow", function (req, res, next) {
             $push: { following: mentor },
           },
           function (error, success) {
+            console.log(success);
+            io.emit(mentor, { user: success, follow: "follow" });
             if (error) {
               res.status(400).send({ message: error });
             } else {
