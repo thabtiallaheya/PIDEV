@@ -38,6 +38,8 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^33.0.0",
     "@ckeditor/ckeditor5-react": "^4.0.1",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
     "@faker-js/faker": "^6.0.0-alpha.7",
     "@fullcalendar/daygrid": "^5.11.0",
     "@fullcalendar/react": "^5.11.0",
