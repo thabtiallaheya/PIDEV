@@ -3,16 +3,7 @@ import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import {
-  Link,
-  Stack,
-  Checkbox,
-  TextField,
-  IconButton,
-  InputAdornment,
-  FormControlLabel,
-  Alert
-} from '@mui/material';
+import { Link, Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useDispatch } from 'react-redux';
 // component
@@ -34,8 +25,7 @@ export default function LoginForm() {
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: '',
-      remember: true
+      password: ''
     },
     validationSchema: LoginSchema,
     onSubmit: async ({ email, password }) => {
@@ -52,16 +42,21 @@ export default function LoginForm() {
           setStatus({ type: 'error', message: data?.message || genericErrorMessage });
         } else {
           setStatus({ type: 'success', message: 'logged in successfuly' });
-          console.log(data);
-          const { _id, firstName, lastName, photo } = data.user;
+          const { _id, firstName, lastName, photo, role, phone, skills, followers, following } =
+            data.user;
           dispatch(
             login({
               email,
               token: data.accessToken,
               firstName,
               lastName,
+              role,
+              phone,
+              followers,
+              following,
               id: _id,
-              photo: `http://localhost:8081/${photo}`
+              photo: `http://localhost:8081/${photo}`,
+              skills
             })
           );
         }
@@ -70,7 +65,7 @@ export default function LoginForm() {
       }
     }
   });
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -115,11 +110,6 @@ export default function LoginForm() {
           />
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-          <FormControlLabel
-            control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-            label="Remember me"
-          />
-
           <Link component={RouterLink} variant="subtitle2" to="/changepassword" underline="hover">
             Forgot password?
           </Link>

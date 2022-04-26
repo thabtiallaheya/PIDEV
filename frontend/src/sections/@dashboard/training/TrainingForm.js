@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -14,15 +15,32 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Typography
+  Typography,
+  Box,
+  ListItemIcon,
+  ListItemText
 } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
 import { LoadingButton } from '@mui/lab';
+import Swal from 'sweetalert2';
 
+const LANGS = [
+  {
+    value: 'en',
+    label: 'English',
+    icon: '/static/icons/ic_flag_en.svg'
+  },
+  {
+    value: 'fr',
+    label: 'French',
+    icon: '/static/icons/ic_flag_fr.svg'
+  }
+];
 export function TrainingForm() {
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const RegisterSchema = Yup.object().shape({
-    Name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Name is required'),
+    Name: Yup.string().min(2, 'Too Short!').required('Name is required'),
     description: Yup.string().min(2, 'Too Short!').required('Description is required'),
     tag: Yup.string().required('Tags is required'),
     duration: Yup.number().required('Duration is required'),
@@ -30,8 +48,11 @@ export function TrainingForm() {
     scheduledDate: Yup.date()
       .required('Scheduled Date is required')
       .min(new Date(), "You can't choose a date equal or later than today"),
-    nbrParticipant: Yup.number().required('Number of participants is required'),
-    price: Yup.number().required('Price is required'),
+    nbrParticipant: Yup.number()
+      .min(1, 'Number of participants must be greater than 1')
+      .max(20, 'Number of participants must be less than 20')
+      .required('Number of participants is required'),
+    price: Yup.number().min(1, 'Price must be greater than 1DT').required('Price is required'),
     image: Yup.mixed().nullable().required('image is required')
   });
 
@@ -60,13 +81,22 @@ export function TrainingForm() {
       formdata.append('nbrParticipent', values.nbrParticipant);
       formdata.append('price', values.price);
       formdata.append('image', values.image);
+      formdata.append('trainer', user.id);
       axios
         .post('http://localhost:8081/api/training/insert', formdata, {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
         .then((res) => {
-          //console.warn(res);
-          navigate('/training', { replace: true });
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Your training has been saved',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          setTimeout(() => {
+            navigate('/training', { replace: true });
+          }, 2000);
         });
     }
   });
@@ -105,30 +135,30 @@ export function TrainingForm() {
               error={Boolean(touched.description && errors.description)}
             />
             {touched.description && errors.description && (
-              <FormHelperText error>{errors.language}</FormHelperText>
+              <FormHelperText error>{errors.description}</FormHelperText>
             )}
           </FormControl>
-
-          {/* <TextField
-            fullWidth
-            label="Description"
-            {...getFieldProps('description')}
-            multiline
-            rows={4}
-            error={Boolean(touched.description && errors.description)}
-            helperText={touched.description && errors.description}
-          /> */}
-          <TextField
-            fullWidth
-            type="number"
-            label="Duration"
-            {...getFieldProps('duration')}
-            error={Boolean(touched.duration && errors.duration)}
-            helperText={touched.duration && errors.duration}
-            InputProps={{
-              startAdornment: <InputAdornment position="start">Min</InputAdornment>
-            }}
-          ></TextField>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-helper-label">Duration</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              {...getFieldProps('duration')}
+              label="Duration"
+              error={Boolean(touched.duration && errors.duration)}
+            >
+              <MenuItem value={0}>
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={30}>30 Min</MenuItem>
+              <MenuItem value={60}>60 Min</MenuItem>
+              <MenuItem value={90}>90 Min</MenuItem>
+              <MenuItem value={120}>120 Min</MenuItem>
+            </Select>
+            {touched.duration && errors.duration && (
+              <FormHelperText error>{errors.duration}</FormHelperText>
+            )}
+          </FormControl>
           <TextField
             label="Number of participants"
             type="number"
@@ -150,7 +180,6 @@ export function TrainingForm() {
             }}
             onChange={(event) => {
               setFieldValue('image', event.currentTarget.files[0]);
-              // console.log(getFieldProps('image'));
             }}
             variant="standard"
             error={Boolean(touched.image && errors.image)}
@@ -168,9 +197,19 @@ export function TrainingForm() {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={'English'}>English</MenuItem>
+              {LANGS.map((option) => (
+                <MenuItem key={option.value} sx={{ py: 1, px: 2.5 }} value={option.label}>
+                  <ListItemIcon>
+                    <Box component="img" alt={option.label} src={option.icon} />
+                  </ListItemIcon>
+                  <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
+                    {option.label}
+                  </ListItemText>
+                </MenuItem>
+              ))}
+              {/* <MenuItem value={'English'}>English</MenuItem>
               <MenuItem value={'French'}>French</MenuItem>
-              <MenuItem value={'Arabic'}>Arabic</MenuItem>
+              <MenuItem value={'Arabic'}>Arabic</MenuItem> */}
             </Select>
             {touched.language && errors.language && (
               <FormHelperText error>{errors.language}</FormHelperText>

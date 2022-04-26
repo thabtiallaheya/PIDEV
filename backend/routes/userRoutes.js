@@ -11,9 +11,9 @@ const ValidateLogin = require("../validation/Login");
 var mailer = require("../utils/mailer");
 const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
+const fs = require("fs");
+const app = express();
 let path = require("path");
-const { findOneAndUpdate } = require("../models/user");
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "images");
@@ -71,6 +71,7 @@ router.post("/", async (req, res, next) => {
         email: req.body.email,
         password: req.body.password,
         verified: false,
+        role: req.body.role === "MENTOR" ? ROLES.MENTOR : ROLES.STUDENT,
       });
       const newUser = await user.save();
       if (newUser) {
@@ -81,6 +82,76 @@ router.post("/", async (req, res, next) => {
       return res.status(404).json({ message: "error" });
     }
   }
+});
+
+router.get("/trainers", function (req, res, next) {
+  user.find({ role: "MENTOR" }, (err, docs) => {
+    if (err) res.status(400).send({ message: err });
+    const users = docs.map((user) => {
+      const { password, ...rest } = user.toObject();
+      return rest;
+    });
+    res.status(200).send({ trainers: users, message: "success" });
+  });
+});
+
+router.post("/follow", function (req, res, next) {
+  var io = req.app.get("socketio");
+
+  const { student, mentor } = req.body;
+
+  user.findOneAndUpdate(
+    { _id: mentor },
+    { $push: { followers: student } },
+    function (error, success) {
+      if (error) {
+        res.status(400).send({ message: error });
+      } else {
+        user.findOneAndUpdate(
+          { _id: student },
+          {
+            $push: { following: mentor },
+          },
+          function (error, success) {
+            console.log(success);
+            io.emit(mentor, { user: success, follow: "follow" });
+            if (error) {
+              res.status(400).send({ message: error });
+            } else {
+              res.status(200).send({ message: "success" });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+router.post("/unfollow", function (req, res, next) {
+  const { student, mentor } = req.body;
+  user.findOneAndUpdate(
+    { _id: mentor },
+    { $pull: { followers: student } },
+    function (error, success) {
+      if (error) {
+        res.status(400).send({ message: error });
+      } else {
+        user.findOneAndUpdate(
+          { _id: student },
+          {
+            $pull: { following: mentor },
+          },
+          function (error, success) {
+            if (error) {
+              res.status(400).send({ message: error });
+            } else {
+              res.status(200).send({ message: "success" });
+            }
+          }
+        );
+      }
+    }
+  );
 });
 
 router.get("/:id", function (req, res, next) {
@@ -94,10 +165,15 @@ router.get("/:id", function (req, res, next) {
 
 router.put("/:id", function (req, res, next) {
   id = req.params.id;
-  firstName = req.body.firstName;
-  User.findByIdAndUpdate(id, { firstName: firstName }, (err, data) => {
-    res.send("data updated");
-  });
+  const { firstName, lastName, phone, bio, skills } = req.body;
+  User.findByIdAndUpdate(
+    id,
+    { firstName, lastName, phone, bio, skills },
+    (err, data) => {
+      if (err) res.status(400).json({ message: err });
+      else res.status(200).json({ message: "data updated" });
+    }
+  );
 });
 
 router.delete("/:id", function (req, res, next) {
@@ -116,6 +192,8 @@ router.post("/login", (req, res, next) => {
         bcrypt.compare(req.body.password, user.password).then((isMatch) => {
           if (!isMatch) {
             res.status(400).json({ message: "incorrect password" });
+          } else if (!user.verified) {
+            res.status(400).json({ message: "Please confirm your email" });
           } else {
             var token = jwt.sign(
               {
@@ -141,10 +219,8 @@ router.post("/login", (req, res, next) => {
 });
 
 router.post("/upload-photo", upload.single("photo"), async (req, res) => {
-  console.log("here");
   const photo = req.file.filename;
-  console.log(req.body.id);
-  console.log(photo);
+  const oldUser = await User.findById(req.body.id);
   const updatedUser = await User.findOneAndUpdate(
     { _id: req.body.id },
     { photo }
@@ -152,7 +228,8 @@ router.post("/upload-photo", upload.single("photo"), async (req, res) => {
   if (!updatedUser) {
     return res.status(400).json({ message: "user does not exist" });
   }
-  return res.status(200).json({ message: "test" });
+  fs.unlink(`images/${oldUser.photo}`, () => console.log("success"));
+  return res.status(200).json(photo);
 });
 
 router.post("/active", function (req, res, next) {
@@ -162,7 +239,6 @@ router.post("/active", function (req, res, next) {
       req.body.token,
       process.env.USER_VERIFICATION_TOKEN_SECRET
     );
-    console.log(payload.ID);
     User.findOneAndUpdate(
       { _id: payload.ID },
       { verified: true },
@@ -208,7 +284,6 @@ router.post("/verify-restpassword", function (req, res, next) {
 
 router.post("/update-password", function (req, res, next) {
   const { id, password } = req.body;
-
   const hash = bcrypt.hashSync(password, 10); //hashed password
 
   User.findByIdAndUpdate({ _id: id }, { password: hash }).exec();

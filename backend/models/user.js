@@ -26,7 +26,18 @@ const User = new Schema({
     trim: true,
     unique: true,
   },
+  followers: [String],
+  following: [String],
+  phone: String,
+  bio: String,
+  role: String,
   restpassword: String,
+  trainings: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "training",
+    },
+  ],
 });
 
 User.methods.generateVerificationToken = function () {
