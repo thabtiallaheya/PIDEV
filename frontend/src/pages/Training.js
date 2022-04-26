@@ -10,6 +10,7 @@ import { Button, Container, Stack, Typography, Divider, Card, Grid } from '@mui/
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import openSocket from 'socket.io-client';
 
 // components
 import Page from '../components/Page';
@@ -22,10 +23,17 @@ import Iconify from '../components/Iconify';
 export default function Training() {
   const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
+  const socket = openSocket('http://localhost:8000');
   useEffect(() => {
     axios.get(`http://localhost:8081/api/trainings/user/${user.id}`).then((response) => {
       setTraining(response.data);
       // console.log(response.data);
+    });
+    socket.on('refresh', () => {
+      axios.get(`http://localhost:8081/api/trainings/user/${user.id}`).then((response) => {
+        setTraining(response.data);
+        // console.log(response.data);
+      });
     });
   }, []);
   const [pageNumber, setPageNumber] = useState(0);

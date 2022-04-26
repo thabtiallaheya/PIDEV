@@ -58,6 +58,7 @@ router.get("/training/getOne/:id", async (req, res) => {
 
 //POST API
 router.post("/training/insert", upload, async (req, res) => {
+  const io = req.app.get("socketio");
   const data = new trainingModule({
     name: req.body.name,
     description: req.body.description,
@@ -74,6 +75,7 @@ router.post("/training/insert", upload, async (req, res) => {
   try {
     const dataToSave = await data.save();
     res.status(200).json(dataToSave);
+    io.emit("refresh", "refresh");
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
