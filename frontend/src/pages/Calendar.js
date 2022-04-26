@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
@@ -14,11 +15,12 @@ import Page from '../components/Page';
 // ----------------------------------------------------------------------
 
 export default function Calendar() {
+  const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:8081/api/training/getAll').then((response) => {
+    axios.get(`http://localhost:8081/api/trainings/user/${user.id}`).then((response) => {
       setTraining(response.data);
-      // console.log(response.data);
+      console.log(response.data);
     });
   }, []);
   return (
@@ -33,11 +35,7 @@ export default function Calendar() {
       <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
-        events={[
-          { title: '.NET Framework', date: '2022-04-20' },
-          { title: 'ssssss', date: '2022-04-21' },
-          { title: 'JavaScript', date: '2022-04-28' }
-        ]}
+        events={training.map((t) => ({ title: t.name, date: t.scheduledDate }))}
       />
     </Page>
   );
