@@ -37,10 +37,10 @@ const upload = multer({
 //GET ALL
 router.get("/training/getAll", async (req, res) => {
   try {
-    const data = await trainingModule.find();
+    const data = await trainingModule.find().populate("trainer");
 
     const sortedData = data.sort((a, b) => b.creationDate - a.creationDate);
-    res.json(sortedData);
+    res.json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -49,7 +49,9 @@ router.get("/training/getAll", async (req, res) => {
 //GET ONE BY ID
 router.get("/training/getOne/:id", async (req, res) => {
   try {
-    const data = await trainingModule.findById(req.params.id);
+    const data = await trainingModule
+      .findById(req.params.id)
+      .populate("trainer");
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -141,7 +143,9 @@ module.exports = router;
 // trainings by user
 router.get("/trainings/user/:id", async (req, res) => {
   try {
-    const data = await trainingModule.find({ trainer: req.params.id });
+    const data = await trainingModule
+      .find({ trainer: req.params.id })
+      .populate("trainer");
     const sortedData = data.sort((a, b) => b.creationDate - a.creationDate);
     res.json(sortedData);
   } catch (err) {

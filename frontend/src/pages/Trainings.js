@@ -20,20 +20,13 @@ import Iconify from '../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-export default function Training() {
+export default function Trainings() {
   const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   const socket = openSocket('http://localhost:8000');
   useEffect(() => {
-    axios.get(`http://localhost:8081/api/trainings/user/${user.id}`).then((response) => {
+    axios.get(`http://localhost:8081/api/training/getAll`).then((response) => {
       setTraining(response.data);
-      // console.log(response.data);
-    });
-    socket.on('refresh', () => {
-      axios.get(`http://localhost:8081/api/trainings/user/${user.id}`).then((response) => {
-        setTraining(response.data);
-        // console.log(response.data);
-      });
     });
   }, []);
   const [pageNumber, setPageNumber] = useState(0);
@@ -60,7 +53,7 @@ export default function Training() {
                 Created by{' '}
                 <b>
                   {' '}
-                  {training.trainer.firstName} {training.trainer.lastName}
+                  {training?.trainer?.firstName} {training?.trainer?.lastName}
                 </b>
               </Typography>
               {/* <Typography variant="body2" color="text.secondary" component="div" noWrap>
@@ -90,14 +83,6 @@ export default function Training() {
           <Typography variant="h4" gutterBottom>
             Training
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="/training/new"
-            startIcon={<Iconify icon="bx:add-to-queue" />}
-          >
-            New Training
-          </Button>
         </Stack>
       </Container>
       <Grid container spacing={3}>

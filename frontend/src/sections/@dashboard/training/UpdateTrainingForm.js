@@ -205,26 +205,6 @@ export function UpdateTrainingForm(props) {
               <FormHelperText error>{errors.language}</FormHelperText>
             )}
           </FormControl>
-          {/* <FormControl sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="demo-simple-select-helper-label">Language</InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              {...getFieldProps('language')}
-              label="Language"
-              error={Boolean(touched.language && errors.language)}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={'English'}>English</MenuItem>
-              <MenuItem value={'French'}>French</MenuItem>
-              <MenuItem value={'Arabic'}>Arabic</MenuItem>
-            </Select>
-            {touched.language && errors.language && (
-              <FormHelperText error>{errors.language}</FormHelperText>
-            )}
-          </FormControl> */}
           <Stack spacing={3}>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <TextField

@@ -38,7 +38,7 @@ const TrainingSchema = new mongoose.Schema({
   },
   trainer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: "User",
   },
 });
 const Training = mongoose.model("training", TrainingSchema);
