@@ -21,6 +21,10 @@ import Training from './pages/Training';
 import NewTraining from './pages/NewTraining';
 import Meeting from './pages/meeting';
 import TrainingDetails from './pages/TrainingDetails';
+import Course from './pages/course';
+import NewCourse from './pages/newCourse';
+import CourseDetails from './pages/courseDetails';
+import EditCourse from './pages/editCourse';
 import EmailVerified from './pages/EmailVerified';
 import ChangePassword from './pages/ChangePassword';
 import ResetPassword from './pages/ResetPassword';
@@ -59,7 +63,12 @@ export default function Router() {
             { path: 'add', element: <CreateAct /> },
             { path: 'new', element: <Add /> },
             { path: 'edit/:id', element: <EditAct /> },
-            { path: 'api/read/detail/:id', element: <ShowDetailAct /> }
+            { path: 'api/read/detail/:id', element: <ShowDetailAct /> },
+            { path: 'course', element: <Course /> },
+            { path: 'course/new', element: <NewCourse /> },
+            { path: 'course/details/:id', element: <CourseDetails /> },
+            { path: 'course/edit/:id', element: <EditCourse /> },
+
           ]
         },
         {

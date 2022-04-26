@@ -9,6 +9,7 @@ const ACTIVITY = require("./models/Activity");
 const morgan = require("morgan");
 const { default: fetch } = require("node-fetch");
 const jwt = require("jsonwebtoken");
+let path = require("path");
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
@@ -41,6 +42,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.static("images"));
+app.use("/uploads", express.static(path.join("uploads")));
+app.use("/course", express.static(path.join("course")));
 //socket.io
 const http = require("http").Server(app);
 io = require("socket.io")(http, {
@@ -55,7 +58,9 @@ app.use(passport.initialize());
 require("./security/passport")(passport);
 const routesTaining = require("./routes/training.routes");
 const userRouter = require("./routes/userRoutes");
+const routesCourse = require("./routes/course.routes");
 
+app.use("/api", routesCourse);
 app.use("/api", routesTaining);
 app.use("/eya", fileRoutes.routes);
 app.use("/users", userRouter);

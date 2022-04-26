@@ -37,6 +37,11 @@ const sidebarConfig = [
     icon: getIcon('healthicons:i-training-class')
   },
   {
+    title: 'Course',
+    path: '/course',
+    icon: getIcon('eva:file-text-fill')
+  },
+  {
     title: 'Meeting',
     path: '/meeting',
     icon: getIcon('ant-design:video-camera-add-outlined')
