@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import PropTypes from 'prop-types';
 import { formatDistance } from 'date-fns';
 import { Link as RouterLink } from 'react-router-dom';
-import React , {useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react';
 // material
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert } from '@mui/material';
@@ -20,7 +20,6 @@ import { mockImgCover } from '../../../utils/mockImages';
 import Scrollbar from '../../../components/Scrollbar';
 import Iconify from '../../../components/Iconify';
 import { LoadingButton } from '@mui/lab';
-
 
 // ----------------------------------------------------------------------
 
@@ -76,121 +75,117 @@ const NEWS = [...Array(5)].map((_, index) => {
 }*/
 
 export default function AppNewsUpdate() {
-
   const [open, setOpen] = React.useState(true);
 
-   //carts
-   var storedTraining = JSON.parse(sessionStorage.getItem("trainingInStorage"))
-   const [cardList, setCardList] = useState(storedTraining)
-   const clearCart = () => {
+  //carts
+  var storedTraining = JSON.parse(sessionStorage.getItem('trainingInStorage'));
+  const [cardList, setCardList] = useState(storedTraining);
+  const clearCart = () => {
     sessionStorage.clear();
-   
-   }
+  };
 
-   const ondelete2 = (id) => {
+  const ondelete2 = (id) => {
     const itemsInCart = JSON.parse(sessionStorage.getItem('trainingInStorage'));
     itemsInCart.splice(id, 1);
-    sessionStorage.setItem('trainingInStorage', JSON.stringify(itemsInCart))
+    sessionStorage.setItem('trainingInStorage', JSON.stringify(itemsInCart));
+    setCardList(itemsInCart);
     //removeItem(id)
-   }
-    let total = 0;
-    const Sum  = () => {
-       for (let i = 0 ; i<storedTraining.length ; i++ )
-       {
-         total = total + storedTraining[i].price;
-       }
-   
-    return  total ;
-  
-       }  
- 
-       if(storedTraining == null || sessionStorage == null) return(
-         <div>
-           <Alert severity="info">
-  <AlertTitle>Info</AlertTitle>
-  
-  Your cart is still empty <strong>fill it up!</strong> 
-</Alert>
-          
-       <Box sx={{ p: 2, textAlign: 'right' }}>
-       <Button
-         to="#"
-         size="small"
-         color="inherit"
-         component={RouterLink}
-         endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
-       >
-           <h3> total 0 TND </h3> 
-       </Button>
-     </Box>
-         </div>
-       )
-  
+  };
+  let total = 0;
+  const Sum = () => {
+    for (let i = 0; i < storedTraining.length; i++) {
+      total = total + storedTraining[i].price;
+    }
+
+    return total;
+  };
+
+  if (storedTraining == null || sessionStorage == null)
+    return (
+      <div>
+        <Alert severity="info">
+          <AlertTitle>Info</AlertTitle>
+          Your cart is still empty <strong>fill it up!</strong>
+        </Alert>
+
+        <Box sx={{ p: 2, textAlign: 'right' }}>
+          <Button
+            to="#"
+            size="small"
+            color="inherit"
+            component={RouterLink}
+            endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
+          >
+            <h3> total 0 TND </h3>
+          </Button>
+        </Box>
+      </div>
+    );
+
   return (
     <Card>
       <CardHeader title="News Update" />
       {/*<Alert variant="filled" severity="success">
   This is a success alert — check it out!
   </Alert>*/}
-<Box sx={{ width: '100%' }}>
-      <Collapse in={open}>
-        <Alert
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-          sx={{ mb: 2 }}
+      <Box sx={{ width: '100%' }}>
+        <Collapse in={open}>
+          <Alert
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+            sx={{ mb: 2 }}
+          >
+            These trainings are successfully added in your cart !
+          </Alert>
+        </Collapse>
+        <Button
+          disabled={open}
+          variant="outlined"
+          onClick={() => {
+            setOpen(true);
+          }}
         >
-          These trainings are successfully added in your cart !
-        </Alert>
-      </Collapse>
-      <Button
-        disabled={open}
-        variant="outlined"
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        Re-open
-      </Button>
-    </Box>
+          Re-open
+        </Button>
+      </Box>
 
       <Scrollbar>
-      
         <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
           {cardList.map((val, key) => (
             <Stack direction="row" alignItems="center" spacing={2}>
-            <Box
-              component="img"
-              alt={val.name}
-              src={`http://localhost:8081/${val.image}`}
-              sx={{ width: 48, height: 48, borderRadius: 1.5 }}
-            />
-                
-            <Box sx={{ minWidth: 450 }}>
-              <Link to="#" color="inherit" underline="hover" component={RouterLink}>
-                <Typography variant="subtitle2" noWrap>
-                {val.name}
+              <Box
+                component="img"
+                alt={val.name}
+                src={`http://localhost:8081/${val.image}`}
+                sx={{ width: 48, height: 48, borderRadius: 1.5 }}
+              />
+
+              <Box sx={{ minWidth: 450 }}>
+                <Link to="#" color="inherit" underline="hover" component={RouterLink}>
+                  <Typography variant="subtitle2" noWrap>
+                    {val.name}
+                  </Typography>
+                </Link>
+
+                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                  {val.tag}
                 </Typography>
-              </Link>
-            
-              <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-              {val.tag}
+              </Box>
+
+              <Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'text.secondary' }}>
+                {val.price} TND
               </Typography>
-            </Box>
-        
-            <Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'text.secondary' }}>
-            {val.price} TND
-            </Typography>
-           {/*  <LoadingButton 
+              {/*  <LoadingButton 
             align="right"
             size="small"
             type="submit"
@@ -202,11 +197,10 @@ export default function AppNewsUpdate() {
           >
            {<DeleteIcon />} Delete
           </LoadingButton> */}
-            <Button onClick= {() => ondelete2(key)} variant="outlined" >
-            <DeleteIcon /> Retrieve
-                                </Button>
-          </Stack>
-          
+              <Button onClick={() => ondelete2(key)} variant="outlined">
+                <DeleteIcon /> Retrieve
+              </Button>
+            </Stack>
           ))}
         </Stack>
       </Scrollbar>
@@ -214,31 +208,27 @@ export default function AppNewsUpdate() {
       <Divider />
 
       <Box sx={{ p: 2, textAlign: 'right' }}>
-        
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-      <LoadingButton 
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <LoadingButton
             align="right"
             size="small"
             type="submit"
             variant="contained"
             //onClick={()=> emptyCart()}
-            onClick={()=> clearCart()}
-            
+            onClick={() => clearCart()}
           >
-           {<DeleteIcon />} Clear Carts
+            {<DeleteIcon />} Clear Carts
           </LoadingButton>
-        <Button
-          to="#"
-          size="small"
-          color="inherit"
-          component={RouterLink}
-          endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
-        >
-            <h3> total {Sum()} TND </h3> 
-        </Button>
-
+          <Button
+            to="#"
+            size="small"
+            color="inherit"
+            component={RouterLink}
+            endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
+          >
+            <h3> total {Sum()} TND </h3>
+          </Button>
         </Stack>
-       
       </Box>
     </Card>
   );

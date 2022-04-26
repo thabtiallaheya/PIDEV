@@ -32,8 +32,8 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 //
 import USERLIST from '../_mocks_/user';
-import {useCart} from "react-use-cart"
-import { CartProvider } from 'react-use-cart'
+import { useCart } from 'react-use-cart';
+import { CartProvider } from 'react-use-cart';
 
 // ----------------------------------------------------------------------
 //carts
@@ -46,12 +46,10 @@ const TABLE_HEAD = [
   { id: 'price', label: 'Price', alignRight: false },
   //{ id: 'isVerified', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  {id:''},
- 
+  { id: '' }
 ];
 
 // ----------------------------------------------------------------------
-
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -84,11 +82,19 @@ function applySortFilter(array, comparator, query) {
 
 export default function Cards() {
   //carts
-  const { isEmpty,totalUniqueItems,items,totalItems,cartTotal,updateItemQuantity,removeItem,emptyCart } = useCart();
+  const {
+    isEmpty,
+    totalUniqueItems,
+    items,
+    totalItems,
+    cartTotal,
+    updateItemQuantity,
+    removeItem,
+    emptyCart
+  } = useCart();
 
-  
-  var storedTraining = JSON.parse(localStorage.getItem("trainingInStorage"))
-  const [cardList, setCardList] = useState(storedTraining)
+  var storedTraining = JSON.parse(localStorage.getItem('trainingInStorage'));
+  const [cardList, setCardList] = useState(storedTraining);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -96,35 +102,26 @@ export default function Cards() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  //carts 
-const ondelete = (id) => {
-  //remove from localstorage
-  const itemsInCart = JSON.parse(localStorage.getItem('trainingInStorage'));
-  itemsInCart.splice(id, 1);
-  localStorage.setItem('trainingInStorage', JSON.stringify(itemsInCart))
-//removeItem(id);
-      
-    
+  //carts
+  const ondelete = (id) => {
+    //remove from localstorage
+    const itemsInCart = JSON.parse(localStorage.getItem('trainingInStorage'));
+    itemsInCart.splice(id, 1);
+    localStorage.setItem('trainingInStorage', JSON.stringify(itemsInCart));
+    setCardList(itemsInCart);
+    //removeItem(id);
+  };
+  const ClearCart = () => {
+    localStorage.clear();
+  };
+  let total = 0;
+  const Sum = () => {
+    for (let i = 0; i < storedTraining.length; i++) {
+      total = total + storedTraining[i].price;
+    }
 
-}
-const ClearCart = () => {
- 
-      
-  localStorage.clear();
-
-}
-let total = 0;
-const Sum  = () => {
-   for (let i = 0 ; i<storedTraining.length ; i++ )
-   {
-     total = total + storedTraining[i].price;
-   }
-
-return  total ;
-
-   }  
-
-
+    return total;
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -178,41 +175,40 @@ return  total ;
 
   const isUserNotFound = filteredUsers.length === 0;
   //if(isEmpty)
-  if(storedTraining == null || localStorage == null )  return     <Alert severity="info">
- <AlertTitle>Info</AlertTitle>
- 
-  carts list is empty <strong>check it out!</strong> 
-</Alert>
+  if (storedTraining == null || localStorage == null)
+    return (
+      <Alert severity="info">
+        <AlertTitle>Info</AlertTitle>
+        carts list is empty <strong>check it out!</strong>
+      </Alert>
+    );
   return (
-    
     <Page title="Carts | Minimal-UI">
       <Container>
-    
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Carts List
           </Typography>
-          Total price of all carts is:  {Sum()} TND
-          <LoadingButton 
+          Total price of all carts is: {Sum()} TND
+          <LoadingButton
             align="right"
             size="small"
             type="submit"
             variant="contained"
             //onClick={()=> emptyCart()}
-            onClick={()=> ClearCart()}
-            
+            onClick={() => ClearCart()}
           >
-           {<DeleteIcon />} Clear Carts
+            {<DeleteIcon />} Clear Carts
           </LoadingButton>
         </Stack>
-       
+
         <Card>
           <UserListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
-           
+
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -226,14 +222,13 @@ return  total ;
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-               
                   {cardList
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((item,index) => {
+                    .map((item, index) => {
                       //const { id, name, role, status, company, avatarUrl, isVerified } = row;
                       //const isItemSelected = selected.indexOf(name) !== -1;
 
-                      return ( 
+                      return (
                         <TableRow
                           hover
                           key={index}
@@ -244,14 +239,13 @@ return  total ;
                         >
                           <TableCell padding="checkbox">
                             <Checkbox
-                             // checked={isItemSelected}
-                              //onChange={(event) => handleClick(event, name)}
+                            // checked={isItemSelected}
+                            //onChange={(event) => handleClick(event, name)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Avatar src={`http://localhost:8081/${item.image}`} />
-                             
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{item.name}</TableCell>
@@ -260,25 +254,26 @@ return  total ;
                           <TableCell align="left">{item.price}TND</TableCell>
                           {/*<TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>*/}
                           <TableCell align="left">
-                           { <Label
-                              variant="ghost"
-                              color={(item.status === false && 'error') || 'success'}
-                            >
-                             <p>Unpaid</p>
-                            
-                           </Label>  }
+                            {
+                              <Label
+                                variant="ghost"
+                                color={(item.status === false && 'error') || 'success'}
+                              >
+                                <p>Unpaid</p>
+                              </Label>
+                            }
                           </TableCell>
 
                           <TableCell align="right">
-                        
-                          <Button onClick= {() => ondelete(index)} variant="outlined" startIcon={<DeleteIcon />}>
-                           Delete
-                          </Button>
-                       
-
+                            <Button
+                              onClick={() => ondelete(index)}
+                              variant="outlined"
+                              startIcon={<DeleteIcon />}
+                            >
+                              Delete
+                            </Button>
                           </TableCell>
                         </TableRow>
-                    
                       );
                     })}
                   {emptyRows > 0 && (
