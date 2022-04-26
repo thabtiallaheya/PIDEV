@@ -217,20 +217,24 @@ export default function BlogPostCard(props) {
 
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
             <Button
+              style={{ color: 'white' }}
               variant="contained"
               component={RouterLink}
               to={`/edit/${props.element._id}`}
               //startIcon={<Iconify icon="flat-color-icons:data-recovery" />}
+              
             >
-              <a href={`/dashboard/edit/${props.element._id}`}>✏️ update</a>
+              ✏️ update
             </Button>
             <Button
+            style={{ color: 'white' }}
               variant="contained"
               component={RouterLink}
               to={`/api/read/detail/${props.element._id}`}
               //startIcon={<Iconify icon="flat-color-icons:data-recovery" />}
+              
             >
-              <a href={`/api/read/detail/${props.element._id}`}>📖show</a>
+              📖show
             </Button>
 
             <Button

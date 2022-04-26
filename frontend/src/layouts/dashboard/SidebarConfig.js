@@ -12,6 +12,16 @@ const sidebarConfig = [
   //   icon: getIcon('eva:pie-chart-2-fill')
   // },
   {
+    title: 'carts',
+    path: '/CartListComponent',
+    icon: getIcon('eva:shopping-bag-fill')
+  },
+  {
+    title: 'product',
+    path: '/dashboard/products',
+    icon: getIcon('eva:shopping-bag-fill')
+  },
+  {
     title: 'user',
     path: '/dashboard/user',
     icon: getIcon('fa6-solid:users-gear')

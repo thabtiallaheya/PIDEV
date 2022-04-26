@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 const TrainingSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -36,10 +36,14 @@ const TrainingSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  status: {
+    type: Boolean,
+    default: false,
+  },
   trainer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
   },
-});
-const Training = mongoose.model("training", TrainingSchema);
-module.exports = Training;
+})
+const Training = mongoose.model('training', TrainingSchema)
+module.exports = Training

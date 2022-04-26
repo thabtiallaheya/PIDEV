@@ -6,7 +6,9 @@ import { Box, Button, Typography, Container } from '@mui/material';
 // components
 import { MotionContainer, varBounceIn } from '../components/animate';
 import Page from '../components/Page';
-
+import DashboardNavbarStudent from 'src/layouts/dashboard/DashboardNavbarStudent';
+import DashboardSidebarStudent from 'src/layouts/dashboard/DashboardSidebarStudent';
+import { useState } from 'react';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Page)(({ theme }) => ({
@@ -20,8 +22,10 @@ const RootStyle = styled(Page)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Page404() {
+
   return (
     <RootStyle title="404 Page Not Found | Minimal-UI">
+       
       <Container>
         <MotionContainer initial="initial" open>
           <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>

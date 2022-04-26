@@ -107,6 +107,7 @@ export function TrainingForm() {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          
             <TextField
               fullWidth
               label=" Name"

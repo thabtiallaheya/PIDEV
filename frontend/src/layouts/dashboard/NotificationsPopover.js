@@ -170,7 +170,7 @@ export default function NotificationsPopover() {
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState(NOTIFICATIONS);
   const user = useSelector((state) => state.user);
-  const socket = openSocket('http://localhost:8000');
+  const socket = openSocket('http://localhost:8080');
   const [totalUnRead, setTotalUnread] = useState(0);
 
   useEffect(() => {
