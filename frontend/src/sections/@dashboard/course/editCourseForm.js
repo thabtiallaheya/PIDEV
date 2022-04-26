@@ -21,22 +21,22 @@ import { LoadingButton } from '@mui/lab';
 
 
 
-export function CourseForm() {
+export function CourseForm({ _id, files, name, description, tag, price }) {
     const navigate = useNavigate();
     const RegisterSchema = Yup.object().shape({
         Name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Name is required'),
         description: Yup.string().min(2, 'Too Short!').required('Description is required'),
         tag: Yup.string().required('Tags is required'),
-        image: Yup.mixed().nullable().required('image is required')
+        image: Yup.mixed().nullable().notRequired()
     });
 
     const formik = useFormik({
         initialValues: {
-            Name: '',
-            description: '',
-            tag: '',
-            price: '',
-            image: null
+            Name: name,
+            description: description,
+            tag: tag,
+            price: price,
+            image: []
         },
         validationSchema: RegisterSchema,
         onSubmit: async (values) => {
@@ -46,7 +46,7 @@ export function CourseForm() {
             formdata.append('description', values.description);
             formdata.append('tag', values.tag);
             formdata.append('price', values.price);
-            if (values.image.length != 0) {
+            if (values?.image?.length != 0) {
                 for (const single_file of values.image) {
                     // data.append('uploadedImages', single_file)
                     formdata.append('image', single_file);
@@ -54,7 +54,7 @@ export function CourseForm() {
             }
 
             axios
-                .post('http://localhost:3001/api/course/add', formdata, {
+                .patch(`http://localhost:3001/api/course/patch/${_id}`, formdata, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 })
                 .then((res) => {
@@ -88,7 +88,7 @@ export function CourseForm() {
                         <Typography sx={{ color: 'text.secondary' }}>Description</Typography>
                         <CKEditor
                             editor={ClassicEditor}
-                            data=""
+                            data={description}
                             onChange={(event, editor) => {
                                 const data = editor.getData();
                                 setFieldValue('description', data);
@@ -133,7 +133,6 @@ export function CourseForm() {
                         error={Boolean(touched.image && errors.image)}
                         helperText={touched.image && errors.image}
                     />
-                     
 
                     <Stack spacing={3}>
                         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>

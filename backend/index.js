@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/images", express.static(path.join("images")));
 app.use("/uploads", express.static(path.join("uploads")));
+app.use("/course", express.static(path.join("course")));
 
 mongoose
   .connect(

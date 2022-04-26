@@ -16,14 +16,8 @@ const CourseSchema = new mongoose.Schema({
   price: {
     type: Number,
   },
-  image: {
-    type: String,
-  },
-  video: {
-    type: String,
-  },
-  pdf : {
-    type: String,
+  files: {
+    type: Array
   }
 });
 const Course = mongoose.model("course", CourseSchema);

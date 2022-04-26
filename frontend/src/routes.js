@@ -16,6 +16,7 @@ import TrainingDetails from './pages/TrainingDetails';
 import Course from './pages/course';
 import NewCourse from './pages/newCourse';
 import CourseDetails from './pages/courseDetails';
+import EditCourse from './pages/editCourse';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,8 @@ export default function Router() {
         { path: 'training/details/:id', element: <TrainingDetails /> },
         { path: 'course', element: <Course /> },
         { path: 'course/new', element: <NewCourse /> },
-          { path: 'course/details/:id', element: <CourseDetails /> },
+        { path: 'course/details/:id', element: <CourseDetails /> },
+        { path: 'course/edit/:id', element: <EditCourse /> },
 
 
       ]

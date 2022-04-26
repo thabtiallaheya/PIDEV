@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
-import './Training.css';
+import "./course.css"
+
 // material
 import { Button, Container, Stack, Typography } from '@mui/material';
 import Card from '@mui/material/Card';
@@ -37,17 +38,19 @@ export default function Course() {
       return (
         <Grid key={course._id} item xs={12} sm={6} md={3}>
           <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-              component="img"
+            <CardMedia  
+              component="img" 
               height="140"
-              image={`http://localhost:3001/${course.image}`}
+              image={`http://localhost:3001/${course.files[0].replace(/\\/, "/")}`}
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography gutterBottom variant="h5" component="div" noWrap>
                 {course.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary" noWrap>
-                {course.description}
+              <Typography variant="body2" color="text.secondary" component="div" noWrap>
+                <div dangerouslySetInnerHTML={{ __html: course.description }}>
+
+                </div>
               </Typography>
             </CardContent>
             <CardActions>
