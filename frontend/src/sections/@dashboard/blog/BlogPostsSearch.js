@@ -40,7 +40,7 @@ BlogPostsSearch.propTypes = {
   posts: PropTypes.array.isRequired
 };
 
-export default function BlogPostsSearch({ posts }) {
+export default function BlogPostsSearch({ posts , setSearchTerm }) {
   return (
     <RootStyle>
       <Autocomplete
@@ -51,8 +51,10 @@ export default function BlogPostsSearch({ posts }) {
         getOptionLabel={(post) => post.title}
         renderInput={(params) => (
           <TextField
+          onChange={event => {setSearchTerm(event.target.value)}}
+
             {...params}
-            placeholder="Search post..."
+            placeholder="Search activity..."
             InputProps={{
               ...params.InputProps,
               startAdornment: (

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import parse from 'html-react-parser';
 import './Training.css';
 // material
-import { Button, Container, Stack, Typography } from '@mui/material';
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
+import { Button, Container, Stack, Typography, Divider, Card, Grid } from '@mui/material';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -20,9 +20,10 @@ import Iconify from '../components/Iconify';
 // ----------------------------------------------------------------------
 
 export default function Training() {
+  const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:3001/api/training/getAll').then((response) => {
+    axios.get(`http://localhost:8081/api/trainings/user/${user.id}`).then((response) => {
       setTraining(response.data);
       // console.log(response.data);
     });
@@ -40,23 +41,27 @@ export default function Training() {
             <CardMedia
               component="img"
               height="140"
-              image={`http://localhost:3001/${training.image}`}
+              image={`http://localhost:8081/${training.image}`}
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography gutterBottom variant="h5" component="div" noWrap>
                 {training.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary" noWrap>
-                {training.description}
+              <Divider variant="middle" />
+              <Typography variant="body2" color="text.secondary" component="div" noWrap>
+                Created by{' '}
+                <b>
+                  {' '}
+                  {user.firstName} {user.lastName}
+                </b>
               </Typography>
+              {/* <Typography variant="body2" color="text.secondary" component="div" noWrap>
+                {parse(training.description)}
+              </Typography> */}
             </CardContent>
-            <CardActions>
-              <Button size="small">Add To Cart</Button>
-              <Button
-                size="small"
-                component={RouterLink}
-                to={`/dashboard/training/details/${training._id}`}
-              >
+            <Divider variant="middle" />
+            <CardActions style={{ justifyContent: 'center' }}>
+              <Button size="small" component={RouterLink} to={`/training/details/${training._id}`}>
                 Learn More
               </Button>
             </CardActions>
@@ -80,8 +85,8 @@ export default function Training() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="/dashboard/training/new"
-            startIcon={<Iconify icon="eva:plus-fill" />}
+            to="/training/new"
+            startIcon={<Iconify icon="bx:add-to-queue" />}
           >
             New Training
           </Button>

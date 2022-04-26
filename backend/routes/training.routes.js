@@ -4,8 +4,12 @@ const multer = require("multer");
 
 const path = require("path");
 
+const fs = require("fs");
+
 const router = express.Router();
+
 const trainingModule = require("../models/training");
+const UserModule = require("../models/user");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -26,7 +30,7 @@ const upload = multer({
     if (mimeType && extname) {
       return cb(null, true);
     }
-    cb("Give proper files formate to upload");
+    cb("Give proper files format to upload");
   },
 }).single("image");
 
@@ -34,7 +38,9 @@ const upload = multer({
 router.get("/training/getAll", async (req, res) => {
   try {
     const data = await trainingModule.find();
-    res.json(data);
+
+    const sortedData = data.sort((a, b) => b.creationDate - a.creationDate);
+    res.json(sortedData);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -61,8 +67,9 @@ router.post("/training/insert", upload, async (req, res) => {
     language: req.body.language,
     scheduledDate: req.body.scheduledDate,
     nbrParticipent: req.body.nbrParticipent,
-    image: req.file.path,
+    image: req.file.filename,
     price: req.body.price,
+    trainer: req.body.trainer,
   });
   try {
     const dataToSave = await data.save();
@@ -71,17 +78,38 @@ router.post("/training/insert", upload, async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
-
-//PATCH API
-router.patch("/training/patch/:id", async (req, res) => {
+//PUT API
+router.put("/training/update/:id", upload, async (req, res) => {
   try {
-    const id = req.params.id;
-    const dataToUpdate = req.body;
+    const data = await trainingModule.findById(req.params.id);
+    let newImage = "";
+    if (req.file) {
+      newImage = req.file.filename;
+      try {
+        fs.unlinkSync("./images/" + data.image);
+        //file removed
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      newImage = data.image;
+    }
     const options = { new: true };
-
     const result = await trainingModule.findByIdAndUpdate(
-      id,
-      dataToUpdate,
+      req.params.id,
+      {
+        name: req.body.name,
+        description: req.body.description,
+        tag: req.body.tag,
+        creationDate: data.creationDate,
+        duration: req.body.duration,
+        language: req.body.language,
+        scheduledDate: req.body.scheduledDate,
+        nbrParticipent: req.body.nbrParticipent,
+        image: newImage,
+        price: req.body.price,
+        trainer: req.body.trainer,
+      },
       options
     );
     res.send(result);
@@ -93,6 +121,14 @@ router.patch("/training/patch/:id", async (req, res) => {
 //DELET API
 router.delete("/training/delete/:id", async (req, res) => {
   try {
+    const data = await trainingModule.findById(req.params.id);
+    //console.log(data.image);
+    try {
+      fs.unlinkSync("./images/" + data.image);
+      //file removed
+    } catch (err) {
+      console.error(err);
+    }
     await trainingModule.findByIdAndDelete(req.params.id);
     res.send(`${req.params.id} has been Deleted`);
   } catch (err) {
@@ -100,3 +136,13 @@ router.delete("/training/delete/:id", async (req, res) => {
   }
 });
 module.exports = router;
+// trainings by user
+router.get("/trainings/user/:id", async (req, res) => {
+  try {
+    const data = await trainingModule.find({ trainer: req.params.id });
+    const sortedData = data.sort((a, b) => b.creationDate - a.creationDate);
+    res.json(sortedData);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});

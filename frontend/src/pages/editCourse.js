@@ -6,14 +6,13 @@ import Card from '@mui/material/Card';
 import Page from '../components/Page';
 import { CourseForm } from '../sections/@dashboard/course/editCourseForm';
 
-
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import parse from 'html-react-parser';
-import VideoPlayer from "react-video-js-player"
+import VideoPlayer from 'react-video-js-player';
 
-import "./course.css"
+import './course.css';
 // material
 import ButtonBase from '@mui/material/ButtonBase';
 import Paper from '@mui/material/Paper';
@@ -24,7 +23,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import Stack from '@mui/material/Stack';
 // components
 import { AppNewsUpdate } from '../sections/@dashboard/app';
-import PDFViewer from 'pdf-viewer-reactjs'
+import PDFViewer from 'pdf-viewer-reactjs';
 
 // ----------------------------------------------------------------------
 
@@ -55,14 +54,12 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function EditCourse() {
-
   const [course, setCourse] = useState(null);
   const { id } = useParams();
 
-
   useEffect(() => {
     // console.log(id);
-    axios.get(`http://localhost:3001/api/course/getOne/${id}`).then((response) => {
+    axios.get(`http://localhost:8081/api/course/getOne/${id}`).then((response) => {
       setCourse(response.data);
       console.log(response.data);
     });
@@ -77,8 +74,7 @@ export default function EditCourse() {
               Edit course.
             </Typography>
           </Box>
-          {course &&
-            <CourseForm {...course} />}
+          {course && <CourseForm {...course} />}
         </ContentStyle>
       </Container>
     </RootStyle>

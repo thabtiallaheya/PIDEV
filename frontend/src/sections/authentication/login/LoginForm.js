@@ -1,26 +1,21 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import {
-  Link,
-  Stack,
-  Checkbox,
-  TextField,
-  IconButton,
-  InputAdornment,
-  FormControlLabel
-} from '@mui/material';
+import { Link, Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { useDispatch } from 'react-redux';
 // component
+import { login } from '../../../features/User/UserSlice';
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [status, setStatus] = useState(false);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
@@ -30,16 +25,47 @@ export default function LoginForm() {
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: '',
-      remember: true
+      password: ''
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: async ({ email, password }) => {
+      const genericErrorMessage = 'Something went wrong! Please try again later.';
+      try {
+        const response = await fetch('http://localhost:8081/users/login', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (response.status !== 200) {
+          setStatus({ type: 'error', message: data?.message || genericErrorMessage });
+        } else {
+          setStatus({ type: 'success', message: 'logged in successfuly' });
+          const { _id, firstName, lastName, photo, role, phone, skills, followers, following } =
+            data.user;
+          dispatch(
+            login({
+              email,
+              token: data.accessToken,
+              firstName,
+              lastName,
+              role,
+              phone,
+              followers,
+              following,
+              id: _id,
+              photo: `http://localhost:8081/${photo}`,
+              skills
+            })
+          );
+        }
+      } catch (error) {
+        console.log(genericErrorMessage);
+      }
     }
   });
-
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -49,6 +75,11 @@ export default function LoginForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
+          {status && (
+            <Alert severity={status?.type} sx={{ width: '100%' }} onClose={() => setStatus(null)}>
+              {status?.message}
+            </Alert>
+          )}
           <TextField
             fullWidth
             autoComplete="username"
@@ -78,14 +109,8 @@ export default function LoginForm() {
             helperText={touched.password && errors.password}
           />
         </Stack>
-
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-          <FormControlLabel
-            control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-            label="Remember me"
-          />
-
-          <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
+          <Link component={RouterLink} variant="subtitle2" to="/changepassword" underline="hover">
             Forgot password?
           </Link>
         </Stack>

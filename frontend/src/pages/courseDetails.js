@@ -2,9 +2,9 @@ import axios from 'axios';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import parse from 'html-react-parser';
-import VideoPlayer from "react-video-js-player"
+import VideoPlayer from 'react-video-js-player';
 
-import "./course.css"
+import './course.css';
 // material
 import { Box, Grid, Container, Typography } from '@mui/material';
 import ButtonBase from '@mui/material/ButtonBase';
@@ -17,31 +17,30 @@ import Stack from '@mui/material/Stack';
 // components
 import Page from '../components/Page';
 import { AppNewsUpdate } from '../sections/@dashboard/app';
-import PDFViewer from 'pdf-viewer-reactjs'
+import PDFViewer from 'pdf-viewer-reactjs';
 export default function CourseDetails() {
   const [course, setCourse] = useState(null);
   const { id } = useParams();
 
-
   useEffect(() => {
     // console.log(id);
-    axios.get(`http://localhost:3001/api/course/getOne/${id}`).then((response) => {
+    axios.get(`http://localhost:8081/api/course/getOne/${id}`).then((response) => {
       setCourse(response.data);
       console.log(response.data);
     });
   }, []);
 
   let deleteCourse = () => {
-    axios.delete(`http://localhost:3001/api/course/delete/${id}`).then((response) => {
+    axios.delete(`http://localhost:8081/api/course/delete/${id}`).then((response) => {
       // setCourse(response.data);
-      window.location.href = "/dashboard/course"
+      window.location.href = '/course';
       console.log(response.data);
     });
-  }
+  };
 
   return (
     <Page title=" Course Details | Minimal-UI">
-      {course &&
+      {course && (
         <Container maxWidth="xl">
           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Grid md={8}>
@@ -64,42 +63,47 @@ export default function CourseDetails() {
                   <Grid item md={12} container>
                     <Grid item xs container direction="column" spacing={1}>
                       <Grid item xs>
-                        
                         <Typography gutterBottom variant="h4">
-                           course : {course.name}
+                          course : {course.name}
                         </Typography>
                         <div className="p-2"></div>
                       </Grid>
                     </Grid>
                   </Grid>
 
-                  {course.files.map(item =>
-                    item.endsWith(".mp4") ?
+                  {course.files.map((item) =>
+                    item.endsWith('.mp4') ? (
                       <Grid item md={12}>
                         <video height="300" controls>
-                          <source src={`http://localhost:3001/${item.replace(/\\/, "/")}`} type="video/mp4" />
-                        </video>
-                      </Grid> :
-                      item.endsWith(".pdf") ?
-                        <Grid item md={6}>
-                          <PDFViewer
-                            document={{
-                              url: 'https://arxiv.org/pdf/quant-ph/0410100.pdf',
-                            }}
-                            scale={.5}
-                            hideNavbar
-                            hideZoom
-                            hideRotation
-                            style={{ height: 100 }}
-                            css={"pdfViewer"}
-                            canvasCss={"pdfViewer"}
+                          <source
+                            src={`http://localhost:8081/${item.replace(/\\/, '/')}`}
+                            type="video/mp4"
                           />
-                        </Grid> :
-                        <Grid item md={4}>
-                          <img
-                            style={{ height: 150, objectFit: "cover", objectPosition: "50% 50%" }}
-                            src={`http://localhost:3001/${item.replace(/\\/, "/")}`} />
-                        </Grid>
+                        </video>
+                      </Grid>
+                    ) : item.endsWith('.pdf') ? (
+                      <Grid item md={6}>
+                        <PDFViewer
+                          document={{
+                            url: 'https://arxiv.org/pdf/quant-ph/0410100.pdf'
+                          }}
+                          scale={0.5}
+                          hideNavbar
+                          hideZoom
+                          hideRotation
+                          style={{ height: 100 }}
+                          css={'pdfViewer'}
+                          canvasCss={'pdfViewer'}
+                        />
+                      </Grid>
+                    ) : (
+                      <Grid item md={4}>
+                        <img
+                          style={{ height: 150, objectFit: 'cover', objectPosition: '50% 50%' }}
+                          src={`http://localhost:8081/${item.replace(/\\/, '/')}`}
+                        />
+                      </Grid>
+                    )
                   )}
                 </Grid>
               </Paper>
@@ -115,16 +119,14 @@ export default function CourseDetails() {
                 }}
               >
                 <Grid item direction="column" spacing={6}>
-                <Typography variant="body1" color="text.secondary">
-                          tag: {course.tag}
-                        </Typography>
-                        <Typography variant="body1" gutterBottom>
-                         <div dangerouslySetInnerHTML={{ __html: course.description }}>
-
-                          </div>
-                        </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    tag: {course.tag}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    <div dangerouslySetInnerHTML={{ __html: course.description }}></div>
+                  </Typography>
                   <Typography variant="subtitle1" component="div">
-                  Price: {course.price} DT
+                    Price: {course.price} DT
                   </Typography>
                 </Grid>
               </Paper>
@@ -134,14 +136,17 @@ export default function CourseDetails() {
                 </Button>
                 <Button
                   component={RouterLink}
-                  to={`/dashboard/course/edit/${course._id}`} variant="contained" endIcon={<ModeEditIcon />}>
+                  to={`/course/edit/${course._id}`}
+                  variant="contained"
+                  endIcon={<ModeEditIcon />}
+                >
                   Update
                 </Button>
               </Stack>
             </Grid>
           </Grid>
         </Container>
-      }
+      )}
     </Page>
   );
 }

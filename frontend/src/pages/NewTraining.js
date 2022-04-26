@@ -1,7 +1,10 @@
+import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Typography, Stack } from '@mui/material';
 import Card from '@mui/material/Card';
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // components
 import Page from '../components/Page';
 import { TrainingForm } from '../sections/@dashboard/training/TrainingForm';
@@ -38,6 +41,12 @@ export default function NewTraining() {
   return (
     <RootStyle title="New Training | Minimal-UI">
       <Container>
+        <Typography variant="h4" gutterBottom>
+          <IconButton aria-label="delete" component={RouterLink} to="/training">
+            <ArrowBackIcon />
+          </IconButton>
+          Back To Trainig List
+        </Typography>
         <ContentStyle>
           <Box sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
-import "./course.css"
+import './course.css';
 
 // material
 import { Button, Container, Stack, Typography } from '@mui/material';
@@ -23,7 +23,7 @@ import Iconify from '../components/Iconify';
 export default function Course() {
   const [course, setCourse] = useState([]);
   useEffect(() => {
-    axios.get('http://localhost:3001/api/course/getAll').then((response) => {
+    axios.get('http://localhost:8081/api/course/getAll').then((response) => {
       setCourse(response.data);
       // console.log(response.data);
     });
@@ -32,41 +32,33 @@ export default function Course() {
 
   const coursesPerPage = 8;
   const pagesVisited = pageNumber * coursesPerPage;
-  const displayCourses = course
-    .slice(pagesVisited, pagesVisited + coursesPerPage)
-    .map((course) => {
-      return (
-        <Grid key={course._id} item xs={12} sm={6} md={3}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardMedia  
-              component="img" 
-              height="140"
-              image={`http://localhost:3001/${course.files[0].replace(/\\/, "/")}`}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div" noWrap>
-                {course.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" component="div" noWrap>
-                <div dangerouslySetInnerHTML={{ __html: course.description }}>
-
-                </div>
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">Add To Cart</Button>
-              <Button
-                size="small"
-                component={RouterLink}
-                to={`/dashboard/course/details/${course._id}`}
-              >
-                Learn More
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      );
-    });
+  const displayCourses = course.slice(pagesVisited, pagesVisited + coursesPerPage).map((course) => {
+    return (
+      <Grid key={course._id} item xs={12} sm={6} md={3}>
+        <Card sx={{ maxWidth: 345 }}>
+          <CardMedia
+            component="img"
+            height="140"
+            image={`http://localhost:8081/${course.files[0].replace(/\\/, '/')}`}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div" noWrap>
+              {course.name}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" component="div" noWrap>
+              <div dangerouslySetInnerHTML={{ __html: course.description }}></div>
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small">Add To Cart</Button>
+            <Button size="small" component={RouterLink} to={`/course/details/${course._id}`}>
+              Learn More
+            </Button>
+          </CardActions>
+        </Card>
+      </Grid>
+    );
+  });
   const pageCount = Math.ceil(course.length / coursesPerPage);
 
   const changePage = ({ selected }) => {
@@ -83,7 +75,7 @@ export default function Course() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="/dashboard/course/new"
+            to="/course/new"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
             New Course

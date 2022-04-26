@@ -1,9 +1,18 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
-import { useNavigate } from 'react-router-dom';
 // material
-import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
+import {
+  Stack,
+  TextField,
+  IconButton,
+  InputAdornment,
+  Alert,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
+} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
@@ -11,8 +20,8 @@ import Iconify from '../../../components/Iconify';
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [status, setStatus] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -21,7 +30,8 @@ export default function RegisterForm() {
       .required('First name required'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required')
+    password: Yup.string().required('Password is required'),
+    role: Yup.string().required('Role is required')
   });
 
   const formik = useFormik({
@@ -29,11 +39,33 @@ export default function RegisterForm() {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      role: ''
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: async ({ email, password, firstName, lastName, role }, { resetForm }) => {
+      const genericErrorMessage = 'Something went wrong! Please try again later.';
+      try {
+        const response = await fetch('http://localhost:8081/users/', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, firstName, lastName, role })
+        });
+        const data = await response.json();
+        if (response.status !== 200) {
+          setStatus({ type: 'error', message: data?.message || genericErrorMessage });
+        } else {
+          setStatus({
+            type: 'success',
+            message: 'You have successfully signed up! Please verify your email in order to log in'
+          });
+          resetForm();
+        }
+      } catch (error) {
+        // setIsSubmitting(false);
+        console.log(error);
+      }
     }
   });
 
@@ -43,6 +75,11 @@ export default function RegisterForm() {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
+          {status && (
+            <Alert severity={status?.type} sx={{ width: '100%' }} onClose={() => setStatus(null)}>
+              {status?.message}
+            </Alert>
+          )}
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
               fullWidth
@@ -89,6 +126,18 @@ export default function RegisterForm() {
             error={Boolean(touched.password && errors.password)}
             helperText={touched.password && errors.password}
           />
+          <FormControl>
+            <InputLabel>I am:</InputLabel>
+            <Select
+              fullWidth
+              {...getFieldProps('role')}
+              error={Boolean(touched.role && errors.role)}
+              helperText={touched.role && errors.role}
+            >
+              <MenuItem value="STUDENT">Student</MenuItem>
+              <MenuItem value="MENTOR">Mentor</MenuItem>
+            </Select>
+          </FormControl>
 
           <LoadingButton
             fullWidth
