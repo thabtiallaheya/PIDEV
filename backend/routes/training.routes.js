@@ -63,6 +63,7 @@ router.post("/training/insert", upload, async (req, res) => {
     nbrParticipent: req.body.nbrParticipent,
     image: req.file.filename,
     price: req.body.price,
+    status : req.body.status
   });
   try {
     const dataToSave = await data.save();

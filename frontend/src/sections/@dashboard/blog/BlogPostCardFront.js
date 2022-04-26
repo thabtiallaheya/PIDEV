@@ -219,10 +219,10 @@ export default function BlogPostCardFront(props) {
             <Button
               variant="contained"
               component={RouterLink}
-              to={`/api/read/detail/${props.element._id}`}
+              to={`/api/read/detail/front/${props.element._id}`}
               //startIcon={<Iconify icon="flat-color-icons:data-recovery" />}
             >
-              <a href={`/api/read/detail/${props.element._id}`}>📖show</a>
+              📖 show
             </Button>
           </Stack>
         </CardContent>

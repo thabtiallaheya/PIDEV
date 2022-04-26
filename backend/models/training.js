@@ -36,6 +36,10 @@ const TrainingSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  status :{
+    type : Boolean,
+    default: false
+  }
 });
 const Training = mongoose.model("training", TrainingSchema);
 module.exports = Training;

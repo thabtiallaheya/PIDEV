@@ -7,10 +7,14 @@ import Iconify from '../components/Iconify';
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
 //
 import POSTS from '../_mocks_/blog';
-import { useEffect, useState } from 'react';
+import { useRef,useEffect, useState } from 'react';
 import axios, * as others from 'axios';
 import ReactPaginate from 'react-paginate';
 import { element } from 'prop-types';
+import { io } from "socket.io-client";
+import Swal from 'sweetalert2';
+import toast, { Toaster } from 'react-hot-toast';
+import ChatIcon from '@mui/icons-material/Chat';
 // ----------------------------------------------------------------------
 
 const SORT_OPTIONS = [
@@ -21,6 +25,7 @@ const SORT_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function Blog() {
+  const socket = useRef();
   const [activityList, setActivityList] = useState([]);
   const [multipleFiles, setMultipleFiles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,6 +54,22 @@ export default function Blog() {
       console.log(response.data);
       setActivityList(response.data);
     });
+    socket.current = io("ws://localhost:8002");
+
+    socket.current.on("connnection", () => {
+      console.log("connected to server");
+    });
+    socket.current.on("new-notification", () => {
+      console.log("new notif");
+      Swal.fire(
+        'the feed is up to date!',
+        'You clicked the button!',
+        'success'
+      )
+      //alert("  New notification!!!");
+      
+    });
+
   }, []);
 
   const ascOrder = () => {
@@ -88,9 +109,18 @@ export default function Blog() {
     <Page title="Dashboard: Blog | Minimal-UI">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+        
           <Typography variant="h3" gutterBottom>
             📚Activities📖
           </Typography>
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="/chat"
+            //startIcon={<Iconify icon="eva:plus-fill" />}
+          >  <ChatIcon  />
+             Join Chat 
+          </Button>
           <Button
             variant="contained"
             component={RouterLink}
@@ -99,11 +129,13 @@ export default function Blog() {
           >
             📝New activity
           </Button>
+
+          
         </Stack>
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
           <BlogPostsSearch posts={multipleFiles} setSearchTerm={setSearchTerm} />
-          <BlogPostsSort options={SORT_OPTIONS} modo={modo} />
+         { <BlogPostsSort options={SORT_OPTIONS} modo={modo} /> } 
         </Stack>
 
         <Grid container spacing={3}>
