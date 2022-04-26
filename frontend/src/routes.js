@@ -42,6 +42,8 @@ import UpdateTraining from './pages/UpdateTraining';
 import Calendar from './pages/Calendar';
 import { Profile } from './sections/profile/Profile';
 import { Trainer } from './pages/Trainers';
+import Trainings from './pages/Trainings';
+import TrainingsDetail from './pages/TrainingsDetail';
 
 // ----------------------------------------------------------------------
 
@@ -64,14 +66,26 @@ export default function Router() {
             { path: 'products', element: <Products /> },
             { path: 'trainers', element: <Trainer /> },
             { path: 'blog', element: <Blog /> },
-            { path: 'training', element: <Training /> },
-            { path: 'trainingComponent', element: <TrainingComponent /> },
+            user.role === 'MENTOR' && { path: 'training', element: <Training /> },
+            user.role === 'STUDENT' && { path: 'training', element: <Trainings /> },
             { path: 'calendar', element: <Calendar /> },
             { path: 'meeting', element: <Meeting /> },
-            { path: 'training/new', element: <NewTraining /> },
-            { path: 'training/update/:id', element: <UpdateTraining /> },
-            { path: 'training/details/:id', element: <TrainingDetails /> },
-            { path: 'training/details/front/:id', element: <TrainingDetailsFront /> },
+            user.role === 'MENTOR' && {
+              path: 'training/new',
+              element: <NewTraining />
+            },
+            user.role === 'MENTOR' && {
+              path: 'training/update/:id',
+              element: <UpdateTraining />
+            },
+            user.role === 'STUDENT' && {
+              path: 'training/details/:id',
+              element: <TrainingsDetail />
+            },
+            user.role === 'MENTOR' && {
+              path: 'training/details/:id',
+              element: <TrainingDetails />
+            },
             { path: 'blogFront', element: <BlogFront /> },
             { path: 'chat', element: <Chat /> },
             { path: 'chatFront', element: <ChatFront /> },

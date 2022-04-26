@@ -44,7 +44,7 @@ const sidebarConfig = [
   {
     title: 'trainers',
     path: '/trainers',
-    icon: getIcon('healthicons:i-training-class')
+    icon: getIcon('fa-solid:chalkboard-teacher')
   },
   {
     title: 'Course',

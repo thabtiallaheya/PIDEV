@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 const TrainingSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -42,8 +42,8 @@ const TrainingSchema = new mongoose.Schema({
   },
   trainer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    ref: "User",
   },
-})
-const Training = mongoose.model('training', TrainingSchema)
-module.exports = Training
+});
+const Training = mongoose.model("training", TrainingSchema);
+module.exports = Training;
