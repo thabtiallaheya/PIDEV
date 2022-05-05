@@ -1,13 +1,15 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Card, Stack, Link, Container, Typography } from '@mui/material';
+import { Card, Stack, Link, Container, Typography, Divider } from '@mui/material';
 // layouts
 import AuthLayout from '../layouts/AuthLayout';
 // components
 import Page from '../components/Page';
 import { LoginForm } from '../sections/authentication/login';
-import AuthSocial from '../sections/authentication/AuthSocial';
+import GoogleLogin from 'react-google-login';
+import { useDispatch } from 'react-redux';
+import { login } from 'src/features/User/UserSlice';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +41,38 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const handleLogin = async (googleData) => {
+    const res = await fetch('http://localhost:8081/users/google', {
+      method: 'POST',
+      body: JSON.stringify({
+        token: googleData.tokenId
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await res.json();
+    console.log(data);
+    const { _id, email, firstName, lastName, photo, role, phone, skills, followers, following } =
+      data.user;
+    // store returned user somehow
+    dispatch(
+      login({
+        email,
+        token: data.accessToken,
+        firstName,
+        lastName,
+        role,
+        phone,
+        followers,
+        following,
+        id: _id,
+        photo: `http://localhost:8081/${photo}`,
+        skills
+      })
+    );
+  };
   return (
     <RootStyle title="Login | Minimal-UI">
       <AuthLayout>
@@ -63,8 +97,18 @@ export default function Login() {
             </Typography>
             <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
           </Stack>
-          <AuthSocial />
-
+          <GoogleLogin
+            clientId={'374086012147-nprk3ceoj1dds52ipbksbcr4jdc4mjk8.apps.googleusercontent.com'}
+            buttonText="Log in with Google"
+            onSuccess={handleLogin}
+            onFailure={handleLogin}
+            cookiePolicy={'single_host_origin'}
+          />
+          <Divider sx={{ my: 3 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              OR
+            </Typography>
+          </Divider>
           <LoginForm />
 
           <Typography

@@ -1,13 +1,15 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Card, Link, Container, Typography } from '@mui/material';
+import { Box, Card, Link, Container, Typography, Divider } from '@mui/material';
 // layouts
 import AuthLayout from '../layouts/AuthLayout';
 // components
 import Page from '../components/Page';
 import { RegisterForm } from '../sections/authentication/register';
-import AuthSocial from '../sections/authentication/AuthSocial';
+import GoogleLogin from 'react-google-login';
+import { login } from 'src/features/User/UserSlice';
+import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +41,38 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Register() {
+  const dispatch = useDispatch();
+  const handleLogin = async (googleData) => {
+    const res = await fetch('http://localhost:8081/users/google', {
+      method: 'POST',
+      body: JSON.stringify({
+        token: googleData.tokenId
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await res.json();
+    console.log(data);
+    const { _id, email, firstName, lastName, photo, role, phone, skills, followers, following } =
+      data.user;
+    // store returned user somehow
+    dispatch(
+      login({
+        email,
+        token: data.accessToken,
+        firstName,
+        lastName,
+        role,
+        phone,
+        followers,
+        following,
+        id: _id,
+        photo: `http://localhost:8081/${photo}`,
+        skills
+      })
+    );
+  };
   return (
     <RootStyle title="Register | Minimal-UI">
       <AuthLayout>
@@ -66,7 +100,18 @@ export default function Register() {
             </Typography>
           </Box>
 
-          <AuthSocial />
+          <GoogleLogin
+            clientId={'374086012147-nprk3ceoj1dds52ipbksbcr4jdc4mjk8.apps.googleusercontent.com'}
+            buttonText="Log in with Google"
+            onSuccess={handleLogin}
+            onFailure={handleLogin}
+            cookiePolicy={'single_host_origin'}
+          />
+          <Divider sx={{ my: 3 }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              OR
+            </Typography>
+          </Divider>
 
           <RegisterForm />
 
