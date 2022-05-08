@@ -1,7 +1,7 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Card, Stack, Link, Container, Typography, Divider } from '@mui/material';
+import { Card, Stack, Link, Container, Typography, Divider, Alert } from '@mui/material';
 // layouts
 import AuthLayout from '../layouts/AuthLayout';
 // components
@@ -10,6 +10,7 @@ import { LoginForm } from '../sections/authentication/login';
 import GoogleLogin from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import { login } from 'src/features/User/UserSlice';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +43,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Login() {
   const dispatch = useDispatch();
+  const [status, setStatus] = useState(false);
   const handleLogin = async (googleData) => {
     const res = await fetch('http://localhost:8081/users/google', {
       method: 'POST',
@@ -53,25 +55,39 @@ export default function Login() {
       }
     });
     const data = await res.json();
-    console.log(data);
-    const { _id, email, firstName, lastName, photo, role, phone, skills, followers, following } =
-      data.user;
+    const {
+      _id,
+      email,
+      firstName,
+      lastName,
+      photo,
+      role,
+      phone,
+      skills,
+      followers,
+      following,
+      status
+    } = data.user;
     // store returned user somehow
-    dispatch(
-      login({
-        email,
-        token: data.accessToken,
-        firstName,
-        lastName,
-        role,
-        phone,
-        followers,
-        following,
-        id: _id,
-        photo: `http://localhost:8081/${photo}`,
-        skills
-      })
-    );
+    if (!status) {
+      setStatus({ type: 'error', message: 'Your account is banned please contact your admin' });
+    } else {
+      dispatch(
+        login({
+          email,
+          token: data.accessToken,
+          firstName,
+          lastName,
+          role,
+          phone,
+          followers,
+          following,
+          id: _id,
+          photo: `http://localhost:8081/${photo}`,
+          skills
+        })
+      );
+    }
   };
   return (
     <RootStyle title="Login | Minimal-UI">
@@ -109,6 +125,11 @@ export default function Login() {
               OR
             </Typography>
           </Divider>
+          <Stack sx={{ mb: 5 }}>
+            <Alert onClose={() => setStatus(null)} severity={status?.type} sx={{ width: '100%' }}>
+              {status?.message}
+            </Alert>
+          </Stack>
           <LoginForm />
 
           <Typography
