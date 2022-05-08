@@ -44,6 +44,15 @@ const TrainingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  participants: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  nbrApplyInto: {
+    type: Number,
+  },
 });
 const Training = mongoose.model("training", TrainingSchema);
 module.exports = Training;

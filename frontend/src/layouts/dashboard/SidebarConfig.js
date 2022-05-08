@@ -13,14 +13,14 @@ const sidebarConfig = [
   // },
   {
     title: 'carts',
-    path: '/CartListComponent',
+    path: '/card',
     icon: getIcon('eva:shopping-bag-fill')
   },
-  {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon('eva:shopping-bag-fill')
-  },
+  // {
+  //   title: 'product',
+  //   path: '/dashboard/products',
+  //   icon: getIcon('eva:shopping-bag-fill')
+  // },
   {
     title: 'user',
     path: '/dashboard/user',

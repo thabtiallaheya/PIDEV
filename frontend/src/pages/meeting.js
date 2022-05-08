@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { getMeetingId, getToken } from '../api';
 import { Link as RouterLink } from 'react-router-dom';
 import { VideoSDKMeeting } from '@videosdk.live/rtc-js-prebuilt';
@@ -15,6 +16,7 @@ import Iconify from '../components/Iconify';
 // ----------------------------------------------------------------------
 
 export default function Meeting() {
+  const user = useSelector((state) => state.user);
   const [token, setToken] = useState(null);
   const [meetingId, setMeetingId] = useState(null);
   const getMeetingToken = async () => {
@@ -28,7 +30,7 @@ export default function Meeting() {
     getMeetingToken();
     // token ? {} : null;
     const config = {
-      name: '',
+      name: `${user.firstName}`,
       meetingId: 'milkyway',
       apiKey: 'cbae9065-7437-4750-8026-9e695ff2566b',
 

@@ -49,8 +49,8 @@ export default function ShowDetailActFront() {
   return (
     <RootStyle title="Create Activity | Minimal-UI">
       <Container>
-      <DashboardNavbarStudent onOpenSidebar={() => setOpen(true)} />
-      <DashboardSidebarStudent isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+        <DashboardNavbarStudent onOpenSidebar={() => setOpen(true)} />
+        {/*      <DashboardSidebarStudent isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />*/}
         <Typography variant="h3" gutterBottom>
           📜 Activity to do
         </Typography>

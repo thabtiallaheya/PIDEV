@@ -7,12 +7,12 @@ import Iconify from '../components/Iconify';
 import { BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
 //
 import POSTS from '../_mocks_/blog';
-import {  useRef,useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import axios, * as others from 'axios';
 import ReactPaginate from 'react-paginate';
 import { element } from 'prop-types';
 import BlogPostCardFront from 'src/sections/@dashboard/blog/BlogPostCardFront';
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client';
 import Swal from 'sweetalert2';
 import ChatIcon from '@mui/icons-material/Chat';
 import DashboardNavbarStudent from 'src/layouts/dashboard/DashboardNavbarStudent';
@@ -57,38 +57,35 @@ export default function BlogFront() {
       console.log(response.data);
       setActivityList(response.data);
     });
-    socket.current = io("ws://localhost:8002");
+    socket.current = io('ws://localhost:8002');
 
-    socket.current.on("connnection", () => {
-      console.log("connected to server");
+    socket.current.on('connnection', () => {
+      console.log('connected to server');
     });
-    socket.current.on("new-notification", () => {
-      console.log("new notif");
-      Swal.fire(
-        'the feed is up to date!',
-        'You clicked the button!',
-        'success'
-      )
+    socket.current.on('new-notification', () => {
+      console.log('new notif');
+      Swal.fire('the feed is up to date!', 'You clicked the button!', 'success');
       //alert("  New notification!!!");
-      
     });
 
-      //chatBoat
-      
-    (function(d, m){
-        var kommunicateSettings = 
-            {"appId":"da13654b0c21d8a6200129043a9f84f5","popupWidget":true,"automaticChatOpenOnNavigation":true};
-        var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
-        s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
-        var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
-        window.kommunicate = m; m._globals = kommunicateSettings;
+    //chatBoat
+
+    (function (d, m) {
+      var kommunicateSettings = {
+        appId: 'da13654b0c21d8a6200129043a9f84f5',
+        popupWidget: true,
+        automaticChatOpenOnNavigation: true
+      };
+      var s = document.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = 'https://widget.kommunicate.io/v2/kommunicate.app';
+      var h = document.getElementsByTagName('head')[0];
+      h.appendChild(s);
+      window.kommunicate = m;
+      m._globals = kommunicateSettings;
     })(document, window.kommunicate || {});
-/* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
-
-
-
-
-
+    /* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
   }, []);
 
   const ascOrder = () => {
@@ -125,7 +122,7 @@ export default function BlogFront() {
   return (
     <Page title="Dashboard: Blog | Minimal-UI">
       <DashboardNavbarStudent onOpenSidebar={() => setOpen(true)} />
-      <DashboardSidebarStudent isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+      {/*<DashboardSidebarStudent isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />*/}
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h3" gutterBottom>
@@ -134,16 +131,18 @@ export default function BlogFront() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="/chatFront"
+            to="/chat"
             //startIcon={<Iconify icon="eva:plus-fill" />}
-          >  <ChatIcon  />
-             Join Chat 
+          >
+            {' '}
+            <ChatIcon />
+            Join Chat
           </Button>
         </Stack>
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
           <BlogPostsSearch posts={multipleFiles} setSearchTerm={setSearchTerm} />
-          { <BlogPostsSort options={SORT_OPTIONS} modo={modo} /> } 
+          {<BlogPostsSort options={SORT_OPTIONS} modo={modo} />}
         </Stack>
 
         <Grid container spacing={3}>

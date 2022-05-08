@@ -74,6 +74,7 @@ router.post("/training/insert", upload, async (req, res) => {
     price: req.body.price,
     status: req.body.status,
     trainer: req.body.trainer,
+    nbrApplyInto: 0,
   });
   try {
     const dataToSave = await data.save();
@@ -114,6 +115,7 @@ router.put("/training/update/:id", upload, async (req, res) => {
         image: newImage,
         price: req.body.price,
         trainer: req.body.trainer,
+        nbrApplyInto: data.nbrApplyInto,
       },
       options
     );
@@ -147,6 +149,35 @@ router.get("/trainings/user/:id", async (req, res) => {
     const data = await trainingModule
       .find({ trainer: req.params.id })
       .populate("trainer");
+    const sortedData = data.sort((a, b) => b.creationDate - a.creationDate);
+    res.json(sortedData);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+// add participant to Training
+router.put("/training/participantToTraining/:id/:iduser", async (req, res) => {
+  try {
+    const data = await trainingModule.findById(req.params.id);
+    const user = await UserModule.findById(req.params.iduser);
+    const result = await trainingModule.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { participants: user._id },
+        nbrApplyInto: data.nbrApplyInto + 1,
+        nbrParticipent: data.nbrParticipent - 1,
+      },
+      { new: true, useFindAndModify: false }
+    );
+    res.send(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+// user training participat into
+router.get("/trainings/participat/:id", async (req, res) => {
+  try {
+    const data = await trainingModule.find({ participants: req.params.id });
     const sortedData = data.sort((a, b) => b.creationDate - a.creationDate);
     res.json(sortedData);
   } catch (err) {
