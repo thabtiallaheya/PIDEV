@@ -16,6 +16,7 @@ const app = express();
 let path = require("path");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.CLIENT_ID);
+
 router.post("/google", async (req, res) => {
   const { token } = req.body;
   const ticket = await client.verifyIdToken({
@@ -65,6 +66,7 @@ router.post("/google", async (req, res) => {
     });
   }
 });
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "images");
@@ -94,16 +96,46 @@ router.get(
 );
 
 /* GET users listing. */
-router.get(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  inRole(ROLES.ADMIN),
-  function (req, res, next) {
-    User.find({}, function (err, users) {
-      res.send(users);
+// router.get(
+//   "/",
+//   passport.authenticate("jwt", { session: false }),
+//   inRole(ROLES.ADMIN),
+//   function (req, res, next) {
+//     User.find({}, function (err, users) {
+//       res.send(users);
+//     });
+//   }
+// );
+
+router.get("/", async (req, res, next) => {
+  const page = req.query.page;
+  const rows = req.query.rows;
+  User.find({}, function (err, users) {
+    return res.status(200).json({
+      users: users.slice(page * rows, page * rows + rows),
+      length: users.length,
     });
-  }
-);
+  });
+});
+
+router.get("/byName/:name", async (req, res, next) => {
+  const name = req.params.name;
+  const page = req.query.page;
+  const rows = req.query.rows;
+  User.find({}, function (err, users) {
+    const result = users.map((user) => {
+      if (
+        (user.firstName + " " + user.lastName).includes(name) ||
+        (user.lastName + " " + user.firstName).includes(name)
+      )
+        return user;
+    });
+    return res.status(200).json({
+      users: result.filter(Boolean).slice(page * rows, page * rows + rows),
+      length: result.length,
+    });
+  });
+});
 
 router.post("/", async (req, res, next) => {
   const { isValid } = ValidateRegister(req.body);
@@ -144,6 +176,34 @@ router.get("/trainers", function (req, res, next) {
     });
     res.status(200).send({ trainers: users, message: "success" });
   });
+});
+
+router.post("/ban/:id", async (req, res, next) => {
+  const id = req.params.id;
+  User.findOneAndUpdate(
+    { _id: id },
+    {
+      status: false,
+    },
+    function (err, user) {
+      if (err) res.status(400).send({ message: err });
+      res.status(200).send({ message: "success", user });
+    }
+  );
+});
+
+router.post("/unban/:id", async (req, res, next) => {
+  const id = req.params.id;
+  User.findOneAndUpdate(
+    { _id: id },
+    {
+      status: true,
+    },
+    function (err, user) {
+      if (err) res.status(400).send({ message: err });
+      res.status(200).send({ message: "success", user });
+    }
+  );
 });
 
 router.post("/follow", function (req, res, next) {
@@ -244,6 +304,10 @@ router.post("/login", (req, res, next) => {
             res.status(400).json({ message: "incorrect password" });
           } else if (!user.verified) {
             res.status(400).json({ message: "Please confirm your email" });
+          } else if (!user.status) {
+            res.status(400).json({
+              message: "Your account is banned, please contact your admin",
+            });
           } else {
             var token = jwt.sign(
               {

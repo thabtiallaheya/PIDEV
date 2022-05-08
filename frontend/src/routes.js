@@ -44,6 +44,7 @@ import { Profile } from './sections/profile/Profile';
 import { Trainer } from './pages/Trainers';
 import Trainings from './pages/Trainings';
 import TrainingsDetail from './pages/TrainingsDetail';
+import User from './pages/User';
 
 // ----------------------------------------------------------------------
 
@@ -61,7 +62,7 @@ export default function Router() {
             { path: 'app', element: <DashboardApp /> },
             { path: 'CartListComponent', element: <CartListComponent /> },
             { path: 'cardComponent', element: <CardComponent /> },
-            // { path: 'user', element: <User /> },
+            { path: 'user', element: <User /> },
             { path: 'profile', element: <Profile /> },
             { path: 'products', element: <Products /> },
             { path: 'trainers', element: <Trainer /> },

@@ -23,7 +23,7 @@ const sidebarConfig = [
   },
   {
     title: 'user',
-    path: '/dashboard/user',
+    path: '/user',
     icon: getIcon('fa6-solid:users-gear')
   },
   // {
