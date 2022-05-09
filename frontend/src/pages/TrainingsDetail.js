@@ -219,9 +219,8 @@ export default function TrainingsDetail() {
                           variant="contained"
                           startIcon={<Icon icon="ant-design:video-camera-add-outlined" />}
                           onClick={() => {
-                            // applyToTraining(training);
+                            navigate('/meeting', { replace: false, state: training });
                           }}
-                          disabled={!disable}
                         >
                           join meeting now
                         </Button>
@@ -236,7 +235,7 @@ export default function TrainingsDetail() {
                           variant="contained"
                           startIcon={<Icon icon="bx:log-in-circle" />}
                           onClick={() => {
-                            applyToTraining(training);
+                            // applyToTraining(training);
                           }}
                         >
                           join now

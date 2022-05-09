@@ -18,15 +18,12 @@ import CardComponent from './pages/CardComponent';
 import NotFound from './pages/Page404';
 import Add from './sections/authentication/activities/Add';
 import EditAct from './pages/EditAct';
-import ChatBlog from './pages/ChatBlog';
 import ShowDetailAct from './pages/ShowDetailAct';
 import ShowDetailActFront from './pages/ShowDetailActFront';
 import Training from './pages/Training';
-import TrainingFront from './pages/TrainingFront';
 import NewTraining from './pages/NewTraining';
 import Meeting from './pages/meeting';
 import TrainingDetails from './pages/TrainingDetails';
-import TrainingDetailsFront from './pages/TrainingDetailsFront';
 import Course from './pages/course';
 import NewCourse from './pages/newCourse';
 import CourseDetails from './pages/courseDetails';
@@ -44,6 +41,7 @@ import { Profile } from './sections/profile/Profile';
 import { Trainer } from './pages/Trainers';
 import Trainings from './pages/Trainings';
 import TrainingsDetail from './pages/TrainingsDetail';
+import Emotion from './pages/emotion';
 
 // ----------------------------------------------------------------------
 
@@ -70,6 +68,7 @@ export default function Router() {
             user.role === 'STUDENT' && { path: 'training', element: <Trainings /> },
             { path: 'calendar', element: <Calendar /> },
             { path: 'meeting', element: <Meeting /> },
+            { path: 'training/emotion', element: <Emotion /> },
             user.role === 'MENTOR' && {
               path: 'training/new',
               element: <NewTraining />

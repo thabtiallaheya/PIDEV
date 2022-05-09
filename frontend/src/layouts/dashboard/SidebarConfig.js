@@ -52,11 +52,6 @@ const sidebarConfig = [
     icon: getIcon('eva:file-text-fill')
   },
   {
-    title: 'Meeting',
-    path: '/meeting',
-    icon: getIcon('ant-design:video-camera-add-outlined')
-  },
-  {
     title: 'calendar',
     path: '/calendar',
     icon: getIcon('bi:calendar-week-fill')

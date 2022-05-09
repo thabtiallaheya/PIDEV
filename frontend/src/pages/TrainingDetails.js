@@ -169,6 +169,20 @@ export default function TrainingDetails() {
                 )}
               </Grid>
               <Divider variant="middle" />
+              <Box sx={{ m: 2 }} justify="center">
+                <Stack spacing={2} display="flex" justifyContent="center" alignItems="center">
+                  <Button
+                    variant="contained"
+                    startIcon={<Icon icon="ant-design:video-camera-add-outlined" />}
+                    onClick={() => {
+                      navigate('/meeting', { replace: false, state: training });
+                    }}
+                  >
+                    join meeting now
+                  </Button>
+                </Stack>
+              </Box>
+              <Divider variant="middle" />
               <Box sx={{ m: 2 }} justify="center" justifyContent="space-between">
                 <Stack direction="row" spacing={2}>
                   <Button
