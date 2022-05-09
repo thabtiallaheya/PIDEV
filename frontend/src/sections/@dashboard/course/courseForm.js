@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -20,6 +21,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import { LoadingButton } from '@mui/lab';
 
 export function CourseForm() {
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
   const RegisterSchema = Yup.object().shape({
     Name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Name is required'),
@@ -43,6 +45,7 @@ export function CourseForm() {
       formdata.append('name', values.Name);
       formdata.append('description', values.description);
       formdata.append('tag', values.tag);
+      formdata.append('trainer', user.id);
       formdata.append('price', values.price);
       if (values.image.length != 0) {
         for (const single_file of values.image) {

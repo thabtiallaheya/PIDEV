@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import './course.css';
+import { useNavigate } from "react-router-dom";
 
 // material
 import { Button, Container, Stack, Typography } from '@mui/material';
@@ -21,9 +23,18 @@ import Iconify from '../components/Iconify';
 // ----------------------------------------------------------------------
 
 export default function Course() {
+  const [query, setQuery] = useState(""); 
+
+  const user = useSelector((state) => state.user);
   const [course, setCourse] = useState([]);
+  let navigate = useNavigate(); 
+  const routeChange = () =>{ 
+    let path = `/recommended`; 
+    navigate(path);
+  }
+  
   useEffect(() => {
-    axios.get('http://localhost:8081/api/course/getAll').then((response) => {
+    axios.get( `http://localhost:8081/api/courses/user/${user.id}`).then((response) => {
       setCourse(response.data);
       // console.log(response.data);
     });
@@ -34,7 +45,9 @@ export default function Course() {
   const pagesVisited = pageNumber * coursesPerPage;
   const displayCourses = course.slice(pagesVisited, pagesVisited + coursesPerPage).map((course) => {
     return (
+      
       <Grid key={course._id} item xs={12} sm={6} md={3}>
+        
         <Card sx={{ maxWidth: 345 }}>
           <CardMedia
             component="img"
@@ -72,6 +85,11 @@ export default function Course() {
           <Typography variant="h4" gutterBottom>
             Course
           </Typography>
+          {/* <input
+  className="search"
+  placeholder="Search..."
+  onChange={(e) => setQuery (e.target.value)}
+/> */}
           <Button
             variant="contained"
             component={RouterLink}
@@ -80,6 +98,11 @@ export default function Course() {
           >
             New Course
           </Button>
+          <Button  size="small" color="primary"
+            onClick={routeChange}
+              >
+              See recommended courses
+            </Button>
         </Stack>
       </Container>
       <Grid container spacing={3}>

@@ -15,6 +15,7 @@ import Chat from './sections/@dashboard/blog/Chat';
 import Blog from './pages/Blog';
 import Cards from './pages/Cards';
 import CardComponent from './pages/CardComponent';
+import User from './pages/User';
 import NotFound from './pages/Page404';
 import Add from './sections/authentication/activities/Add';
 import EditAct from './pages/EditAct';
@@ -41,8 +42,9 @@ import { Profile } from './sections/profile/Profile';
 import { Trainer } from './pages/Trainers';
 import Trainings from './pages/Trainings';
 import TrainingsDetail from './pages/TrainingsDetail';
-import User from './pages/User';
 import Emotion from './pages/emotion';
+import CourseStusent from './pages/coursesStudent';
+import Recommended from './pages/Recommended';
 
 // ----------------------------------------------------------------------
 
@@ -102,8 +104,12 @@ export default function Router() {
             },
             { path: 'course', element: <Course /> },
             { path: 'course/new', element: <NewCourse /> },
-            { path: 'course/details/:id', element: <CourseDetails /> },
-            { path: 'course/edit/:id', element: <EditCourse /> }
+            user.role === 'MENTOR' && { path: 'course', element: <Course /> },
+            user.role === 'STUDENT' && { path: 'course', element: <CourseStusent /> },
+            user.role === 'STUDENT' && { path: 'course/details/:id', element: <coursesDetail /> },
+            user.role === 'MENTOR' && { path: 'course/details/:id', element: <CourseDetails /> },
+            { path: 'course/edit/:id', element: <EditCourse /> },
+            { path: 'recommended', element: <Recommended /> }
           ]
         },
         {

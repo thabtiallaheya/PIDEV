@@ -3,6 +3,7 @@ const multer = require('multer')
 const uuid = require('uuid').v4;
 const path = require('path');
 const courseModule = require("../models/course");
+const UserModule = require("../models/user");
 //const Course = require("../models/course");
 
 const storage = multer.diskStorage({
@@ -38,7 +39,8 @@ router.post("/course/add", upload, async (req, res) => {
     description: req.body.description,
     tag: req.body.tag,
     files: req.files.map(file => file.path),
-    price: req.body.price
+    price: req.body.price,
+    trainer: req.body.trainer,
   });
   try {
     const dataToSave = await data.save();
@@ -52,7 +54,7 @@ router.post("/course/add", upload, async (req, res) => {
 //GET ALL
 router.get("/course/getAll", async (req, res) => {
   try {
-    const data = await courseModule.find();
+    const data = await courseModule.find().populate("trainer");
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -114,3 +116,12 @@ router.delete("/course/delete/:id", async (req, res) => {
   }
 });
 module.exports = router;
+// trainings by user
+router.get("/courses/user/:id", async (req, res) => {
+  try {
+    const data = await courseModule.find({ trainer: req.params.id });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});

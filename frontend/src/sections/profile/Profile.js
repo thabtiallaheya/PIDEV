@@ -134,7 +134,7 @@ export const Profile = () => {
                   {training.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" component="div" noWrap>
-                  {parse(training.description)}
+                  {training.name}
                 </Typography>
               </CardContent>
               <Divider variant="middle" />
