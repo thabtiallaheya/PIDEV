@@ -13,14 +13,14 @@ const sidebarConfig = [
   // },
   {
     title: 'carts',
-    path: '/CartListComponent',
+    path: '/card',
     icon: getIcon('eva:shopping-bag-fill')
   },
-  {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon('eva:shopping-bag-fill')
-  },
+  // {
+  //   title: 'product',
+  //   path: '/dashboard/products',
+  //   icon: getIcon('eva:shopping-bag-fill')
+  // },
   {
     title: 'user',
     path: '/user',
@@ -50,11 +50,6 @@ const sidebarConfig = [
     title: 'Course',
     path: '/course',
     icon: getIcon('eva:file-text-fill')
-  },
-  {
-    title: 'Meeting',
-    path: '/meeting',
-    icon: getIcon('ant-design:video-camera-add-outlined')
   },
   {
     title: 'calendar',

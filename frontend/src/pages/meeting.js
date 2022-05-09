@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { getMeetingId, getToken } from '../api';
 import { Link as RouterLink } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { VideoSDKMeeting } from '@videosdk.live/rtc-js-prebuilt';
 
 // material
@@ -15,6 +17,9 @@ import Iconify from '../components/Iconify';
 // ----------------------------------------------------------------------
 
 export default function Meeting() {
+  const user = useSelector((state) => state.user);
+  const location = useLocation();
+  const training = location.state;
   const [token, setToken] = useState(null);
   const [meetingId, setMeetingId] = useState(null);
   const getMeetingToken = async () => {
@@ -26,16 +31,16 @@ export default function Meeting() {
   };
   useEffect(() => {
     getMeetingToken();
-    // token ? {} : null;
     const config = {
-      name: '',
-      meetingId: 'milkyway',
+      name: `${user.firstName}`,
+      meetingId: `${training.name}`,
       apiKey: 'cbae9065-7437-4750-8026-9e695ff2566b',
 
       containerId: 'meeting-container-id',
 
       micEnabled: true,
       webcamEnabled: true,
+      redirectOnLeave: 'http://localhost:3000/training/emotion',
       participantCanToggleSelfWebcam: true,
       participantCanToggleSelfMic: true,
       chatEnabled: true,
@@ -44,7 +49,7 @@ export default function Meeting() {
       joinScreen: {
         visible: true,
         title: 'welcome To Learnigo Join Classroom',
-        meetingUrl: 'customURL.com'
+        meetingUrl: `${training.name}.com`
       },
       recording: {
         enabled: true,

@@ -124,33 +124,30 @@ const server1 = app.listen(process.env.PORT || 8081, function () {
   console.log("App started at port:", port);
 });
 
-// socket
+// // socket
 
-const socketUtils = require("./utils/socketUtils");
+// const socketUtils = require("./utils/socketUtils");
 
-const server2 = http.createServer(app);
-const io1 = socketUtils.sio(server2);
-socketUtils.connection(io1);
-const socketIOMiddleware = (req, res, next) => {
-  req.io = io1;
+// const server2 = http.createServer(app);
+// const io1 = socketUtils.sio(server2);
+// socketUtils.connection(io1);
+// const socketIOMiddleware = (req, res, next) => {
+//   req.io = io1;
 
-  next();
-};
-
-// // CORS
-app.use(cors());
+//   next();
+// };
 
 // // ROUTES
-app.use("/api/v1/hello", socketIOMiddleware, (req, res) => {
-  req.io.emit("message", `Hello, ${req.originalUrl}`);
-  res.send("hello world!");
-});
+// app.use("/api/v1/hello", socketIOMiddleware, (req, res) => {
+//   req.io.emit("message", `Hello, ${req.originalUrl}`);
+//   res.send("hello world!");
+// });
 
 // // LISTEN
 
-server2.listen(8002, () => {
-  console.log("App running on port 8002...");
-});
+// server2.listen(8002, () => {
+//   console.log("App running on port 8002...");
+// });
 
 //web socket
 const webSocketsServerPort = 8000;

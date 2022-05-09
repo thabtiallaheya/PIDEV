@@ -18,15 +18,12 @@ import CardComponent from './pages/CardComponent';
 import NotFound from './pages/Page404';
 import Add from './sections/authentication/activities/Add';
 import EditAct from './pages/EditAct';
-import ChatBlog from './pages/ChatBlog';
 import ShowDetailAct from './pages/ShowDetailAct';
 import ShowDetailActFront from './pages/ShowDetailActFront';
 import Training from './pages/Training';
-import TrainingFront from './pages/TrainingFront';
 import NewTraining from './pages/NewTraining';
 import Meeting from './pages/meeting';
 import TrainingDetails from './pages/TrainingDetails';
-import TrainingDetailsFront from './pages/TrainingDetailsFront';
 import Course from './pages/course';
 import NewCourse from './pages/newCourse';
 import CourseDetails from './pages/courseDetails';
@@ -45,6 +42,7 @@ import { Trainer } from './pages/Trainers';
 import Trainings from './pages/Trainings';
 import TrainingsDetail from './pages/TrainingsDetail';
 import User from './pages/User';
+import Emotion from './pages/emotion';
 
 // ----------------------------------------------------------------------
 
@@ -63,14 +61,17 @@ export default function Router() {
             { path: 'CartListComponent', element: <CartListComponent /> },
             { path: 'cardComponent', element: <CardComponent /> },
             { path: 'user', element: <User /> },
+            user.role === 'MENTOR' && { path: 'card', element: <CartListComponent /> },
+            user.role === 'STUDENT' && { path: 'card', element: <CardComponent /> },
             { path: 'profile', element: <Profile /> },
             { path: 'products', element: <Products /> },
             { path: 'trainers', element: <Trainer /> },
-            { path: 'blog', element: <Blog /> },
+            user.role === 'MENTOR' && { path: 'blog', element: <Blog /> },
             user.role === 'MENTOR' && { path: 'training', element: <Training /> },
             user.role === 'STUDENT' && { path: 'training', element: <Trainings /> },
             { path: 'calendar', element: <Calendar /> },
             { path: 'meeting', element: <Meeting /> },
+            { path: 'training/emotion', element: <Emotion /> },
             user.role === 'MENTOR' && {
               path: 'training/new',
               element: <NewTraining />
@@ -87,14 +88,17 @@ export default function Router() {
               path: 'training/details/:id',
               element: <TrainingDetails />
             },
-            { path: 'blogFront', element: <BlogFront /> },
-            { path: 'chat', element: <Chat /> },
-            { path: 'chatFront', element: <ChatFront /> },
+            user.role === 'STUDENT' && { path: 'blog', element: <BlogFront /> },
+            user.role === 'MENTOR' && { path: 'chat', element: <Chat /> },
+            user.role === 'STUDENT' && { path: 'chat', element: <ChatFront /> },
             { path: 'add', element: <CreateAct /> },
             { path: 'new', element: <Add /> },
             { path: 'edit/:id', element: <EditAct /> },
-            { path: 'api/read/detail/:id', element: <ShowDetailAct /> },
-            { path: 'api/read/detail/front/:id', element: <ShowDetailActFront /> },
+            user.role === 'MENTOR' && { path: 'api/read/detail/:id', element: <ShowDetailAct /> },
+            user.role === 'STUDENT' && {
+              path: 'api/read/detail/front/:id',
+              element: <ShowDetailActFront />
+            },
             { path: 'course', element: <Course /> },
             { path: 'course/new', element: <NewCourse /> },
             { path: 'course/details/:id', element: <CourseDetails /> },

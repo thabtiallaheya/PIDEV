@@ -18,10 +18,17 @@ export default function Calendar() {
   const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   useEffect(() => {
-    axios.get(`http://localhost:8081/api/trainings/user/${user.id}`).then((response) => {
-      setTraining(response.data);
-      console.log(response.data);
-    });
+    if (user.role === 'MENTOR') {
+      axios.get(`http://localhost:8081/api/trainings/user/${user.id}`).then((response) => {
+        setTraining(response.data);
+        console.log(response.data);
+      });
+    } else if (user.role === 'STUDENT') {
+      axios.get(`http://localhost:8081/api/trainings/participat/${user.id}`).then((response) => {
+        setTraining(response.data);
+        console.log(response.data);
+      });
+    }
   }, []);
   return (
     <Page title="Calendar | Learnigo">

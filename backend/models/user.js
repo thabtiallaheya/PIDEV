@@ -39,6 +39,12 @@ const User = new Schema({
       ref: "training",
     },
   ],
+  trainingsApplyInto: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "training",
+    },
+  ],
 });
 
 User.methods.generateVerificationToken = function () {

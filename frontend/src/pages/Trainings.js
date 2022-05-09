@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
-import parse from 'html-react-parser';
 import './Training.css';
 // material
 import { Button, Container, Stack, Typography, Divider, Card, Grid } from '@mui/material';
@@ -11,10 +10,12 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import openSocket from 'socket.io-client';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
 
 // components
 import Page from '../components/Page';
-import Iconify from '../components/Iconify';
+import { Icon } from '@iconify/react';
 
 // ----------------------------------------------------------------------
 
@@ -23,17 +24,40 @@ import Iconify from '../components/Iconify';
 export default function Trainings() {
   const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const socket = openSocket('http://localhost:8000');
   useEffect(() => {
     axios.get(`http://localhost:8081/api/training/getAll`).then((response) => {
       setTraining(response.data);
     });
+    // socket.on('refresh', () => {
+    //   axios.get(`http://localhost:8081/api/training/getAll`).then((response) => {
+    //     setTraining(response.data);
+    //   });
+    // });
   }, []);
   const [pageNumber, setPageNumber] = useState(0);
+  //carts
+  let itemsInCart = [];
+  let numberOfCart = 0;
+  const addData = (val) => {
+    itemsInCart.push(val);
+    let bookStringified = JSON.stringify(itemsInCart);
+    sessionStorage.setItem('trainingInStorage', bookStringified);
+    localStorage.setItem('trainingInStorage', bookStringified);
+    console.log(itemsInCart);
+  };
 
   const trainingsPerPage = 8;
   const pagesVisited = pageNumber * trainingsPerPage;
   const displayTrainings = training
+    .filter((val) => {
+      if (searchTerm == '') {
+        return val;
+      } else if (val.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return val;
+      }
+    })
     .slice(pagesVisited, pagesVisited + trainingsPerPage)
     .map((training) => {
       return (
@@ -65,6 +89,14 @@ export default function Trainings() {
               <Button size="small" component={RouterLink} to={`/training/details/${training._id}`}>
                 Learn More
               </Button>
+              <Button
+                size="small"
+                onClick={() => {
+                  addData(training);
+                }}
+              >
+                add to cart
+              </Button>
             </CardActions>
           </Card>
         </Grid>
@@ -77,12 +109,26 @@ export default function Trainings() {
   };
 
   return (
-    <Page title="Dashboard: Training | Learnigo">
+    <Page title="Training | Learnigo">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Training
+            Trainings
           </Typography>
+        </Stack>
+      </Container>
+      <Container>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+            <Input
+              id="standard-adornment-amount"
+              placeholder="Search ...."
+              onChange={(event) => {
+                setSearchTerm(event.target.value);
+              }}
+              startAdornment={<Icon icon="pepicons:loop" width="50" height="50" />}
+            />
+          </FormControl>
         </Stack>
       </Container>
       <Grid container spacing={3}>

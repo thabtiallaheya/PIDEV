@@ -123,36 +123,65 @@ export default function TrainingDetails() {
               <Grid item>
                 <Typography variant="body2" color="text.secondary">
                   {/* //flag:gb-4x3 */}
-                  {training.language === 'French' && <Icon icon="twemoji:flag-france" />}
-                  {training.language === 'English' && <Icon icon="flag:gb-4x3" />} Language :{' '}
-                  {training.language}
+                  {training.language === 'French' && (
+                    <Icon icon="twemoji:flag-france" width="20" height="20" />
+                  )}
+                  {training.language === 'English' && (
+                    <Icon icon="flag:gb-4x3" width="20" height="20" />
+                  )}{' '}
+                  Language : {training.language}
                 </Typography>
               </Grid>
               <Grid item>
                 {training.scheduledDate && (
                   <Typography variant="body2" color="text.secondary">
-                    <Icon icon="icon-park:time" /> ScheduledDate :{' '}
+                    <Icon icon="icon-park:time" width="20" height="20" /> ScheduledDate :{' '}
                     {fDateTime(training.scheduledDate)}
                   </Typography>
                 )}
               </Grid>
               <Grid item>
                 <Typography variant="body2" color="text.secondary">
-                  <Icon icon="heroicons-solid:user-group" />
-                  Participant: {training.nbrParticipent}
+                  <Icon icon="bi:box-arrow-in-down" width="20" height="20" />
+                  Participants apply into: {training.nbrApplyInto}
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography variant="body2" color="text.secondary">
-                  <Icon icon="el:screen" /> Duration: {training.duration} Min
+                  <Icon icon="heroicons-solid:user-group" width="20" height="20" />
+                  Places available: {training.nbrParticipent}
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography variant="body2" color="text.secondary">
-                  <Icon icon="icon-park:user-business" /> Created by {user.firstName}{' '}
-                  {user.lastName}
+                  <Icon icon="el:screen" width="20" height="20" /> Duration: {training.duration} Min
                 </Typography>
               </Grid>
+              <Grid item>
+                {training.trainer?.firstName && training.trainer?.lastName && (
+                  <Typography variant="body2" color="text.secondary">
+                    <Icon icon="icon-park:user-business" width="20" height="20" /> Created by{' '}
+                    <b>
+                      {' '}
+                      {training.trainer.firstName} {training.trainer.lastName}
+                    </b>
+                  </Typography>
+                )}
+              </Grid>
+              <Divider variant="middle" />
+              <Box sx={{ m: 2 }} justify="center">
+                <Stack spacing={2} display="flex" justifyContent="center" alignItems="center">
+                  <Button
+                    variant="contained"
+                    startIcon={<Icon icon="ant-design:video-camera-add-outlined" />}
+                    onClick={() => {
+                      navigate('/meeting', { replace: false, state: training });
+                    }}
+                  >
+                    join meeting now
+                  </Button>
+                </Stack>
+              </Box>
               <Divider variant="middle" />
               <Box sx={{ m: 2 }} justify="center" justifyContent="space-between">
                 <Stack direction="row" spacing={2}>
