@@ -65,7 +65,7 @@ export default class ChatFront extends Component {
         return (
           <div className="main" id='wrapper'>
              <DashboardNavbarStudent />
-           <DashboardSidebarStudent />
+         
             {this.state.isLoggedIn ?
             <div>
               <div className="title">

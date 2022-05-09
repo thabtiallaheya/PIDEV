@@ -28,7 +28,7 @@ export default function CardComponent() {
   return (
     <Page title="Dashboard | Minimal-UI">
        <DashboardNavbarStudent onOpenSidebar={() => setOpen(true)} />
-      <DashboardSidebarStudent isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+     
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Hi, Welcome back</Typography>

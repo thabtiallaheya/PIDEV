@@ -20,8 +20,14 @@ import Stack from '@mui/material/Stack';
 // components
 import Page from '../components/Page';
 import { format } from 'date-fns';
+//tostify
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+//stripe
+import StripeCheckout from 'react-stripe-checkout'
 
 export default function TrainingsDetail() {
+  toast.configure();
   const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   const { id } = useParams();
@@ -34,10 +40,79 @@ export default function TrainingsDetail() {
     setTraining(response.data);
     setIsLoading(false);
   }, []);
+   //carts
+  //let itemCount = [];
+  let itemsInCart = [];
+  let numberOfCart = 0 ;
+  const addData = (val)=>{
+    
+   itemsInCart.push(val);
+   let bookStringified = JSON.stringify(itemsInCart);
+   sessionStorage.setItem('trainingInStorage', bookStringified)
+   localStorage.setItem('trainingInStorage', bookStringified)
+  
+  //addItem(val);
+  numberOfCart = numberOfCart +1;
+  if(numberOfCart==1)
+  toast.info(' Greate '+ numberOfCart +'  training are succussfully added to your cart ' 
+ 
+);
+  else
+  toast.success(' Greate '+ numberOfCart +'  trainings have been added to cart ');
+    console.log(itemsInCart);
+
+   
+    //itemsNumberFct(val);
+  }
   const navigate = useNavigate();
   const fDateTime = (date) => {
     return format(new Date(date), 'dd MMM yyyy HH:mm ');
   };
+
+  //stripe
+  async function handleToken(token) {
+    const response = await axios.post(
+      "http://localhost:8081/checkout",
+      { token, training }
+    );
+    const { status } = response.data;
+    console.log("Response:", response.data);
+    if (status === "success") {
+      training.status=true;
+      toast(" Your purchase has been successfully paid 💰​💲!", { type: "success" });
+     Swal.fire({
+  title: 'Your purchase has been successfully paid 💰​💲!',
+  width: 600,
+  padding: '3em',
+  color: 'rgb(0,128,0,0.7)',
+  background: '#fff url(/images/trees.png)',
+  backdrop: `
+    
+  rgb(0,128,0,0.4)	
+    url("/images/nyan-cat.gif")
+    left top
+    no-repeat
+  `
+})
+/*Swal.fire({
+  title: 'Your purchase has been successfully paid 💰​💲!',
+  width: 600,
+  padding: '3em',
+  color: '#6AA84F',
+  background: '#fff url(/images/trees.png)',
+  backdrop: `
+ 
+  #B6D7A8
+    url("/images/nyan-cat.gif")
+    left top
+    no-repeat
+  `
+})*/
+    } else {
+
+      toast("Something went wrong", { type: "error" });
+    }
+  }
   return (
     <Page title=" Traning Details | Minimal-UI">
       <Container maxWidth="xl">
@@ -160,17 +235,28 @@ export default function TrainingsDetail() {
                   <Divider variant="middle" />
                   <Box sx={{ m: 2 }} justify="center">
                     <Stack spacing={2} display="flex" justifyContent="center" alignItems="center">
-                      <Button variant="contained" startIcon={<Icon icon="bi:cart-check-fill" />}>
+                     {/** <Button variant="contained" startIcon={<Icon icon="bi:cart-check-fill" />}>
                         Buy Now
-                      </Button>
+                      </Button> */} 
+                      <StripeCheckout
+                    stripeKey="pk_test_51KuHK6DzmY9Xbsy8E4SIcCZ78oD7sA81CRCSAS46I42f6peE3AHyyP2fYUvXfWTUWM1ElXeID0SF5kFS8BnVN2Oe005n8Su5Yw"
+                    token={handleToken}
+                    amount={training.price * 100}
+                    name="let's paid online "
+                    billingAddress
+                    shippingAddress
+                     />
                     </Stack>
                     <br></br>
                     <Divider variant="middle" />
                     <br></br>
                     <Stack spacing={2} display="flex" justifyContent="center" alignItems="center">
-                      <Button variant="outlined" startIcon={<Icon icon="bx:cart-download" />}>
+                     {/** <Button variant="outlined" startIcon={<Icon icon="bx:cart-download" />}  onClick={() => {
+                
+                addData(training);
+              }}  >
                         add to cart
-                      </Button>
+                      </Button> */}
                     </Stack>
                   </Box>
                 </Paper>

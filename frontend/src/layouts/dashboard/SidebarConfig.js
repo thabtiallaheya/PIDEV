@@ -12,8 +12,8 @@ const sidebarConfig = [
   //   icon: getIcon('eva:pie-chart-2-fill')
   // },
   {
-    title: 'carts',
-    path: '/CartListComponent',
+    title: 'Carts',
+    path: '/carts',
     icon: getIcon('eva:shopping-bag-fill')
   },
   {

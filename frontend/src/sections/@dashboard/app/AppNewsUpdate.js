@@ -20,6 +20,8 @@ import { mockImgCover } from '../../../utils/mockImages';
 import Scrollbar from '../../../components/Scrollbar';
 import Iconify from '../../../components/Iconify';
 import { LoadingButton } from '@mui/lab';
+import DashboardNavbarStudent from 'src/layouts/dashboard/DashboardNavbarStudent';
+import Label from 'src/components/Label';
 
 // ----------------------------------------------------------------------
 
@@ -76,19 +78,29 @@ const NEWS = [...Array(5)].map((_, index) => {
 
 export default function AppNewsUpdate() {
   const [open, setOpen] = React.useState(true);
-
+  const [nmbrItem, setNmbrItem] = React.useState(0);
   //carts
   var storedTraining = JSON.parse(sessionStorage.getItem('trainingInStorage'));
   const [cardList, setCardList] = useState(storedTraining);
   const clearCart = () => {
     sessionStorage.clear();
+    setCardList(null);
   };
-
+  useEffect(() => {
+    if(storedTraining!=null)
+    {setNmbrItem(storedTraining.length);}
+    else 
+    {setNmbrItem(0);}
+  }, []);
   const ondelete2 = (id) => {
     const itemsInCart = JSON.parse(sessionStorage.getItem('trainingInStorage'));
+    const itemCartInLocalSorage = JSON.parse(localStorage.getItem('trainingInStorage'));
     itemsInCart.splice(id, 1);
+    itemCartInLocalSorage.splice(id, 1);
     sessionStorage.setItem('trainingInStorage', JSON.stringify(itemsInCart));
+    localStorage.setItem('trainingInStorage', JSON.stringify(itemCartInLocalSorage));
     setCardList(itemsInCart);
+  
     //removeItem(id)
   };
   let total = 0;
@@ -103,6 +115,7 @@ export default function AppNewsUpdate() {
   if (storedTraining == null || sessionStorage == null)
     return (
       <div>
+         <DashboardNavbarStudent itemCountList={nmbrItem} onOpenSidebar={() => setOpen(true)} />
         <Alert severity="info">
           <AlertTitle>Info</AlertTitle>
           Your cart is still empty <strong>fill it up!</strong>
@@ -171,7 +184,7 @@ export default function AppNewsUpdate() {
               />
 
               <Box sx={{ minWidth: 450 }}>
-                <Link to="#" color="inherit" underline="hover" component={RouterLink}>
+                <Link component={RouterLink} to={`/training/details/${val._id}`} color="inherit" underline="hover" >
                   <Typography variant="subtitle2" noWrap>
                     {val.name}
                   </Typography>
@@ -185,6 +198,12 @@ export default function AppNewsUpdate() {
               <Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'text.secondary' }}>
                 {val.price} TND
               </Typography>
+              {/**<Label
+                                variant="ghost"
+                                color={(val.status === false && 'error') || 'success'}
+                              >
+                                <p>Unpaid</p>
+                              </Label> */}
               {/*  <LoadingButton 
             align="right"
             size="small"
