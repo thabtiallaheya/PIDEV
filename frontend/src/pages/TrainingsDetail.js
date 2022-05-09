@@ -36,14 +36,19 @@ export default function TrainingsDetail() {
   const [disable, setDisable] = React.useState(false);
   const [applyIn, setApplyIn] = React.useState(false);
 
-  useEffect(async () => {
-    setIsLoading(true);
-    const response = await axios.get(`http://localhost:8081/api/training/getOne/${id}`);
-    // console.log(response.data);
-    setTraining(response.data);
-    setDisable(new Date().getTime() === new Date(response.data.scheduledDate).getTime());
-    setApplyIn(response.data.participants.find((p) => p === user.id) === user.id);
-    setIsLoading(false);
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      const response = await axios.get(`http://localhost:8081/api/training/getOne/${id}`);
+      // console.log(response.data);§
+      setTraining(response.data);
+      setDisable(
+        new Date().getTime() - new Date(response.data.scheduledDate).getTime() < 1800000 &&
+          new Date().getTime() - new Date(response.data.scheduledDate).getTime() > -1800000
+      );
+      setApplyIn(response.data.participants.find((p) => p === user.id) === user.id);
+      setIsLoading(false);
+    })();
   }, []);
   const navigate = useNavigate();
   const fDateTime = (date) => {
@@ -218,6 +223,7 @@ export default function TrainingsDetail() {
                         <Button
                           variant="contained"
                           startIcon={<Icon icon="ant-design:video-camera-add-outlined" />}
+                          disabled={!disable}
                           onClick={() => {
                             navigate('/meeting', { replace: false, state: training });
                           }}

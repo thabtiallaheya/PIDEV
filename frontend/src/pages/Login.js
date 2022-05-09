@@ -126,9 +126,11 @@ export default function Login() {
             </Typography>
           </Divider>
           <Stack sx={{ mb: 5 }}>
-            <Alert onClose={() => setStatus(null)} severity={status?.type} sx={{ width: '100%' }}>
-              {status?.message}
-            </Alert>
+            {status && (
+              <Alert onClose={() => setStatus(null)} severity={status?.type} sx={{ width: '100%' }}>
+                {status?.message}
+              </Alert>
+            )}
           </Stack>
           <LoginForm />
 
