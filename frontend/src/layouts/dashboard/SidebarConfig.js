@@ -55,11 +55,6 @@ const sidebarConfig = [
     title: 'calendar',
     path: '/calendar',
     icon: getIcon('bi:calendar-week-fill')
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: getIcon('eva:alert-triangle-fill')
   }
 ];
 
