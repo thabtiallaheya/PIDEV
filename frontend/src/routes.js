@@ -57,12 +57,13 @@ export default function Router() {
           children: [
             { path: 'account', element: <Account /> },
             { path: 'app', element: <DashboardApp /> },
-            { path: 'CartListComponent', element: <CartListComponent /> },
-            { path: 'cardComponent', element: <CardComponent /> },
+            user.role === 'MENTOR' && { path: 'carts', element: <CartListComponent /> },
+            user.role === 'STUDENT' && { path: 'carts', element: <CardComponent /> },
             // { path: 'user', element: <User /> },
             { path: 'profile', element: <Profile /> },
             { path: 'products', element: <Products /> },
             { path: 'trainers', element: <Trainer /> },
+<<<<<<< Updated upstream
             { path: 'blog', element: <Blog /> },
             { path: 'training', element: <Training /> },
             { path: 'trainingComponent', element: <TrainingComponent /> },
@@ -75,6 +76,33 @@ export default function Router() {
             { path: 'blogFront', element: <BlogFront /> },
             { path: 'chat', element: <Chat /> },
             { path: 'chatFront', element: <ChatFront /> },
+=======
+        
+            user.role === 'MENTOR' && { path: 'training', element: <Training /> },
+            user.role === 'STUDENT' && { path: 'training', element: <Trainings /> },
+            { path: 'calendar', element: <Calendar /> },
+            { path: 'meeting', element: <Meeting /> },
+            user.role === 'MENTOR' && {
+              path: 'training/new',
+              element: <NewTraining />
+            },
+            user.role === 'MENTOR' && {
+              path: 'training/update/:id',
+              element: <UpdateTraining />
+            },
+            user.role === 'STUDENT' && {
+              path: 'training/details/:id',
+              element: <TrainingsDetail />
+            },
+            user.role === 'MENTOR' && {
+              path: 'training/details/:id',
+              element: <TrainingDetails />
+            },
+            user.role === 'STUDENT' && { path: 'blog', element: <BlogFront /> },
+            user.role === 'MENTOR' && { path: 'blog', element: <Blog /> },
+            user.role === 'MENTOR' && { path: 'chat', element: <Chat /> },
+            user.role === 'STUDENT' && { path: 'chat', element: <ChatFront /> },
+>>>>>>> Stashed changes
             { path: 'add', element: <CreateAct /> },
             { path: 'new', element: <Add /> },
             { path: 'edit/:id', element: <EditAct /> },

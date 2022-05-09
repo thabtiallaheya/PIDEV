@@ -3,11 +3,23 @@ import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Alert } from '@mui/material';
+import IconButton from "@material-ui/core/IconButton";
+import InputAdornment from "@material-ui/core/InputAdornment";
+//import SearchIcon from "@material-ui/icons/Search";
+import { Alert, TextField } from '@mui/material';
 import { AlertTitle } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
+///m
+import * as React from 'react';
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import Divider from '@mui/material/Divider';
+//import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
+import DirectionsIcon from '@mui/icons-material/Directions';
 import {
   Card,
   Table,
@@ -32,8 +44,17 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 //
 import USERLIST from '../_mocks_/user';
+<<<<<<< Updated upstream
 import {useCart} from "react-use-cart"
 import { CartProvider } from 'react-use-cart'
+=======
+import { useCart } from 'react-use-cart';
+import { CartProvider } from 'react-use-cart';
+import Searchbar from 'src/layouts/dashboard/Searchbar';
+//import * as React from 'react';
+import Box from '@mui/material/Box';
+//mport TextField from '@mui/material/TextField';
+>>>>>>> Stashed changes
 
 // ----------------------------------------------------------------------
 //carts
@@ -45,9 +66,14 @@ const TABLE_HEAD = [
   { id: 'duration', label: 'Duration', alignRight: false },
   { id: 'price', label: 'Price', alignRight: false },
   //{ id: 'isVerified', label: 'Verified', alignRight: false },
+<<<<<<< Updated upstream
   { id: 'status', label: 'Status', alignRight: false },
   {id:''},
  
+=======
+  { id: 'Action', label: 'Action', alignRight: false },
+  { id: '' }
+>>>>>>> Stashed changes
 ];
 
 // ----------------------------------------------------------------------
@@ -84,11 +110,27 @@ function applySortFilter(array, comparator, query) {
 
 export default function Cards() {
   //carts
+<<<<<<< Updated upstream
   const { isEmpty,totalUniqueItems,items,totalItems,cartTotal,updateItemQuantity,removeItem,emptyCart } = useCart();
 
   
   var storedTraining = JSON.parse(localStorage.getItem("trainingInStorage"))
   const [cardList, setCardList] = useState(storedTraining)
+=======
+  const {
+    isEmpty,
+    totalUniqueItems,
+    items,
+    totalItems,
+    cartTotal,
+    updateItemQuantity,
+    removeItem,
+    emptyCart
+  } = useCart();
+  const [searchTerm, setSearchTerm]= useState('')
+  var storedTraining = JSON.parse(localStorage.getItem('trainingInStorage'));
+  const [cardList, setCardList] = useState(storedTraining);
+>>>>>>> Stashed changes
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -192,8 +234,26 @@ return  total ;
           <Typography variant="h4" gutterBottom>
             Carts List
           </Typography>
+<<<<<<< Updated upstream
           Total price of all carts is:  {Sum()} TND
           <LoadingButton 
+=======
+          
+         
+         {/** <input type="text" placeholder="search..." onChange={event => {setSearchTerm(event.target.value)}}/>  */}
+         
+         
+       <Box
+      sx={{
+        width: 500,
+        maxWidth: '100%',
+      }}
+    >
+      <TextField cart label="search about ... " id="fullWidth" onChange={event => {setSearchTerm(event.target.value)}} />
+    </Box>
+            
+          <LoadingButton
+>>>>>>> Stashed changes
             align="right"
             size="small"
             type="submit"
@@ -204,15 +264,29 @@ return  total ;
           >
            {<DeleteIcon />} Clear Carts
           </LoadingButton>
+
+
+
         </Stack>
        
         <Card>
-          <UserListToolbar
-            numSelected={selected.length}
+
+       
+       
+              <br/>
+              <br/>
+          {/**<UserListToolbar
+            /*numSelected={selected.length}
             filterName={filterName}
+<<<<<<< Updated upstream
             onFilterName={handleFilterByName}
           />
            
+=======
+            onFilterName={handleFilterByName} />*/
+           }
+
+>>>>>>> Stashed changes
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -226,8 +300,20 @@ return  total ;
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
+<<<<<<< Updated upstream
                
                   {cardList
+=======
+                {cardList.filter((item)=>{
+        if(searchTerm == ""){
+          return item;
+        }
+        else if(item.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()) || item.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()) ) {
+         return item;
+        }
+      }
+                )
+>>>>>>> Stashed changes
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((item,index) => {
                       //const { id, name, role, status, company, avatarUrl, isVerified } = row;
@@ -259,6 +345,7 @@ return  total ;
                           <TableCell align="left">{item.duration} Hours</TableCell>
                           <TableCell align="left">{item.price}TND</TableCell>
                           {/*<TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>*/}
+<<<<<<< Updated upstream
                           <TableCell align="left">
                            { <Label
                               variant="ghost"
@@ -267,8 +354,19 @@ return  total ;
                              <p>Unpaid</p>
                             
                            </Label>  }
+=======
+                         {/** <TableCell align="left">
+                            {
+                              <Label
+                                variant="ghost"
+                                color={(item.status === true && 'success') || 'error'}
+                              >
+                                <p>paid</p>
+                              </Label>
+                            }
+>>>>>>> Stashed changes
                           </TableCell>
-
+ */}
                           <TableCell align="right">
                         
                           <Button onClick= {() => ondelete(index)} variant="outlined" startIcon={<DeleteIcon />}>

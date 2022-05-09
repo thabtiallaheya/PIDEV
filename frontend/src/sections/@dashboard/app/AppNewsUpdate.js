@@ -20,6 +20,8 @@ import { mockImgCover } from '../../../utils/mockImages';
 import Scrollbar from '../../../components/Scrollbar';
 import Iconify from '../../../components/Iconify';
 import { LoadingButton } from '@mui/lab';
+import DashboardNavbarStudent from 'src/layouts/dashboard/DashboardNavbarStudent';
+import Label from 'src/components/Label';
 
 
 // ----------------------------------------------------------------------
@@ -78,6 +80,7 @@ const NEWS = [...Array(5)].map((_, index) => {
 export default function AppNewsUpdate() {
 
   const [open, setOpen] = React.useState(true);
+<<<<<<< Updated upstream
 
    //carts
    var storedTraining = JSON.parse(sessionStorage.getItem("trainingInStorage"))
@@ -88,8 +91,27 @@ export default function AppNewsUpdate() {
    }
 
    const ondelete2 = (id) => {
+=======
+  const [nmbrItem, setNmbrItem] = React.useState(0);
+  //carts
+  var storedTraining = JSON.parse(sessionStorage.getItem('trainingInStorage'));
+  const [cardList, setCardList] = useState(storedTraining);
+  const clearCart = () => {
+    sessionStorage.clear();
+    setCardList(null);
+  };
+  useEffect(() => {
+    if(storedTraining!=null)
+    {setNmbrItem(storedTraining.length);}
+    else 
+    {setNmbrItem(0);}
+  }, []);
+  const ondelete2 = (id) => {
+>>>>>>> Stashed changes
     const itemsInCart = JSON.parse(sessionStorage.getItem('trainingInStorage'));
+    const itemCartInLocalSorage = JSON.parse(localStorage.getItem('trainingInStorage'));
     itemsInCart.splice(id, 1);
+<<<<<<< Updated upstream
     sessionStorage.setItem('trainingInStorage', JSON.stringify(itemsInCart))
     //removeItem(id)
    }
@@ -126,6 +148,47 @@ export default function AppNewsUpdate() {
          </div>
        )
   
+=======
+    itemCartInLocalSorage.splice(id, 1);
+    sessionStorage.setItem('trainingInStorage', JSON.stringify(itemsInCart));
+    localStorage.setItem('trainingInStorage', JSON.stringify(itemCartInLocalSorage));
+    setCardList(itemsInCart);
+  
+    //removeItem(id)
+  };
+  let total = 0;
+  const Sum = () => {
+    for (let i = 0; i < storedTraining.length; i++) {
+      total = total + storedTraining[i].price;
+    }
+
+    return total;
+  };
+
+  if (storedTraining == null || sessionStorage == null)
+    return (
+      <div>
+         <DashboardNavbarStudent itemCountList={nmbrItem} onOpenSidebar={() => setOpen(true)} />
+        <Alert severity="info">
+          <AlertTitle>Info</AlertTitle>
+          Your cart is still empty <strong>fill it up!</strong>
+        </Alert>
+
+        <Box sx={{ p: 2, textAlign: 'right' }}>
+          <Button
+            to="#"
+            size="small"
+            color="inherit"
+            component={RouterLink}
+            endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
+          >
+            <h3> total 0 TND </h3>
+          </Button>
+        </Box>
+      </div>
+    );
+
+>>>>>>> Stashed changes
   return (
     <Card>
       <CardHeader title="News Update" />
@@ -168,6 +231,7 @@ export default function AppNewsUpdate() {
         <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
           {cardList.map((val, key) => (
             <Stack direction="row" alignItems="center" spacing={2}>
+<<<<<<< Updated upstream
             <Box
               component="img"
               alt={val.name}
@@ -179,18 +243,46 @@ export default function AppNewsUpdate() {
               <Link to="#" color="inherit" underline="hover" component={RouterLink}>
                 <Typography variant="subtitle2" noWrap>
                 {val.name}
+=======
+              <Box
+                component="img"
+                alt={val.name}
+                src={`http://localhost:8081/${val.image}`}
+                sx={{ width: 48, height: 48, borderRadius: 1.5 }}
+              />
+
+              <Box sx={{ minWidth: 450 }}>
+                <Link component={RouterLink} to={`/training/details/${val._id}`} color="inherit" underline="hover" >
+                  <Typography variant="subtitle2" noWrap>
+                    {val.name}
+                  </Typography>
+                </Link>
+
+                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                  {val.tag}
+>>>>>>> Stashed changes
                 </Typography>
               </Link>
             
               <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
               {val.tag}
               </Typography>
+<<<<<<< Updated upstream
             </Box>
         
             <Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'text.secondary' }}>
             {val.price} TND
             </Typography>
            {/*  <LoadingButton 
+=======
+              {/**<Label
+                                variant="ghost"
+                                color={(val.status === false && 'error') || 'success'}
+                              >
+                                <p>Unpaid</p>
+                              </Label> */}
+              {/*  <LoadingButton 
+>>>>>>> Stashed changes
             align="right"
             size="small"
             type="submit"

@@ -125,7 +125,7 @@ export default function BlogFront() {
   return (
     <Page title="Dashboard: Blog | Minimal-UI">
       <DashboardNavbarStudent onOpenSidebar={() => setOpen(true)} />
-      <DashboardSidebarStudent isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+    
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h3" gutterBottom>
@@ -134,7 +134,7 @@ export default function BlogFront() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="/chatFront"
+            to="/chat"
             //startIcon={<Iconify icon="eva:plus-fill" />}
           >  <ChatIcon  />
              Join Chat 

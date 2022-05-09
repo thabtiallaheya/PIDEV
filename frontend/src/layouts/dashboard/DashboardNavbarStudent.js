@@ -5,7 +5,7 @@ import { Box, Stack, AppBar, Toolbar, IconButton, Button} from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Link as RouterLink } from 'react-router-dom';
 import ChatIcon from '@mui/icons-material/Chat';
-
+import Badge from "@material-ui/core/Badge";
 
 // components
 import Iconify from '../../components/Iconify';
@@ -46,7 +46,7 @@ DashboardNavbarStudent.propTypes = {
   onOpenSidebar: PropTypes.func
 };
 
-export default function DashboardNavbarStudent({ onOpenSidebar }) {
+export default function DashboardNavbarStudent(props,{ onOpenSidebar }) {
   const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
   return (
     <RootStyle>
@@ -63,13 +63,18 @@ export default function DashboardNavbarStudent({ onOpenSidebar }) {
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
-        
-          <Button component={RouterLink} to={`/cardComponent`} class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-hpqcig-MuiButtonBase-root-MuiIconButton-root" tabindex="0" type="button">
+         {/**  <Button color="secondary"  component={RouterLink} to={`/carts`} class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-hpqcig-MuiButtonBase-root-MuiIconButton-root" tabindex="0" type="button">
             <span class="MuiBadge-root css-1c32n2y-MuiBadge-root">
-            {<ShoppingCartIcon />} </span>
-             <span class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span></Button>
+            {<ShoppingCartIcon />}</span>
+             <span class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root">{props.itemCount}</span></Button> */}
+        
+             <Badge  component={RouterLink} to={`/carts`} class="MuiBadge-root css-1c32n2y-MuiBadge-root"  tabindex="0" type="button" color="secondary" badgeContent={props.itemCount}>
+          <ShoppingCartIcon />{" "}
+        </Badge>
              
-          <Button component={RouterLink} to={`/chatFront`} class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-hpqcig-MuiButtonBase-root-MuiIconButton-root" tabindex="0" type="button">
+            
+             
+          <Button component={RouterLink} to={`/chat`} class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-hpqcig-MuiButtonBase-root-MuiIconButton-root" tabindex="0" type="button">
             <span class="MuiBadge-root css-1c32n2y-MuiBadge-root">
             {<ChatIcon />} </span>
              <span class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"></span></Button>
