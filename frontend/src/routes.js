@@ -106,7 +106,7 @@ export default function Router() {
             { path: 'course/new', element: <NewCourse /> },
             user.role === 'MENTOR' && { path: 'course', element: <Course /> },
             user.role === 'STUDENT' && { path: 'course', element: <CourseStusent /> },
-            user.role === 'STUDENT' && { path: 'course/details/:id', element: <coursesDetail /> },
+            user.role === 'STUDENT' && { path: 'course/details/:id', element: <CourseDetails /> },
             user.role === 'MENTOR' && { path: 'course/details/:id', element: <CourseDetails /> },
             { path: 'course/edit/:id', element: <EditCourse /> },
             { path: 'recommended', element: <Recommended /> }

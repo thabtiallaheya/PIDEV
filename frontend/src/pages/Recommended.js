@@ -5,9 +5,19 @@ import { Link as RouterLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import './course.css';
 
-
 // material
-import { Button, Container, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  Chip,
+  Container,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Stack,
+  Typography,
+  useTheme
+} from '@mui/material';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import CardActions from '@mui/material/CardActions';
@@ -17,37 +27,55 @@ import CardMedia from '@mui/material/CardMedia';
 // components
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
+import { Box } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
+
+const names = ['Business', 'IT', 'Marketing', 'Management'];
 export default function Recommended() {
-    const user = useSelector((state) => state.user);
-    const [course, setCourse] = useState([]);
-    // const [tag, setTag] = useState("IT")
-    // const handleClick = () => setTag("Management")
+  const user = useSelector((state) => state.user);
+  const [course, setCourse] = useState([]);
+  // const [tag, setTag] = useState("IT")
+  // const handleClick = () => setTag("Management")
 
-    
   // var buttonText = "Management";
-
 
   // const handleChange = event => {
   //     this.setState({ id: event.target.value });
   // }
-   
-  
-    useEffect(() => {
-      axios(`http://152.228.172.32:5000/predict?course=IT`, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {"Access-Control-Allow-Origin": "*"}
-      }).then(res => {
-          console.log(res);
-          console.log(res.data);
-          setCourse(res.data);
-      })
-    }, []);
-    
+
+  const [personName, setPersonName] = useState('IT');
+  useEffect(() => {
+    axios(`http://152.228.172.32:5000/predict?course=${personName}`, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Access-Control-Allow-Origin': '*' }
+    }).then((res) => {
+      console.log(res);
+      console.log(res.data);
+      setCourse(res.data);
+    });
+  }, [personName]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value }
+    } = event;
+    setPersonName(value);
+  };
+
   const [pageNumber, setPageNumber] = useState(0);
 
   const coursesPerPage = 8;
@@ -70,10 +98,12 @@ export default function Recommended() {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" href="https://fr.coursera.org/learn/uva-darden-innovation-business-model-canvas">
+            <Button
+              size="small"
+              href="https://fr.coursera.org/learn/uva-darden-innovation-business-model-canvas"
+            >
               Learn More
             </Button>
-            
           </CardActions>
         </Card>
       </Grid>
@@ -85,6 +115,16 @@ export default function Recommended() {
     setPageNumber(selected);
   };
 
+  function getStyles(name, personName, theme) {
+    return {
+      fontWeight:
+        personName.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium
+    };
+  }
+  const theme = useTheme();
+
   return (
     <Page title="Dashboard: Course | Learningo">
       <Container>
@@ -92,6 +132,7 @@ export default function Recommended() {
           <Typography variant="h4" gutterBottom>
             Course
           </Typography>
+          <CardContent></CardContent>
           <Button
             variant="contained"
             component={RouterLink}
@@ -110,6 +151,28 @@ export default function Recommended() {
           </Button> */}
         </Stack>
       </Container>
+      <Stack alignItems="center" justifyContent="space-between" mb={5}>
+        <InputLabel shrink>Tags</InputLabel>
+        <Select
+          fullWidth
+          label="Tags"
+          value={personName}
+          onChange={handleChange}
+          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+          renderValue={(selected) => (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              <Chip key={selected} label={selected} />
+            </Box>
+          )}
+          MenuProps={MenuProps}
+        >
+          {names.map((name) => (
+            <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </Stack>
       <Grid container spacing={3}>
         {displayCourses}
       </Grid>

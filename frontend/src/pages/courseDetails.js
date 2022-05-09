@@ -18,9 +18,14 @@ import Stack from '@mui/material/Stack';
 import Page from '../components/Page';
 import { AppNewsUpdate } from '../sections/@dashboard/app';
 import PDFViewer from 'pdf-viewer-reactjs';
+import { useSelector } from 'react-redux';
+import StripeCheckout from 'react-stripe-checkout';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 export default function CourseDetails() {
   const [course, setCourse] = useState(null);
   const { id } = useParams();
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     // console.log(id);
@@ -130,19 +135,29 @@ export default function CourseDetails() {
                   </Typography>
                 </Grid>
               </Paper>
-              <Stack direction="row" spacing={2}>
-                <Button onClick={deleteCourse} variant="outlined" startIcon={<DeleteIcon />}>
-                  Delete
-                </Button>
-                <Button
-                  component={RouterLink}
-                  to={`/course/edit/${course._id}`}
-                  variant="contained"
-                  endIcon={<ModeEditIcon />}
-                >
-                  Update
-                </Button>
-              </Stack>
+              {user.role === 'MENTOR' ? (
+                <Stack direction="row" spacing={2}>
+                  <Button onClick={deleteCourse} variant="outlined" startIcon={<DeleteIcon />}>
+                    Delete
+                  </Button>
+                  <Button
+                    component={RouterLink}
+                    to={`/course/edit/${course._id}`}
+                    variant="contained"
+                    endIcon={<ModeEditIcon />}
+                  >
+                    Update
+                  </Button>
+                </Stack>
+              ) : (
+                <StripeCheckout
+                  stripeKey="pk_test_51KuHK6DzmY9Xbsy8E4SIcCZ78oD7sA81CRCSAS46I42f6peE3AHyyP2fYUvXfWTUWM1ElXeID0SF5kFS8BnVN2Oe005n8Su5Yw"
+                  amount={course.price * 100}
+                  name="let's paid online "
+                  billingAddress
+                  shippingAddress
+                />
+              )}
             </Grid>
           </Grid>
         </Container>

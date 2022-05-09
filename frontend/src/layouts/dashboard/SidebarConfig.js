@@ -16,11 +16,7 @@ const sidebarConfig = [
     path: '/carts',
     icon: getIcon('eva:shopping-bag-fill')
   },
-  {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon('eva:shopping-bag-fill')
-  },
+
   // {
   //   title: 'product',
   //   path: '/dashboard/products',
