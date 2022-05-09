@@ -123,6 +123,7 @@ export default function BlogFront() {
     <Page title="Dashboard: Blog | Minimal-UI">
       <DashboardNavbarStudent onOpenSidebar={() => setOpen(true)} />
       {/*<DashboardSidebarStudent isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />*/}
+
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h3" gutterBottom>

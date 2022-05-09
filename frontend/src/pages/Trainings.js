@@ -26,17 +26,68 @@ import Input from '@mui/material/Input';
 // components
 import Page from '../components/Page';
 import { Icon } from '@iconify/react';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import Swal from 'sweetalert2';
+
+//icon
+
+import React from 'react';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Badge from '@material-ui/core/Badge';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+//import Button from "@material-ui/core/Button";
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+//tostify
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// components
+import Iconify from '../components/Iconify';
+import DashboardNavbarStudent from 'src/layouts/dashboard/DashboardNavbarStudent';
 
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
 export default function Trainings() {
+  toast.configure();
+  var storedTraining = JSON.parse(sessionStorage.getItem('trainingInStorage'));
+  var [itemCount, setItemCount] = React.useState(0);
+  const [open, setOpen] = useState(false);
   const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [allChecked, setAllChecked] = useState(true);
   const socket = openSocket('http://localhost:8000');
+  //window.location.reload(true);
+
+  const itemsNumberFct = () => {
+    setItemCount(itemCount + 1);
+  };
+  //carts
+  //let itemCount = [];
+  let itemsInCart = [];
+  let numberOfCart = 0;
+  const addData = (val) => {
+    itemsInCart.push(val);
+    let bookStringified = JSON.stringify(itemsInCart);
+    sessionStorage.setItem('trainingInStorage', bookStringified);
+    localStorage.setItem('trainingInStorage', bookStringified);
+
+    //addItem(val);
+    numberOfCart = numberOfCart + 1;
+    if (numberOfCart == 1)
+      toast.info(' Greate new training has been succussfully added to your cart ​​🛒​ ');
+    else
+      toast.success(
+        ' Greate ' + numberOfCart + ' new trainings have been succussfully added to your cart ​🛒​ '
+      );
+    console.log(itemsInCart);
+
+    //itemsNumberFct(val);
+  };
+
   useEffect(() => {
     axios
       .get(
@@ -54,16 +105,6 @@ export default function Trainings() {
     // });
   }, [allChecked]);
   const [pageNumber, setPageNumber] = useState(0);
-  //carts
-  let itemsInCart = [];
-  let numberOfCart = 0;
-  const addData = (val) => {
-    itemsInCart.push(val);
-    let bookStringified = JSON.stringify(itemsInCart);
-    sessionStorage.setItem('trainingInStorage', bookStringified);
-    localStorage.setItem('trainingInStorage', bookStringified);
-    console.log(itemsInCart);
-  };
 
   const trainingsPerPage = 8;
   const pagesVisited = pageNumber * trainingsPerPage;
@@ -103,6 +144,26 @@ export default function Trainings() {
             </CardContent>
             <Divider variant="middle" />
             <CardActions style={{ justifyContent: 'center' }}>
+              <Button
+                size="small"
+                onClick={() => {
+                  //addData(training)
+                  //window.location.reload(false);
+                  //setItemCount(itemCount + 1);
+                  addData(training);
+                }}
+              >
+                add to cart
+              </Button>
+              <Button
+                onClick={() => {
+                  itemsNumberFct();
+
+                  //setItemCount(itemCount + 1);
+                }}
+              >
+                <AddShoppingCartIcon />
+              </Button>
               <Button size="small" component={RouterLink} to={`/training/details/${training._id}`}>
                 Learn More
               </Button>
@@ -114,6 +175,15 @@ export default function Trainings() {
               >
                 add to cart
               </Button>
+
+              {/**  <Button
+            onClick={() => {
+              setItemCount(Math.max(itemCount - 1, 0));
+            }}
+          >
+            {" "}
+            <RemoveIcon fontSize="small" />
+          </Button> */}
             </CardActions>
           </Card>
         </Grid>

@@ -3,11 +3,23 @@ import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Alert } from '@mui/material';
+import IconButton from "@material-ui/core/IconButton";
+import InputAdornment from "@material-ui/core/InputAdornment";
+//import SearchIcon from "@material-ui/icons/Search";
+import { Alert, TextField } from '@mui/material';
 import { AlertTitle } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
+///m
+import * as React from 'react';
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import Divider from '@mui/material/Divider';
+//import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
+import DirectionsIcon from '@mui/icons-material/Directions';
 import {
   Card,
   Table,
@@ -34,6 +46,10 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashbo
 import USERLIST from '../_mocks_/user';
 import { useCart } from 'react-use-cart';
 import { CartProvider } from 'react-use-cart';
+import Searchbar from 'src/layouts/dashboard/Searchbar';
+//import * as React from 'react';
+import Box from '@mui/material/Box';
+//mport TextField from '@mui/material/TextField';
 
 // ----------------------------------------------------------------------
 //carts
@@ -45,7 +61,7 @@ const TABLE_HEAD = [
   { id: 'duration', label: 'Duration', alignRight: false },
   { id: 'price', label: 'Price', alignRight: false },
   //{ id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'Action', label: 'Action', alignRight: false },
   { id: '' }
 ];
 
@@ -92,7 +108,7 @@ export default function Cards() {
     removeItem,
     emptyCart
   } = useCart();
-
+  const [searchTerm, setSearchTerm]= useState('')
   var storedTraining = JSON.parse(localStorage.getItem('trainingInStorage'));
   const [cardList, setCardList] = useState(storedTraining);
   const [page, setPage] = useState(0);
@@ -189,7 +205,20 @@ export default function Cards() {
           <Typography variant="h4" gutterBottom>
             Carts List
           </Typography>
-          Total price of all carts is: {Sum()} TND
+          
+         
+         {/** <input type="text" placeholder="search..." onChange={event => {setSearchTerm(event.target.value)}}/>  */}
+         
+         
+       <Box
+      sx={{
+        width: 500,
+        maxWidth: '100%',
+      }}
+    >
+      <TextField cart label="search about ... " id="fullWidth" onChange={event => {setSearchTerm(event.target.value)}} />
+    </Box>
+            
           <LoadingButton
             align="right"
             size="small"
@@ -200,14 +229,22 @@ export default function Cards() {
           >
             {<DeleteIcon />} Clear Carts
           </LoadingButton>
+
+
+
         </Stack>
 
         <Card>
-          <UserListToolbar
-            numSelected={selected.length}
+
+       
+       
+              <br/>
+              <br/>
+          {/**<UserListToolbar
+            /*numSelected={selected.length}
             filterName={filterName}
-            onFilterName={handleFilterByName}
-          />
+            onFilterName={handleFilterByName} />*/
+           }
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -222,7 +259,15 @@ export default function Cards() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {cardList
+                {cardList.filter((item)=>{
+        if(searchTerm == ""){
+          return item;
+        }
+        else if(item.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()) || item.name.toLowerCase().includes(searchTerm.toLocaleLowerCase()) ) {
+         return item;
+        }
+      }
+                )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((item, index) => {
                       //const { id, name, role, status, company, avatarUrl, isVerified } = row;
@@ -253,17 +298,17 @@ export default function Cards() {
                           <TableCell align="left">{item.duration} Hours</TableCell>
                           <TableCell align="left">{item.price}TND</TableCell>
                           {/*<TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>*/}
-                          <TableCell align="left">
+                         {/** <TableCell align="left">
                             {
                               <Label
                                 variant="ghost"
-                                color={(item.status === false && 'error') || 'success'}
+                                color={(item.status === true && 'success') || 'error'}
                               >
-                                <p>Unpaid</p>
+                                <p>paid</p>
                               </Label>
                             }
                           </TableCell>
-
+ */}
                           <TableCell align="right">
                             <Button
                               onClick={() => ondelete(index)}

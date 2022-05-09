@@ -61,8 +61,8 @@ export default function Router() {
             { path: 'CartListComponent', element: <CartListComponent /> },
             { path: 'cardComponent', element: <CardComponent /> },
             { path: 'user', element: <User /> },
-            user.role === 'MENTOR' && { path: 'card', element: <CartListComponent /> },
-            user.role === 'STUDENT' && { path: 'card', element: <CardComponent /> },
+            user.role === 'MENTOR' && { path: 'carts', element: <CartListComponent /> },
+            user.role === 'STUDENT' && { path: 'carts', element: <CardComponent /> },
             { path: 'profile', element: <Profile /> },
             { path: 'products', element: <Products /> },
             { path: 'trainers', element: <Trainer /> },
@@ -89,6 +89,7 @@ export default function Router() {
               element: <TrainingDetails />
             },
             user.role === 'STUDENT' && { path: 'blog', element: <BlogFront /> },
+            user.role === 'MENTOR' && { path: 'blog', element: <Blog /> },
             user.role === 'MENTOR' && { path: 'chat', element: <Chat /> },
             user.role === 'STUDENT' && { path: 'chat', element: <ChatFront /> },
             { path: 'add', element: <CreateAct /> },

@@ -8,27 +8,27 @@ import Swal from 'sweetalert2';
 import { Icon } from '@iconify/react';
 
 // material
-import {
-  Box,
-  Grid,
-  Container,
-  Typography,
-  Divider,
-  CircularProgress,
-  IconButton,
-  ButtonBase,
-  Paper,
-  CardMedia,
-  Button,
-  Stack
-} from '@mui/material';
+import { Box, Grid, Container, Typography, Divider, CircularProgress } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import ButtonBase from '@mui/material/ButtonBase';
+import Paper from '@mui/material/Paper';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import Stack from '@mui/material/Stack';
 // components
 import Page from '../components/Page';
 import { format } from 'date-fns';
+//tostify
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+//stripe
+import StripeCheckout from 'react-stripe-checkout';
 
 export default function TrainingsDetail() {
+  toast.configure();
   const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   const { id } = useParams();
@@ -54,8 +54,6 @@ export default function TrainingsDetail() {
   const fDateTime = (date) => {
     return format(new Date(date), 'dd MMM yyyy HH:mm ');
   }; //carts
-  let itemsInCart = [];
-  let numberOfCart = 0;
   const applyToTraining = (t) => {
     axios
       .put(`http://localhost:8081/api/training/participantToTraining/${training._id}/${user.id}`, {
@@ -74,18 +72,65 @@ export default function TrainingsDetail() {
         }, 2000);
       });
   };
+  //carts
+  //let itemCount = [];
+  let itemsInCart = [];
+  let numberOfCart = 0;
   const addData = (val) => {
-    //numberOfCart = numberOfCart +1;
-    //setNumber(numberOfCart);
-    //save in sessionstorage
     itemsInCart.push(val);
     let bookStringified = JSON.stringify(itemsInCart);
     sessionStorage.setItem('trainingInStorage', bookStringified);
     localStorage.setItem('trainingInStorage', bookStringified);
 
     //addItem(val);
+    numberOfCart = numberOfCart + 1;
+    if (numberOfCart == 1)
+      toast.info(' Greate ' + numberOfCart + '  training are succussfully added to your cart ');
+    else toast.success(' Greate ' + numberOfCart + '  trainings have been added to cart ');
     console.log(itemsInCart);
+
+    //itemsNumberFct(val);
   };
+  //stripe
+  async function handleToken(token) {
+    const response = await axios.post('http://localhost:8081/checkout', { token, training });
+    const { status } = response.data;
+    console.log('Response:', response.data);
+    if (status === 'success') {
+      training.status = true;
+      toast(' Your purchase has been successfully paid 💰​💲!', { type: 'success' });
+      Swal.fire({
+        title: 'Your purchase has been successfully paid 💰​💲!',
+        width: 600,
+        padding: '3em',
+        color: 'rgb(0,128,0,0.7)',
+        background: '#fff url(/images/trees.png)',
+        backdrop: `
+      
+    rgb(0,128,0,0.4)	
+      url("/images/nyan-cat.gif")
+      left top
+      no-repeat
+    `
+      });
+      /*Swal.fire({
+    title: 'Your purchase has been successfully paid 💰​💲!',
+    width: 600,
+    padding: '3em',
+    color: '#6AA84F',
+    background: '#fff url(/images/trees.png)',
+    backdrop: `
+   
+    #B6D7A8
+      url("/images/nyan-cat.gif")
+      left top
+      no-repeat
+    `
+  })*/
+    } else {
+      toast('Something went wrong', { type: 'error' });
+    }
+  }
   return (
     <Page title=" Traning Details | Minimal-UI">
       <Container maxWidth="xl">
@@ -235,33 +280,81 @@ export default function TrainingsDetail() {
                   )}
 
                   {!applyIn && (
-                    <Box sx={{ m: 2 }} justify="center">
-                      <Stack spacing={2} display="flex" justifyContent="center" alignItems="center">
-                        <Button
-                          variant="contained"
-                          startIcon={<Icon icon="bx:log-in-circle" />}
-                          onClick={() => {
-                            // applyToTraining(training);
-                          }}
+                    <>
+                      <Box sx={{ m: 2 }} justify="center">
+                        <Stack
+                          spacing={2}
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
                         >
-                          join now
-                        </Button>
-                      </Stack>
-                      <br></br>
-                      <Divider variant="middle" />
-                      <br></br>
-                      <Stack spacing={2} display="flex" justifyContent="center" alignItems="center">
-                        <Button
-                          variant="outlined"
-                          startIcon={<Icon icon="bx:cart-download" />}
-                          onClick={() => {
-                            addData(training);
-                          }}
+                          <Button
+                            variant="contained"
+                            startIcon={<Icon icon="bx:log-in-circle" />}
+                            onClick={() => {
+                              applyToTraining(training);
+                            }}
+                          >
+                            join now
+                          </Button>
+                        </Stack>
+                        <br></br>
+                        <Divider variant="middle" />
+                        <br></br>
+                        <Stack
+                          spacing={2}
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
                         >
-                          add to cart
-                        </Button>
-                      </Stack>
-                    </Box>
+                          <Button
+                            variant="outlined"
+                            startIcon={<Icon icon="bx:cart-download" />}
+                            onClick={() => {
+                              addData(training);
+                            }}
+                          >
+                            add to cart
+                          </Button>
+                        </Stack>
+                      </Box>
+                      <Box sx={{ m: 2 }} justify="center">
+                        <Stack
+                          spacing={2}
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          {/** <Button variant="contained" startIcon={<Icon icon="bi:cart-check-fill" />}>
+                        Buy Now
+                      </Button> */}
+                          <StripeCheckout
+                            stripeKey="pk_test_51KuHK6DzmY9Xbsy8E4SIcCZ78oD7sA81CRCSAS46I42f6peE3AHyyP2fYUvXfWTUWM1ElXeID0SF5kFS8BnVN2Oe005n8Su5Yw"
+                            token={handleToken}
+                            amount={training.price * 100}
+                            name="let's paid online "
+                            billingAddress
+                            shippingAddress
+                          />
+                        </Stack>
+                        <br></br>
+                        <Divider variant="middle" />
+                        <br></br>
+                        <Stack
+                          spacing={2}
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          {/** <Button variant="outlined" startIcon={<Icon icon="bx:cart-download" />}  onClick={() => {
+                
+                addData(training);
+              }}  >
+                        add to cart
+                      </Button> */}
+                        </Stack>
+                      </Box>
+                    </>
                   )}
                 </Paper>
               </Grid>

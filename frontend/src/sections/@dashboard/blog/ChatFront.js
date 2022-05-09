@@ -42,6 +42,7 @@ export default class ChatFront extends Component {
     client.onopen = () => {
       console.log('WebSocket Client Connected');
     };
+
     client.onmessage = (message) => {
       const dataFromServer = JSON.parse(message.data);
       console.log('got reply! ', dataFromServer);
