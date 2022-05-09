@@ -5,7 +5,17 @@ import { Link as RouterLink } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import './Training.css';
 // material
-import { Button, Container, Stack, Typography, Divider, Card, Grid } from '@mui/material';
+import {
+  Button,
+  Container,
+  Stack,
+  Typography,
+  Divider,
+  Card,
+  Grid,
+  Checkbox,
+  FormControlLabel
+} from '@mui/material';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -25,17 +35,24 @@ export default function Trainings() {
   const user = useSelector((state) => state.user);
   const [training, setTraining] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [allChecked, setAllChecked] = useState(true);
   const socket = openSocket('http://localhost:8000');
   useEffect(() => {
-    axios.get(`http://localhost:8081/api/training/getAll`).then((response) => {
-      setTraining(response.data);
-    });
+    axios
+      .get(
+        allChecked
+          ? `http://localhost:8081/api/training/getAll `
+          : `http://localhost:8081/api/trainings/participat/${user.id}`
+      )
+      .then((response) => {
+        setTraining(response.data);
+      });
     // socket.on('refresh', () => {
     //   axios.get(`http://localhost:8081/api/training/getAll`).then((response) => {
     //     setTraining(response.data);
     //   });
     // });
-  }, []);
+  }, [allChecked]);
   const [pageNumber, setPageNumber] = useState(0);
   //carts
   let itemsInCart = [];
@@ -129,6 +146,12 @@ export default function Trainings() {
               startAdornment={<Icon icon="pepicons:loop" width="50" height="50" />}
             />
           </FormControl>
+        </Stack>
+        <Stack mb={5}>
+          <FormControlLabel
+            control={<Checkbox checked={allChecked} onClick={() => setAllChecked(!allChecked)} />}
+            label="Show all trainings"
+          />
         </Stack>
       </Container>
       <Grid container spacing={3}>
